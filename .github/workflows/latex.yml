@@ -1,7 +1,9 @@
 name: Build LaTeX document
 on: 
     push:
-        paths: [report/**]
+        paths: 
+            - report/**
+            - .github/workflows/**
 jobs:
   build_latex:
     runs-on: ubuntu-latest
@@ -12,7 +14,11 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: report/main.tex
-          args: -pdf -file-line-error -halt-on-error -interaction=nonstopmode
+          args: |
+            -pdf 
+            -file-line-error 
+            -halt-on-error 
+            -interaction=nonstopmode
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           extra_fonts: report/FiraCode.ttf
