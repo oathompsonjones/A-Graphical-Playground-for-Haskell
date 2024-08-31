@@ -14,7 +14,13 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: report/main.tex
-          latexmk_use_lualatex: true
+          args: |
+            -pdf 
+            -file-line-error 
+            -halt-on-error 
+            -interaction=nonstopmode
+            -bibtex
+          latexmk_use_xelatex: true
           latexmk_shell_escape: true
           extra_fonts: report/FiraCode.ttf
       - name: Upload PDF file
