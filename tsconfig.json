@@ -1,0 +1,58 @@
+{
+    "extends": "@oathompsonjones/ts-config",
+    "compilerOptions": {
+        "target": "es5",
+        "skipLibCheck": true,
+        "noEmit": true,
+        "incremental": true,
+        "plugins": [
+            {
+                "name": "next",
+            },
+        ],
+        "paths": {
+            "app/*": [
+                "./src/app/*"
+            ],
+            "pages/*": [
+                "./src/app/(pages)/*"
+            ],
+            "redirects/*": [
+                "./src/app/(redirects)/*"
+            ],
+            "api/*": [
+                "./src/app/api/*"
+            ],
+            "assets/*": [
+                "./src/assets/*"
+            ],
+            "components/*": [
+                "./src/components/*"
+            ],
+            "contexts/*": [
+                "./src/contexts/*"
+            ],
+            "hooks/*": [
+                "./src/hooks/*"
+            ],
+            "images/*": [
+                "./src/images/*"
+            ],
+            "styles/*": [
+                "./src/styles/*"
+            ],
+        },
+        "isolatedModules": true,
+        "preserveConstEnums": true,
+    },
+    "include": [
+        "next-env.d.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        ".next/types/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        ".next",
+    ],
+}

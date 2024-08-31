@@ -1,0 +1,75 @@
+% Define the type of document.
+\documentclass[11pt, a4paper]{article}
+
+% Set a more sensible document size.
+\usepackage[margin=0.75in]{geometry}
+
+% Set the fonts.
+\usepackage{fontspec}
+    \setmainfont{Lato}
+    \setmonofont[Contextuals=Alternate, Scale=0.8]{Fira Code}
+    \makeatletter\renewcommand*\verbatim@nolig@list{}\makeatother
+
+% Set the language.
+\usepackage[british]{babel}
+    \usepackage{csquotes}
+
+% Prevent words from being split accross lines.
+\tolerance=1\emergencystretch=\maxdimen\hyphenpenalty=10000\hbadness=10000
+
+% Set up the bibliography.
+\usepackage[sorting=none, style=science]{biblatex}
+    \addbibresource{references.bib}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+% Allow syntax highlighting for code segments.
+\usepackage[outputdir=build]{minted}
+    \setminted{
+        style=one-dark,
+        linenos,
+        autogobble,
+        breaklines,
+        breakautoindent,
+        breakanywhere,
+        mathescape,
+        resetmargins,
+        tabsize=4
+    }
+
+% Allow more advanced maths.
+\usepackage{amsmath, amssymb, amsthm, bbm}
+
+% Create better tables.
+\usepackage{xltabular}
+    \renewcommand{\arraystretch}{2}
+
+% Allows images to be included.
+\usepackage{graphicx, animate}
+    \graphicspath{ {./images/} }
+
+% Allow for drawing complex diagrams.
+\usepackage{tikz}
+    \usetikzlibrary{positioning}
+
+% Allow disabling of floating objects.
+\usepackage{float}
+
+% Allows the use of subfiles.
+\usepackage{subfiles}
+
+% Removes numbers from headings and the contents page.
+\setcounter{secnumdepth}{0}
+
+% Sets the title.
+\title{Honours Project}
+\author{Oliver Jones}
+\date{\today}
+
+% Begin the document.
+\begin{document}
+\maketitle
+\tableofcontents
+
+\printbibliography
+
+\end{document}
