@@ -14,10 +14,11 @@
 
 # production
 build
-report
+report/*
 !report/main.tex
 !report/references.bib
 !report/FiraCode.ttf
+!report/sections
 
 # misc
 .DS_Store
