@@ -23,6 +23,8 @@ jobs:
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           extra_fonts: report/FiraCode.ttf
+        env:
+          TEXINPUTS: ".:./report//:"
       - name: Copy
         run: |
           mkdir build
