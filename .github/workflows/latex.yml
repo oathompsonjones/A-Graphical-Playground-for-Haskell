@@ -19,7 +19,7 @@ jobs:
             -file-line-error 
             -halt-on-error 
             -interaction=nonstopmode
-            -bibtex
+            -biber
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           extra_fonts: report/FiraCode.ttf
