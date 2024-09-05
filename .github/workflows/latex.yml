@@ -15,7 +15,7 @@ jobs:
         with:
           root_file: |
             main.tex
-            sections/**/*.tex
+            sections/abstract.tex
           working_directory: report
           latexmk_use_lualatex: true
           latexmk_shell_escape: true
