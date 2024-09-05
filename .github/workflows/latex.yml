@@ -13,7 +13,9 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: main.tex
+          root_file: |
+            main.tex
+            sections/**/*.tex
           working_directory: report
           latexmk_use_lualatex: true
           latexmk_shell_escape: true
