@@ -17,9 +17,6 @@
             "pages/*": [
                 "./src/app/(pages)/*"
             ],
-            "redirects/*": [
-                "./src/app/(redirects)/*"
-            ],
             "api/*": [
                 "./src/app/api/*"
             ],
