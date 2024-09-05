@@ -15,6 +15,7 @@ jobs:
         with:
           root_file: main.tex
           working_directory: report
+          latexmk_use_lualatex: true
           latexmk_shell_escape: true
           extra_fonts: FiraCode.ttf
       - name: Copy
