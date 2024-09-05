@@ -13,7 +13,8 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: report/main.tex
+          root_file: main.tex
+          working_directory: report
           args: |
             -pdf 
             -file-line-error 
@@ -22,9 +23,7 @@ jobs:
             -biber
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
-          extra_fonts: report/FiraCode.ttf
-        env:
-          TEXINPUTS: ".:./report//:"
+          extra_fonts: FiraCode.ttf
       - name: Copy
         run: |
           mkdir build
