@@ -20,8 +20,8 @@ jobs:
           latexmk_use_lualatex: true
           latexmk_shell_escape: true
           extra_fonts: FiraCode.ttf
-      - name: Copy
-        run: mkdir build && cp ./report/main.pdf ./build/main.pdf
+      - name: Generate GitHub Pages content
+        run: mkdir build && cp ./report/main.pdf ./build/main.pdf && echo "<meta http-equiv='refresh' content='0;url=main.pdf'>" > ./build/index.html
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
         with:
