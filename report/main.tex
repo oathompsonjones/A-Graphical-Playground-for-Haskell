@@ -25,15 +25,17 @@
 % Allow syntax highlighting for code segments.
 \usepackage{minted}
     \setminted{
-        style=one-dark,
-        linenos,
         autogobble,
-        breaklines,
-        breakautoindent,
+        bgcolor=lightgray!10,
         breakanywhere,
+        breakautoindent,
+        breaklines,
+        linenos,
         mathescape,
         resetmargins,
-        tabsize=4
+        style=one-dark,
+        tabsize=4,
+        xleftmargin=2em,
     }
 
 % Allow more advanced maths.
@@ -58,7 +60,7 @@
 \usepackage{subfiles}
 
 % Sets the title.
-\title{Honours Project}
+\title{Honours Project\\A Graphical Playground for Haskell}
 \author{Oliver Jones}
 \date{\today}
 
@@ -69,11 +71,6 @@
 \subfile{sections/abstract.tex}
 
 \tableofcontents
-
-\begin{minted}{haskell}
-    main :: IO ()
-    main = putStrLn "Hello, World!"
-\end{minted}
 
 \subfile{sections/introduction.tex}
 

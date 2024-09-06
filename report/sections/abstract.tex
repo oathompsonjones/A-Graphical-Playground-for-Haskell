@@ -4,8 +4,30 @@
 % Begin the document.
 \begin{document}
 \section*{Abstract}
-    Haskell~\cite{haskell} is a general-purpose, statically-typed, purely
-        functional programming language with type inference and lazy
-        evaluation~\cite{wiki-haskell}.
+    \paragraph{}
+        Haskell~\cite{haskell} is a general-purpose, statically-typed, purely
+            functional programming language with type inference and lazy
+            evaluation~\cite{wiki-haskell}.
+
+        \begin{listing}[H]
+            \caption{A simple Haskell Hello World program.}
+            \begin{minted}{haskell}
+                -- A simple Haskell Hello World program.
+                
+                main :: IO ()
+                main = putStrLn "Hello, World!"
+            \end{minted}
+            \label{listing:hello-world}
+        \end{listing}
+
+        Listing~\ref{listing:hello-world} shows a simple Haskell program that prints
+            \verb|"Hello, World!"| to the console.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.5\textwidth]{haskell.jpg}
+            \caption{The Haskell logo.}
+            \label{fig:haskell-logo}
+        \end{figure}
 
 \end{document}

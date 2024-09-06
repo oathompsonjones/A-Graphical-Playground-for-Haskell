@@ -19,6 +19,7 @@ report/*
 !report/references.bib
 !report/FiraCode.ttf
 !report/sections
+!report/images
 
 # misc
 .DS_Store
