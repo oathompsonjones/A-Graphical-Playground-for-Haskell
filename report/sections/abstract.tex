@@ -30,4 +30,40 @@
             \label{fig:haskell-logo}
         \end{figure}
 
+        \begin{figure}[H]
+            \centering
+            \begin{tikzpicture}[]
+                % Nodes
+                \node[] (a) [] {$a$};
+                \node[] (b) [right = of a] {$b$};
+                \node[] (d) [below = of a] {$d$};
+                \node[] (c) [left  = of d] {$c$};
+                \node[] (e) [right = of d] {$e$};
+                \node[] (f) [right = of e] {$f$};
+                \node[] (g) [below = of d] {$g$};
+                \node[] (h) [right = of g] {$h$};
+
+                % Edges 
+                \draw[] (a) -- (b);
+                \draw[] (a) -- (c);
+                \draw[] (a) -- (d);
+                \draw[] (a) -- (e);
+                \draw[] (b) -- (d);
+                \draw[] (b) -- (e);
+                \draw[] (b) -- (f);
+                \draw[] (c) -- (d);
+                \draw[] (c) -- (g);
+                \draw[] (d) -- (e);
+                \draw[] (d) -- (g);
+                \draw[] (d) -- (h);
+                \draw[] (e) -- (f);
+                \draw[] (e) -- (g);
+                \draw[] (e) -- (h);
+                \draw[] (f) -- (h);
+                \draw[] (g) -- (h);
+            \end{tikzpicture}
+            \caption{This is a diagram.}
+            \label{fig:diagram}
+        \end{figure}
+
 \end{document}
