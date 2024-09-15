@@ -3,6 +3,62 @@
 
 % Begin the document.
 \begin{document}
-\section{Introduction}
+\chapter{Introduction}
 
+    The preliminary material of your report should contain:
+    \begin{itemize}
+        \item The title page.
+        \item An abstract page.
+        \item Declaration of ethics and own work.
+        \item Optionally an acknowledgements page.
+        \item The table of contents.
+    \end{itemize}
+
+    As in this example \texttt{skeleton.tex}, the above material should be included
+        between: \begin{verbatim}
+\begin{preliminary}
+    ...
+\end{preliminary}
+\end{verbatim} This style file uses roman numeral page numbers
+        for the preliminary material.
+
+    The main content of the dissertation, starting with the first chapter, starts
+        with page~1.
+    \emph{\textbf{The main content must not go beyond page~40.}}
+
+    The report then contains a bibliography and any appendices, which may go beyond
+        page~40.
+    The appendices are only for any supporting material that's important to go on
+        record.
+    However, you cannot assume markers of dissertations will read them.
+
+    You may not change the dissertation format (e.g., reduce the font size, change
+        the margins, or reduce the line spacing from the default single spacing).
+    Be careful if you copy-paste packages into your document preamble from
+        elsewhere.
+    Some \LaTeX{} packages, such as \texttt{fullpage} or \texttt{savetrees}, change
+        the margins of your document.
+    Do not include them!
+
+    Over-length or incorrectly-formatted dissertations will not be accepted and you
+        would have to modify your dissertation and resubmit.
+    You cannot assume we will check your submission before the final deadline and
+        if it requires resubmission after the deadline to conform to the page and style
+        requirements you will be subject to the usual late penalties based on your
+        final submission time.
+
+    \section{Using Sections}
+
+        Divide your chapters into sub-parts as appropriate.
+
+    \section{Citations}
+
+        When citing work using author names, your sentences should still read as
+            correct English if any parts in parenthesis are removed.
+        Use {\tt {\textbackslash}citet} when citing the name as text that's part of
+            your sentence, and use {\tt {\textbackslash}citep} for a parenthetical
+            citation.
+
+        You may use any consistent reference style that you prefer, including ``[1]''
+            numerical citations~\cite{P1}~\cite{P2}.
 \end{document}

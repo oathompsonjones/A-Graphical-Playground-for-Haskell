@@ -1,0 +1,66 @@
+% Define the document as a subfile and reference its root.
+\documentclass[main.tex]{subfiles}
+
+% Begin the document.
+\begin{document}
+\begin{preliminary}
+
+    \title{An Interactive Playground for Haskell}
+    \author{Oliver Jones}
+    \course{Computer Science}
+    \project{4th Year Project Report}
+    \date{\today}
+
+    \abstract{
+        This skeleton demonstrates how to use the \texttt{infthesis} style for
+        undergraduate dissertations in the School of Informatics.
+        It also emphasises the page limit, and that you must not deviate from the
+            required style.
+        The file \texttt{skeleton.tex} generates this document and should be used as a
+            starting point for your thesis.
+        Replace this abstract text with a concise summary of your report.
+    }
+
+    \maketitle
+
+    \newenvironment{ethics}{
+        \begin{frontenv}{Research Ethics Approval}{\LARGE}} {
+        \end{frontenv}
+        \newpage}
+
+    \begin{ethics}
+        \textbf{Instructions:} \emph{Agree with your supervisor which
+            statement you need to include.
+            Then delete the statement that you are not using, and the instructions in
+                italics.
+            \\
+            \textbf{Either complete and include this statement:}}\\ % DELETE THESE INSTRUCTIONS
+        %
+        % IF ETHICS APPROVAL WAS REQUIRED:
+        This project obtained approval from the Informatics Research Ethics committee.
+        \\
+        Ethics application number: ???\\
+        Date when approval was obtained: YYYY-MM-DD\\
+        %
+        \emph{[If the project required human participants, edit as appropriate, otherwise delete:]}\\ % DELETE THIS LINE
+        The participants' information sheet and a consent form are included in the
+            appendix.
+        \\
+        %
+        % IF ETHICS APPROVAL WAS NOT REQUIRED:
+        \textbf{\emph{Or include this statement:}}\\ % DELETE THIS LINE
+        This project was planned in accordance with the Informatics Research Ethics
+            policy.
+        It did not involve any aspects that required approval from the Informatics
+            Research Ethics committee.
+
+        \standarddeclaration
+    \end{ethics}
+
+    \begin{acknowledgements}
+        Any acknowledgements go here.
+    \end{acknowledgements}
+
+    \tableofcontents
+\end{preliminary}
+\end{document}

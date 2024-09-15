@@ -17,7 +17,10 @@ build
 report/*
 !report/main.tex
 !report/references.bib
-!report/FiraCode.ttf
+!report/ugcheck.sty
+!report/infthesis.cls
+!report/eushield.sty
+!report/eushield-normal.pdf
 !report/sections
 !report/images
 

@@ -1,79 +1,24 @@
-% Define the type of document.
-\documentclass[12pt, a4paper, titlepage]{article}
+\documentclass[logo,bsc,singlespacing,parskip,online]{infthesis}
+\usepackage{ugcheck}
 
-% Set a more sensible document size.
-\usepackage[margin=0.75in]{geometry}
-
-% Set the fonts.
-\usepackage{fontspec}
-    \setmainfont{Lato}
-    \setmonofont[Contextuals=Alternate, Scale=0.8]{Fira Code}
-    \makeatletter\renewcommand*\verbatim@nolig@list{}\makeatother
-
-% Set the language.
-\usepackage[british]{babel}
-    \usepackage{csquotes}
-
-% Prevent words from being split accross lines.
-\tolerance=1\emergencystretch=\maxdimen\hyphenpenalty=10000\hbadness=10000
-
-% Set up the bibliography.
+\usepackage{microtype}
 \usepackage[sorting=none, style=science]{biblatex}
     \addbibresource{references.bib}
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
-
-% Allow syntax highlighting for code segments.
-\usepackage{minted}
-    \setminted{
-        autogobble,
-        bgcolor=lightgray!10,
-        breakanywhere,
-        breakautoindent,
-        breaklines,
-        linenos,
-        mathescape,
-        resetmargins,
-        style=one-dark,
-        tabsize=4,
-        xleftmargin=2em,
-    }
-
-% Allow more advanced maths.
-\usepackage{amsmath, amssymb, amsthm, bbm}
-
-% Create better tables.
-\usepackage{xltabular}
-    \renewcommand{\arraystretch}{2}
-
-% Allows images to be included.
-\usepackage{graphicx, animate}
-    \graphicspath{ {./images/} }
-
-% Allow for drawing complex diagrams.
-\usepackage{tikz}
-    \usetikzlibrary{positioning}
-
-% Allow disabling of floating objects.
+\usepackage{subfiles}
 \usepackage{float}
 
-% Allows the use of subfiles.
-\usepackage{subfiles}
-
-% Sets the title.
-\title{Honours Project\\A Graphical Playground for Haskell}
-\author{Oliver Jones}
-\date{\today}
-
-% Begin the document.
 \begin{document}
-\maketitle
 
-\subfile{sections/abstract.tex}
-
-\tableofcontents
+\subfile{sections/preliminary.tex}
 
 \subfile{sections/introduction.tex}
 
+\subfile{sections/next-chapter.tex}
+
+\subfile{sections/conclusions.tex}
+
 \printbibliography
+
+\subfile{sections/appendix.tex}
 
 \end{document}
