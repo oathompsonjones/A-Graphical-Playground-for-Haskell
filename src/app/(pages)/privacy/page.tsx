@@ -2,14 +2,14 @@ import type { ReactNode } from "react";
 import { Typography } from "@mui/material";
 
 /**
- * This is the home page.
- * @returns The home page.
+ * This details my privacy policy.
+ * @returns The privacy policy page.
  */
-export default function Home(): ReactNode {
+export default function Privacy(): ReactNode {
     return (
         <div>
             <br />
-            <Typography variant="h2">Home Page</Typography>
+            <Typography variant="h2">Privacy Policy</Typography>
             <br />
             <Typography>
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.

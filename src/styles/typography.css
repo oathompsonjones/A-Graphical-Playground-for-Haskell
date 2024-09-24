@@ -1,0 +1,8 @@
+* {
+    font-family: "Fira Code", monospace !important;
+    font-variant-ligatures: common-ligatures !important;
+}
+
+a {
+    text-decoration: none;
+}

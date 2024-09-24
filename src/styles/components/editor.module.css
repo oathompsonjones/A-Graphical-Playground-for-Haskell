@@ -1,0 +1,58 @@
+.editor {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    --line-num-colour: #666;
+    --line-num-width: 3ch;
+    overflow: clip;
+}
+
+.editor * {
+    font-size: 1.25rem;
+    line-height: 1.6rem;
+    letter-spacing: 0.025rem;
+    background: none !important;
+}
+
+.editor textarea,
+.editor pre {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding: 1rem !important;
+    margin: 0 !important;
+    border: 0;
+    white-space: nowrap;
+}
+
+.editor textarea {
+    overflow: auto;
+    resize: none;
+    color: transparent;
+    background-color: transparent;
+    caret-color: var(--line-num-colour);
+    outline: none;
+    padding-left: calc(1rem + var(--line-num-width) + 0.5ch) !important;
+    word-break: break-all;
+}
+
+.editor pre {
+    color: #ddd;
+    overflow: hidden;
+}
+
+.editor pre code {
+    counter-increment: line;
+    display: block;
+}
+
+.editor pre code::before {
+    content: counter(line);
+    display: inline-block;
+    width: var(--line-num-width);
+    margin-right: 0.5ch;
+    color: var(--line-num-colour);
+    text-align: right;
+}

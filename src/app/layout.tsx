@@ -1,8 +1,11 @@
 import "styles/global.css";
+import "styles/layout.css";
+import "styles/typography.css";
 import type { Metadata, Viewport } from "next";
 import { Footer } from "components/footer";
 import { Header } from "components/header";
 import type { ReactNode } from "react";
+import { ThemeContextProvider } from "contexts/theme";
 
 // https://realfavicongenerator.net (remove the mask icon and msapplication stuff)
 export const metadata: Metadata = {
@@ -13,12 +16,12 @@ export const metadata: Metadata = {
         shortcut: "https://cdn.worldvectorlogo.com/logos/next-js.svg",
     },
     keywords: [],
-    title: "My Website",
+    title: "A Graphical Playground for Haskell",
 };
 
 export const viewport: Viewport = {
     initialScale: 1,
-    themeColor: "",
+    themeColor: "#5e5086",
     width: "device-width",
 };
 
@@ -33,9 +36,11 @@ export default function Layout({ children }: { children: ReactNode; }): ReactNod
         <html lang="en">
             <body>
                 <noscript>You need to enable JavaScript to run this app.</noscript>
-                <Header />
-                <main>{children}</main>
-                <Footer />
+                <ThemeContextProvider>
+                    <Header />
+                    <main>{children}</main>
+                    <Footer />
+                </ThemeContextProvider>
             </body>
         </html>
     );

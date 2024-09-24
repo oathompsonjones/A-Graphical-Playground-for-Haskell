@@ -1,0 +1,59 @@
+body,
+.wrapper {
+    --padding: 1rem;
+    --gutter: minmax(0, 1fr);
+    --content-max: 70rem;
+    --content: min(100% - 2 * var(--padding), var(--content-max));
+    --breakout-max: 90rem;
+    --breakout: minmax(0, calc((var(--breakout-max) - var(--content-max)) / 2));
+    display: grid;
+    grid-template-columns: [edge-start] var(--padding) [full-width-start] var(--gutter) [breakout-start breakout-left-start] var(--breakout) [content-start breakout-right-start] var(--content) [content-end breakout-left-end] var(--breakout) [breakout-end breakout-right-end] var(--gutter) [full-width-end] var(--padding) [edge-end];
+}
+
+* {
+    grid-column: content;
+}
+
+.breakout {
+    grid-column: breakout;
+}
+
+.breakout-left {
+    grid-column: breakout-left;
+}
+
+.breakout-right {
+    grid-column: breakout-right;
+}
+
+.full-width {
+    grid-column: full-width;
+}
+
+.edge {
+    grid-column: edge;
+}
+
+body {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: [header-start] auto [header-end main-start] 1fr [main-end footer-start] auto [footer-end];
+    background-color: var(--mui-palette-background-default);
+}
+
+header {
+    grid-row: header;
+    grid-column: edge;
+}
+
+main {
+    grid-row: main;
+    grid-column: edge;
+    display: grid;
+    grid-template-columns: subgrid;
+}
+
+footer {
+    grid-row: footer;
+    grid-column: edge;
+}

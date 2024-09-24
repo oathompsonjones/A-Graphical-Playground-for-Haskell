@@ -7,9 +7,9 @@ import type { ReactNode } from "react";
  */
 export default function Error(): ReactNode {
     return (
-        <>
+        <div>
             <h2>Error 404 - Page not found</h2>
             <p>Click <Link href="/">here</Link> to go to the homepage.</p>
-        </>
+        </div>
     );
 }

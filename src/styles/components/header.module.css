@@ -1,0 +1,14 @@
+.header {
+    background-color: var(--mui-palette-primary-main);
+    background-image: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav {
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+    margin-inline: 1rem;
+}

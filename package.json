@@ -1,9 +1,9 @@
 {
-    "name": "next-init",
+    "name": "a-graphical-playground-for-haskell",
     "version": "0.0.1",
     "description": "",
     "repository": {
-        "url": "https://github.com/oathompsonjones/next-init.git"
+        "url": "https://github.com/oathompsonjones/honours-project.git"
     },
     "scripts": {
         "dev": "next dev",
@@ -14,21 +14,22 @@
     "author": "oathompsonjones",
     "license": "MIT",
     "devDependencies": {
-        "@oathompsonjones/eslint-config": "^1.5.2",
+        "@oathompsonjones/eslint-config": "^1.5.5",
         "@oathompsonjones/ts-config": "^0.0.35",
-        "@types/node": "^22.5.1",
-        "@types/react": "18.3.5",
+        "@types/node": "^22.6.1",
+        "@types/react": "18.3.9",
         "@types/react-dom": "18.3.0",
-        "typescript": "^5.5.4"
+        "typescript": "^5.6.2"
     },
     "dependencies": {
         "@emotion/react": "^11.13.3",
         "@emotion/styled": "^11.13.0",
-        "@mui/icons-material": "^6.0.1",
-        "@mui/lab": "6.0.0-beta.8",
-        "@mui/material": "^6.0.1",
+        "@mui/icons-material": "^6.1.1",
+        "@mui/lab": "6.0.0-beta.10",
+        "@mui/material": "^6.1.1",
         "@svgr/webpack": "^8.1.0",
-        "next": "14.2.7",
+        "highlight.js": "^11.10.0",
+        "next": "14.2.13",
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "sharp": "^0.33.5"
