@@ -7,16 +7,22 @@ import { Paper } from "@mui/material";
 import haskell from "highlight.js/lib/languages/haskell";
 import hljs from "highlight.js/lib/core";
 import styles from "styles/components/editor.module.css";
-import typescript from "highlight.js/lib/languages/typescript";
+//! import { useLocalStorage } from "hooks/useLocalStorage";
+
+// FIXME: This page breaks on production build.
+// NotFoundError: The object can not be found here.
+// HierarchyRequestError: The operation would yield an incorrect node tree.
 
 /**
  * This is the text editor.
  * @returns The editor element.
  */
 export function Editor(): ReactNode {
+    //! const [rawCode, setRawCode] = useLocalStorage<string>("code", "main = putStrLn \"Hello, World!\"");
     const [displayCode, setDisplayCode] = useState<ReactNode>(null);
 
     const handleChange = (event: FormEvent<HTMLTextAreaElement>): void => {
+        //! setRawCode(event.currentTarget.value);
         setDisplayCode(
             event.currentTarget.value
                 .split("\n")
@@ -24,13 +30,13 @@ export function Editor(): ReactNode {
                     <code
                         key={i}
                         className="language-haskell"
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        dangerouslySetInnerHTML={{ __html: hljs.highlight(line, { language: "haskell" }).value }}
-                    />
+                        /* // eslint-disable-next-line @typescript-eslint/naming-convention
+                        dangerouslySetInnerHTML={{ __html: hljs.highlight(line, { language: "haskell" }).value }} */
+                    >{line}</code>
                 )),
         );
 
-        hljs.highlightAll();
+        //! hljs.highlightAll();
     };
 
     const handleScroll = (event: UIEvent<HTMLTextAreaElement>): void => {
@@ -45,9 +51,6 @@ export function Editor(): ReactNode {
     useEffect(() => {
         if (hljs.getLanguage("haskell") === undefined)
             hljs.registerLanguage("haskell", haskell);
-
-        if (hljs.getLanguage("typescript") === undefined)
-            hljs.registerLanguage("typescript", typescript);
 
         if (displayCode === null)
             handleChange({ currentTarget: { value: "" } } as FormEvent<HTMLTextAreaElement>);
