@@ -1,6 +1,6 @@
+import { Stack, Typography } from "@mui/material";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Typography } from "@mui/material";
 import styles from "styles/components/footer.module.css";
 
 /**
@@ -10,9 +10,17 @@ import styles from "styles/components/footer.module.css";
 export function Footer(): ReactNode {
     return (
         <footer className={styles.footer}>
-            <Typography>
-                <Link href="/privacy">Privacy Policy</Link> • Copyright © 2024 Oliver Jones
-            </Typography>
+            <Stack direction="row" spacing={2} divider={<Typography>•</Typography>} justifyContent="center">
+                <Typography component={Link} href="https://oathompsonjones.github.io/Honours-Project">
+                    Dissertation
+                </Typography>
+                <Typography component={Link} href="/privacy">
+                    Privacy Policy
+                </Typography>
+                <Typography>
+                    Copyright © 2024 Oliver Jones
+                </Typography>
+            </Stack>
         </footer>
     );
 }
