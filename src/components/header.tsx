@@ -12,9 +12,11 @@ import styles from "styles/components/header.module.css";
 export function Header(): ReactNode {
     return (
         <AppBar component="header" className={styles.header!}>
-            <Toolbar component="nav" className={styles.nav!}>
+            <Toolbar component="nav" className={`${styles.nav!} full-width`}>
                 <Image src={logo} alt="Haskell Logo" style={{ height: "3rem", width: "auto" }} />
-                <Typography variant="h5">A Graphical Playground for Haskell</Typography>
+                <Typography variant="h5" sx={{ display: { md: "block", xs: "none" } }}>
+                    A Graphical Playground for Haskell
+                </Typography>
                 <MenuItem component={Link} href="/">Home</MenuItem>
                 <MenuItem component={Link} href="/editor">Editor</MenuItem>
             </Toolbar>

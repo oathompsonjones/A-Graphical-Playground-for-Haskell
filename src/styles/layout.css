@@ -1,6 +1,6 @@
 body,
 .wrapper {
-    --padding: 1rem;
+    --padding: 3rem;
     --gutter: minmax(0, 1fr);
     --content-max: 70rem;
     --content: min(100% - 2 * var(--padding), var(--content-max));
@@ -36,24 +36,26 @@ body,
 
 body {
     min-height: 100dvh;
-    display: grid;
     grid-template-rows: [header-start] auto [header-end main-start] 1fr [main-end footer-start] auto [footer-end];
     background-color: var(--mui-palette-background-default);
 }
 
+header,
+main,
+footer {
+    grid-column: edge;
+    display: grid !important;
+    grid-template-columns: subgrid;
+}
+
 header {
     grid-row: header;
-    grid-column: edge;
 }
 
 main {
     grid-row: main;
-    grid-column: edge;
-    display: grid;
-    grid-template-columns: subgrid;
 }
 
 footer {
     grid-row: footer;
-    grid-column: edge;
 }
