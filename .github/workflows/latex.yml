@@ -13,9 +13,7 @@ jobs:
       - name: Compile LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: |
-            main.tex
-            sections/**/*.tex
+          root_file: main.tex
           working_directory: report
       - name: Generate GitHub Pages content
         run: mkdir build && cp ./report/main.pdf ./build/main.pdf && echo "<meta http-equiv='refresh' content='0;url=main.pdf'>" > ./build/index.html
