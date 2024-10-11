@@ -1,9 +1,10 @@
 .editor {
+    --line-num-width: 3ch;
+
+    border-radius: 0;
     height: 100%;
     width: 100%;
     position: relative;
-    --line-num-colour: #666;
-    --line-num-width: 3ch;
     overflow: clip;
 }
 
@@ -24,7 +25,7 @@
     padding: 1rem !important;
     margin: 0 !important;
     border: 0;
-    white-space: nowrap;
+    white-space: pre;
 }
 
 .editor textarea {
@@ -32,7 +33,7 @@
     resize: none;
     color: transparent;
     background-color: transparent;
-    caret-color: var(--line-num-colour);
+    caret-color: var(--mui-palette-text-disabled);
     outline: none;
     padding-left: calc(1rem + var(--line-num-width) + 0.5ch) !important;
     word-break: break-all;
@@ -53,6 +54,6 @@
     display: inline-block;
     width: var(--line-num-width);
     margin-right: 0.5ch;
-    color: var(--line-num-colour);
+    color: var(--mui-palette-text-disabled);
     text-align: right;
 }

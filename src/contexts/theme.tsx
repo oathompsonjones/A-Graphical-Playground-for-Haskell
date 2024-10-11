@@ -25,10 +25,11 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
             cssVariables: { colorSchemeSelector: "class" },
             defaultColorScheme: "dark",
             palette: {
-                background: { default: "#666666", paper: "#333333" },
+                background: { default: "#666", paper: "#333" },
                 mode: "dark",
                 primary: { main: "#5e5086" },
-                secondary: { main: "#999999" },
+                secondary: { main: "#999" },
+                text: { disabled: "#666", primary: "#ddd", secondary: "#999" },
             },
         }),
         { breakpoints: ["xs", "sm", "md", "lg", "xl"] },

@@ -15,11 +15,11 @@ export default function EditorPage(): ReactNode {
     return (
         <div className={`edge ${styles.container}`}>
             <div className={styles.column}>
-                <Canvas />
-            </div>
-            <div className={styles.column}>
                 <Editor />
                 <Console />
+            </div>
+            <div className={styles.column}>
+                <Canvas />
             </div>
         </div>
     );
