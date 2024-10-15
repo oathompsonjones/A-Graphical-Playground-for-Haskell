@@ -1,42 +1,123 @@
+% https://dl.acm.org/journal/pacmpl/author-guidelines
+% Change citations to use (Author, Year) format. 
+% Be consice, don't use extra words where they are not needed.
+% Cite markers iff relevant.
+% Don't add *too* much background — Write for the audience of the paper.
+    % More background needed for graphics.
+% Find data about how widely used Gloss is, and add comparisions to other libraries.
+% Quite broad at the moment, narrow in, and compare options then justify my choices.
+
+% Remember, we will have to go back to the background chapter later to narrow it down.
+% In the next 2 weeks, have an answer for "here's what I'm going to do, am I going to work with Sam or alone" (I'm going to work alone).
+
 % Define the document as a subfile and reference its root.
 \documentclass[../main.tex]{subfiles}
 
 % Begin the document.
 \begin{document}
 \chapter{Background}
-    % \paragraph{What is required?}
-    %     You should aim to produce around 5 pages of synopsis of the existing work that
-    %         forms the context for your project.
-    %     You should give this to your supervisor by the end of week 5, and discuss it
-    %         with them at your next meeting, jointly filling in and submitting this form.
+    % ? WHAT IS REQUIRED?
+    % * You should aim to produce around 5 pages of synopsis of the existing work that forms the context for your project.
 
-    %     It is suggested that you use this as an opportunity to familiarise yourself
-    %         with LaTeX, using the report template shown in Style Guide provided.
-    %     The University has reasonable guides for beginners on how to use LaTeX with or
-    %         without overleaf.
+    % * You should give this to your supervisor by the end of week 5, and discuss it with them at your next meeting, jointly filling in and submitting this form.
 
-    %     Things to consider:
-    %     \begin{itemize}
-    %         \item Although typically published papers will be a substantial part of the background
-    %               (see more below) this may differ for different projects.
-    %               For example, your task may instead require you to get a strong understanding of
-    %                   an existing code-base, or critical software tools, or of an application domain.
-    %               You will still need to demonstrate your knowledge and critical evaluation
-    %                   through writing a good synopsis of the relevant existing material, to set your
-    %                   work in context, and justify your approach.
+    % ! THINGS TO CONSIDER
+    % * Although typically published papers will be a substantial part of the background (see more below) this may differ for different projects. For example, your task may instead require you to get a strong understanding of an existing code-base, or critical software tools, or of an application domain. You will still need to DEMONSTRATE YOUR KNOWLEDGE and CRITICAL EVALUATION through writing a good SYNOPSIS OF THE RELEVANT EXISTING MATERIAL, to SET YOUR WORK IN CONTEXT, and JUSTIFY YOUR APPROACH.
 
-    %         \item A good background chapter is not just a summary of all the things you have read.
-    %               Rather, it should be selective and well-organised, to tell the reader just what
-    %                   they need to know to understand the work that follows.
+    % * A good background chapter is NOT JUST A SUMMARY of all the things you have read. Rather, it should be SELECTIVE AND WELL-ORGANISED, to tell the reader JUST WHAT THEY NEED TO KNOW to understand the work that follows.
 
-    %         \item It should be clear to the reader (and to you!) why you are including any information
-    %               that you present.
-    %               A lengthy, rambling and ‘padded’ background chapter is a common reason for
-    %                   lower marks on these criteria; or a chapter that omits critical material.
+    % * It should be clear to the reader (and to you!) why you are including any information that you present. A lengthy, rambling and ‘padded’ background chapter is a common reason for lower marks on these criteria; or a chapter that omits critical material.
 
-    %         \item Probably the best guide to the expected content is to look at published papers in
-    %               the same domain as your project, and how they put their new work in the context of
-    %               previous work.
-    %     \end{itemize}
+    % * Probably the best guide to the expected content is to look at published papers in the same domain as your project, and how they put their new work in the context of previous work.
+
+    \section{Functional Programming and Haskell}
+        Functional programming is a programming paradigm built around the evaluation of
+            mathematical functions~\citep{fpPaulHudak}.
+        Unlike the more widely used imperative programming, which utilises a series of
+            statements to alter the state of a program and produce a result, functional
+            programming is based on the composition and execution of functions to produce
+            that result.
+        The paradigm is based on lambda calculus, a formal system of computation,
+            developed by Alonzo Church in the 1930s~\citep{lambdaCalculus}, which is built
+            around function application.
+        Lambda calculus was proved to be equivalent to Turing machines by Alan
+            \citet{lambdaTuringComplete}, and was developed further by
+            \citet{simplyTypedLambdaCalculus} into the simply typed lambda calculus, which
+            is the basis for functional programming languages today.
+
+        One of the most widely used functional programming languages is Haskell, a
+            statically typed, purely functional programming language, developed in the late
+            1980s, with the intention of consolidating features from existing functional
+            programming languages into a single, standardised
+            language~\citep{haskellConference}.
+        Haskell's namesake is Haskell Curry, who developed an equivalent system to
+            lambda calculus, combinatory logic, alongside Moses Schönfinkel the 1920s and
+            1930s~\citep{combinatoryLogic}.
+
+    \section{Graphics}
+        Computer graphics is a very wide field, encompassing the use of computers for
+            the creation, manipulation, and rendering of images, across both two and
+            three-dimensional domains.
+        Although rudimentary graphics have been around longer, the discipline of
+            computer graphics was first really established in the 1950s, with the
+            development of the first graphical displays~\citep{X}.
+        Since then, the field has grown rapidly, resulting in a plethora of techniques
+            and technologies for creating and rendering graphics.
+
+        \subsubsection{OpenGL}
+            One of the most widely used graphics libraries is OpenGL, an open-source
+                library developed by Silicon Graphics in the early 1990s~\citep{X}.
+            It is a cross-platform library, which supports both 2D and 3D graphics.
+
+        \subsection{Graphics in Haskell}
+            There are a number of libraries and bindings available for Haskell which aid in
+                generating graphics.
+            The most widely used of these is the Gloss library, which provides a simple
+                interface for creating graphics in Haskell~\citep{X}.
+
+        \subsection{Graphics in Web Browsers}
+            The first web browser, originally named WorldWideWeb before becoming Nexus, was
+                developed by Sir Tim Berners-Lee in 1990~\citep{X}, alongside the first web
+                server, and a very basic version of HypterText Markup Language
+                (HTML)~\citep{X}.
+            Web browsers are inherently designed for redering structured graphical content,
+                and while early browsers were limited to displaying very basic HTML~\citep{X},
+                developments in the last three decades, including the introduction of Cascading
+                Style Sheets (CSS)~\citep{X}, JavaScript~\citep{X}, and HTML5~\citep{X}, have
+                allowed for far more complex and interactive graphics.
+
+            \subsubsection{HTML5 Canvas API}
+                Due to the nature of markup languages, new features are rarely added to
+                    HTML~\citep{X}.
+                Occasionally, however, new elements are added to the language, including the
+                    \texttt{canvas} element, which was first introduced by Apple in 2004~\citep{X},
+                    and later standardised in the HTML5 specification~\citep{X} in 2011.
+                The \texttt{canvas} element allows for dynamic rendering of 2D graphics using
+                    JavaScript, producing a bitmap image which is displayed in the browser.
+
+            \subsubsection{WebGL}
+
+    \section{Existing Work}
+        There are a number of existing projects which provide similar platforms for
+            creating graphics in a web browser.
+        Very few of these projects support the Haskell programming language, and those
+            that do are limited in their capabilities.
+
+        \subsection{Processing and P5 JS}
+            Processing is a programming language and integrated development environment
+                (IDE) based on Java (with bindings available for JavaScript, Python and Ruby),
+                allowing for the creation of graphics and animations~\citep{X}.
+            P5.js is the official JavaScript binding for Processing, which uses the web
+                browser to display graphics via the HTML \texttt{canvas} element~\citep{X}.
+            Processing and P5.js sketches are built around two core functions:
+                \texttt{setup()} which is called once when the program starts; and
+                \texttt{draw()} which is called repeatedly to update the canvas.
+            While Processing uses OpenGL as its rendering engine, P5.js uses the HTML5
+                Canvas API, with WebGL support available as an opt-in feature~\citep{X} to
+                improve performance and enable 3D graphics.
+
+        \subsection{Code World}
+            Code World is website which provides an environment for creating simple
+                graphics using Haskell~\citep{codeWorld}.
 
 \end{document}
