@@ -19,7 +19,7 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
                 MuiDivider: { styleOverrides: { root: { margin: "1.25% 0" } } },
                 MuiInputBase: { styleOverrides: { root: { borderRadius: "1rem 1rem 0 0 !important" } } },
                 MuiMenuItem: { styleOverrides: { root: { borderRadius: "999px" } } },
-                MuiPaper: { styleOverrides: { rounded: { borderRadius: "2vmin" } } },
+                MuiPaper: { styleOverrides: { rounded: { borderRadius: "0" } } },
                 MuiSkeleton: { styleOverrides: { root: { borderRadius: "2vmin" } } },
             },
             cssVariables: { colorSchemeSelector: "class" },

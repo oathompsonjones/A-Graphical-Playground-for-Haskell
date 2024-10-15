@@ -1,8 +1,10 @@
 .container {
+    --gap: 0.5rem;
+
     display: flex;
     margin: 1rem;
-    gap: 0.5rem;
-    border-radius: 2vmin;
+    gap: var(--gap);
+    border-radius: 10px;
     overflow: clip;
 }
 
@@ -10,12 +12,11 @@
     .container {
         flex-direction: column-reverse;
     }
-
 }
 
-.column {
+.container .column {
     display: flex;
     flex-direction: column;
     flex: 1;
-    gap: 0.5rem;
+    gap: var(--gap);
 }

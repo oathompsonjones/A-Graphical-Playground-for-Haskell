@@ -1,7 +1,8 @@
 .editor {
     --line-num-width: 3ch;
+    --space-from-line-num: 0.5ch;
+    --padding: 1rem;
 
-    border-radius: 0;
     height: 100%;
     width: 100%;
     position: relative;
@@ -12,7 +13,6 @@
     font-size: 1.25rem;
     line-height: 1.6rem;
     letter-spacing: 0.025rem;
-    background: none !important;
 }
 
 .editor textarea,
@@ -22,8 +22,8 @@
     left: 0;
     height: 100%;
     width: 100%;
-    padding: 1rem !important;
-    margin: 0 !important;
+    padding: var(--padding);
+    margin: 0;
     border: 0;
     white-space: pre;
 }
@@ -35,7 +35,7 @@
     background-color: transparent;
     caret-color: var(--mui-palette-text-disabled);
     outline: none;
-    padding-left: calc(1rem + var(--line-num-width) + 0.5ch) !important;
+    padding-left: calc(var(--padding) + var(--line-num-width) + var(--space-from-line-num));
     word-break: break-all;
 }
 
@@ -53,7 +53,7 @@
     content: counter(line);
     display: inline-block;
     width: var(--line-num-width);
-    margin-right: 0.5ch;
+    margin-right: var(--space-from-line-num);
     color: var(--mui-palette-text-disabled);
     text-align: right;
 }
