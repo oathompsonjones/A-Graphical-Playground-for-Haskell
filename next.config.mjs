@@ -1,10 +1,12 @@
+// @ts-check
 /** @type {import('next').NextConfig} */
 export default {
     compiler: {
         emotion: true,
         styledComponents: true,
     },
-    redirects() {
+    // eslint-disable-next-line require-await
+    async redirects() {
         return [
             {
                 destination: "https://oathompsonjones.github.io/Honours-Project/",
@@ -13,6 +15,7 @@ export default {
             },
         ];
     },
+    transpilePackages: ["highlight.js"],
     webpack(config) {
         config.module.rules.push({
             test: /\.svg$/u,

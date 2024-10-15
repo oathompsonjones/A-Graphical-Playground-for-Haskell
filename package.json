@@ -16,20 +16,20 @@
     "devDependencies": {
         "@oathompsonjones/eslint-config": "^1.5.5",
         "@oathompsonjones/ts-config": "^0.0.35",
-        "@types/node": "^22.6.1",
-        "@types/react": "18.3.9",
-        "@types/react-dom": "18.3.0",
-        "typescript": "^5.6.2"
+        "@types/node": "^22.7.5",
+        "@types/react": "18.3.11",
+        "@types/react-dom": "18.3.1",
+        "typescript": "^5.6.3"
     },
     "dependencies": {
         "@emotion/react": "^11.13.3",
         "@emotion/styled": "^11.13.0",
-        "@mui/icons-material": "^6.1.1",
-        "@mui/lab": "6.0.0-beta.10",
-        "@mui/material": "^6.1.1",
+        "@mui/icons-material": "^6.1.4",
+        "@mui/lab": "6.0.0-beta.12",
+        "@mui/material": "^6.1.4",
         "@svgr/webpack": "^8.1.0",
         "highlight.js": "^11.10.0",
-        "next": "14.2.13",
+        "next": "14.2.15",
         "react": "18.3.1",
         "react-dom": "18.3.1",
         "sharp": "^0.33.5"

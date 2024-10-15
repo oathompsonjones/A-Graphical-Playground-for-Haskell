@@ -25,7 +25,7 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
             cssVariables: { colorSchemeSelector: "class" },
             defaultColorScheme: "dark",
             palette: {
-                background: { default: "#666", paper: "#333" },
+                background: { default: "#666", paper: "#222" },
                 mode: "dark",
                 primary: { main: "#5e5086" },
                 secondary: { main: "#999" },
