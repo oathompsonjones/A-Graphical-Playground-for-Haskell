@@ -9,6 +9,19 @@ import styles from "styles/components/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
 
 /*
+TODO:
+
+* Remove things like macOS double space inserting a dot.
+* Allow use of the tab key.
+* Support keyboard shortcuts, like Ctrl+S to save, Ctrl+Enter to run, etc.
+* Allow the Haskell code to be executed, displaying text output in the console.
+* Add accounts to allow users to save their code.
+* Add the ability to share code via a URL.
+* Add autocomplete for Haskell code.
+* Implement graphics and animations.
+*/
+
+/*
 ! Some of this code looks cumbersome and unnecessary.
 It's a workaround for a bug in the next.js build process.
 ? What caused the bug?
@@ -27,7 +40,7 @@ That's why we are storing the highlight.js instance in a state variable,
 export function Editor(): ReactNode {
     // Setup state variables.
     const [hljs, setHljs] = useState<HLJSApi>(null!);
-    const [rawCode, setRawCode] = useLocalStorage("code", "-- Start writing your code here.");
+    const [rawCode, setRawCode] = useLocalStorage("code", "-- Start writing your code here.\n\n");
     const [displayCode, setDisplayCode] = useState<ReactNode>(null);
 
     /**
