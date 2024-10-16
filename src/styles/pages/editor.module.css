@@ -1,22 +1,5 @@
 .container {
-    --gap: 0.5rem;
-
-    display: flex;
     margin: 1rem;
-    gap: var(--gap);
     border-radius: 10px;
     overflow: clip;
-}
-
-@media screen and (orientation: portrait) {
-    .container {
-        flex-direction: column-reverse;
-    }
-}
-
-.container .column {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: var(--gap);
 }

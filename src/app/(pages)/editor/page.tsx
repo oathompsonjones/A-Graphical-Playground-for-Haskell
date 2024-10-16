@@ -1,26 +1,27 @@
+"use client";
+
 import { Canvas } from "components/pages/editor/canvas";
 import { Console } from "components/pages/editor/console";
 import { Editor } from "components/pages/editor/editor";
-import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { SplitView } from "components/splitView";
 import styles from "styles/pages/editor.module.css";
-
-export const metadata: Metadata = { title: "A Graphical Playground for Haskell | Editor" };
+import { useMediaQuery } from "@mui/material";
 
 /**
  * This is the editor page.
  * @returns The page element.
  */
 export default function EditorPage(): ReactNode {
+    const isPortrait = useMediaQuery("(orientation: portrait)");
+
     return (
-        <div className={`edge ${styles.container}`}>
-            <div className={styles.column}>
+        <SplitView className={`edge ${styles.container}`} vertical={isPortrait}>
+            <SplitView vertical>
                 <Editor />
                 <Console />
-            </div>
-            <div className={styles.column}>
-                <Canvas />
-            </div>
-        </div>
+            </SplitView>
+            <Canvas />
+        </SplitView>
     );
 }

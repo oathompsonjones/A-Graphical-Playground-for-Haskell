@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex: 1;
+}
+
+.horizontal>* {
+    height: 100%;
+    width: 50%;
+}
+
+.vertical>* {
+    height: 50%;
+    width: 100%;
+}
+
+.vertical {
+    flex-direction: column;
+}
+
+.splitter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--mui-palette-text-secondary);
+}
+
+.horizontal .splitter {
+    cursor: ew-resize;
+    height: 100%;
+    width: max-content;
+}
+
+.vertical .splitter {
+    cursor: ns-resize;
+    height: max-content;
+    width: 100%;
+}
+
+.horizontal>.splitter>.dragIcon {
+    transform: rotate(90deg);
+}
