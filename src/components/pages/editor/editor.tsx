@@ -12,10 +12,12 @@ import { useLocalStorage } from "hooks/useLocalStorage";
 TODO:
 
 * Remove things like macOS double space inserting a dot.
-* Allow use of the tab key.
-* Support keyboard shortcuts, like Ctrl+S to save, Ctrl+Enter to run, etc.
+* Keyboard controls
+    * Allow use of the tab key.
+    * Support shortcuts like Ctrl+S to save, Ctrl+Enter to run, etc.
 * Allow the Haskell code to be executed, displaying text output in the console.
 * Add accounts to allow users to save their code.
+    * Set up database
 * Add the ability to share code via a URL.
 * Add autocomplete for Haskell code.
 * Implement graphics and animations.
