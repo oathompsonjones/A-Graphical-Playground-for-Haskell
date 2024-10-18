@@ -1,11 +1,10 @@
 % https://dl.acm.org/journal/pacmpl/author-guidelines
-% Change citations to use (Author, Year) format. 
 % Be consice, don't use extra words where they are not needed.
-% Cite markers iff relevant.
+% ! Cite markers iff relevant.
 % Don't add *too* much background — Write for the audience of the paper.
-    % More background needed for graphics.
-% Find data about how widely used Gloss is, and add comparisions to other libraries.
-% Quite broad at the moment, narrow in, and compare options then justify my choices.
+% ! More background wanted for graphics.
+% ! Add comparisions to other libraries.
+% Quite broad at the moment, narrow in, and compare options to then justify my choices.
 
 % Remember, we will have to go back to the background chapter later to narrow it down.
 % In the next 2 weeks, have an answer for "here's what I'm going to do, am I going to work with Sam or alone" (I'm going to work alone).
@@ -32,92 +31,162 @@
 
     \section{Functional Programming and Haskell}
         Functional programming is a programming paradigm built around the evaluation of
-            mathematical functions~\citep{fpPaulHudak}.
+            mathematical functions \citep{fpPaulHudak}.
         Unlike the more widely used imperative programming, which utilises a series of
             statements to alter the state of a program and produce a result, functional
             programming is based on the composition and execution of functions to produce
             that result.
         The paradigm is based on lambda calculus, a formal system of computation,
-            developed by Alonzo Church in the 1930s~\citep{lambdaCalculus}, which is built
-            around function application.
+            developed by Alonzo \citet{lambdaCalculus} which is built around function
+            application.
         Lambda calculus was proved to be equivalent to Turing machines by Alan
-            \citet{lambdaTuringComplete}, and was developed further by
-            \citet{simplyTypedLambdaCalculus} into the simply typed lambda calculus, which
-            is the basis for functional programming languages today.
+            \citet{lambdaTuringComplete}.
 
         One of the most widely used functional programming languages is Haskell, a
             statically typed, purely functional programming language, developed in the late
             1980s, with the intention of consolidating features from existing functional
-            programming languages into a single, standardised
-            language~\citep{haskellConference}.
+            programming languages into a single, standardised language
+            \citep{haskellConference}.
         Haskell's namesake is Haskell Curry, who developed an equivalent system to
             lambda calculus, combinatory logic, alongside Moses Schönfinkel the 1920s and
-            1930s~\citep{combinatoryLogic}.
+            1930s \citep{combinatoryLogic}.
 
     \section{Graphics}
         Computer graphics is a very wide field, encompassing the use of computers for
             the creation, manipulation, and rendering of images, across both two and
             three-dimensional domains.
-        Although rudimentary graphics have been around longer, the discipline of
-            computer graphics was first really established in the 1950s, with the
-            development of the first graphical displays~\citep{X}.
+        Although rudimentary graphics have been around longer, making use of cathode
+            ray tube displays \citep{crtBraun}, the discipline of computer graphics was
+            first truly established in the 1950s and 60s, with the development of the first
+            viable interactive graphical displays.
         Since then, the field has grown rapidly, resulting in a plethora of techniques
             and technologies for creating and rendering graphics.
 
-        \subsubsection{OpenGL}
-            One of the most widely used graphics libraries is OpenGL, an open-source
-                library developed by Silicon Graphics in the early 1990s~\citep{X}.
-            It is a cross-platform library, which supports both 2D and 3D graphics.
+        Two-dimensional graphics are typically stored as raster graphics, where images
+            are represented as a grid of pixels \citep{rasterGraphics}.
+        This method of storage is simple, and reflects the same method that modern
+            displays use to render images, but can result in loss of quality when images
+            are scaled.
+        An alternative method of storing graphics, is to use vector graphics, where
+            shapes are described by mathematical equations, which are then converted into
+            pixels when rendered \citep{vectorGraphics}.
+        This is a more ideal solution for images which need to be scaled, as the image
+            will not change in quality when resized.
+
+        \subsection{OpenGL}
+            One of the most widely used graphics libraries is OpenGL, a cross-language,
+                cross-platform library developed by Silicon Graphics in the early 1990s
+                \citep{openGL}.
+            It supports both 2D and 3D graphics, and is generally used to interact with the
+                graphics processing unit (GPU) to take advantage of hardware acceleration,
+                improving performance particularly for 3D graphics, but can also be used for
+                central processing unit (CPU) rendering.
+            With several hundred procedures available within the API, OpenGL is a both a
+                powerful and versatile library, making it ideal for a wide range of
+                applications, from video games to scientific visualisation.
 
         \subsection{Graphics in Haskell}
-            There are a number of libraries and bindings available for Haskell which aid in
-                generating graphics.
-            The most widely used of these is the Gloss library, which provides a simple
-                interface for creating graphics in Haskell~\citep{X}.
+            \subsubsection{Gloss}
+                There are a number of libraries and bindings available for Haskell which aid in
+                    generating graphics.
+                One of the most popular of these, with a rating on Hackage of 2.75 out of 3, is
+                    the Gloss library, which provides a simple interface for creating graphics in
+                    Haskell \citep{hackageGloss}.
+                As with many graphics libraries, Gloss uses OpenGL as its rendering engine, but
+                    provides a more simple and high-level interface, making it ideal for beginners
+                    or for quick sketches.
+                Due to the simplicity of Gloss, there are a very limited number of functions
+                    available, which can make it difficult to create more complex graphics.
+
+            \subsubsection{Diagrams}
+                Another popular Haskell graphics library is Diagrams \citep{hackageDiagrams},
+                    which also has a Hackage rating of 2.75, but has fewer downloads than Gloss.
+                This provides a more powerful and flexible interface than Gloss, by allowing
+                    the user to choose from one of six backends, including Cairo \citep{cairo}.
+                The larger API of Diagrams makes it less suitable for beginners, but the
+                    flexibility of backends makes the library more versatile for a wider range of
+                    applications.
+
+                % TODO: Add comparison
 
         \subsection{Graphics in Web Browsers}
             The first web browser, originally named WorldWideWeb before becoming Nexus, was
-                developed by Sir Tim Berners-Lee in 1990~\citep{X}, alongside the first web
-                server, and a very basic version of HypterText Markup Language
-                (HTML)~\citep{X}.
-            Web browsers are inherently designed for redering structured graphical content,
-                and while early browsers were limited to displaying very basic HTML~\citep{X},
+                developed by Sir Tim \citet{worldWideWeb}, alongside the first web server, and
+                a very basic version of HyperText Markup Language (HTML) \citep{html}.
+            Web browsers are inherently designed for rendering structured graphical
+                content, and while the first browsers were limited to displaying just HTML,
                 developments in the last three decades, including the introduction of Cascading
-                Style Sheets (CSS)~\citep{X}, JavaScript~\citep{X}, and HTML5~\citep{X}, have
-                allowed for far more complex and interactive graphics.
+                Style Sheets (CSS) \citep{css}, JavaScript \citep{js}, and HTML5 \citep{html5},
+                have allowed for far more complex and interactive graphics.
+
+            \subsubsection{Scalable Vector Graphics (SVGs)}
+                Scalable Vector Graphics (SVGs) use an XML-based format, similar to HTML, to
+                    describe two-dimensional vector graphics \citep{svg}.
+                Each object in an SVG is appended to the Document Object Model (DOM) of the web
+                    page, allowing the browser to automatically re-render the image if any changes
+                    are made to the SVG.
 
             \subsubsection{HTML5 Canvas API}
-                Due to the nature of markup languages, new features are rarely added to
-                    HTML~\citep{X}.
-                Occasionally, however, new elements are added to the language, including the
-                    \texttt{canvas} element, which was first introduced by Apple in 2004~\citep{X},
-                    and later standardised in the HTML5 specification~\citep{X} in 2011.
-                The \texttt{canvas} element allows for dynamic rendering of 2D graphics using
-                    JavaScript, producing a bitmap image which is displayed in the browser.
+                The \texttt{canvas} element was first introduced by Apple in 2004
+                    \citep{appleCanvas}, before being later standardised in the HTML5 specification
+                    \citep{html5Canvas} in 2011.
+                By itself, the \texttt{canvas} element is nothing but a plain bitmap image.
+                Where it becomes interesting, however, is when it is combined with JavaScript,
+                    allowing for the dynamic generation and rendering of graphics.
+                Unlike SVGs, each component that makes up the image is not stored in the DOM,
+                    but is rendered directly to the canvas, which can result in better performance
+                    once the image is rendered, but requires the whole canvas to be redrawn if any
+                    changes are made.
 
             \subsubsection{WebGL}
+                WebGL brings the capabilities of OpenGL to web browsers, allowing for
+                    hardware-accelerated 2D and 3D graphics to be rendered without the need for any
+                    plugins \citep{webGL}.
+                Before being standardised by the Khronos Group, WebGL started out as two
+                    independent experiments by Mozilla and Opera \citep{mozillaWebGL, operaWebGL}.
+                WebGL renders inside the \texttt{canvas} element, and is based on OpenGL ES
+                    2.0, a subset of OpenGL which is designed for embedded systems
+                    \citep{openGLES}.
 
     \section{Existing Work}
-        There are a number of existing projects which provide similar platforms for
-            creating graphics in a web browser.
-        Very few of these projects support the Haskell programming language, and those
-            that do are limited in their capabilities.
-
-        \subsection{Processing and P5 JS}
+        \subsection{Processing and P5.js}
             Processing is a programming language and integrated development environment
                 (IDE) based on Java (with bindings available for JavaScript, Python and Ruby),
-                allowing for the creation of graphics and animations~\citep{X}.
+                allowing for the creation of graphics and animations \citep{processing}.
             P5.js is the official JavaScript binding for Processing, which uses the web
-                browser to display graphics via the HTML \texttt{canvas} element~\citep{X}.
+                browser to display graphics via the HTML \texttt{canvas} element \citep{p5js}.
             Processing and P5.js sketches are built around two core functions:
                 \texttt{setup()} which is called once when the program starts; and
                 \texttt{draw()} which is called repeatedly to update the canvas.
             While Processing uses OpenGL as its rendering engine, P5.js uses the HTML5
-                Canvas API, with WebGL support available as an opt-in feature~\citep{X} to
-                improve performance and enable 3D graphics.
+                Canvas API, with WebGL support available as an opt-in feature \citep{p5WebGL}
+                to improve performance and enable 3D graphics.
+
+            While there is no official support for Haskell from the Processing Foundation,
+                there have been some unofficial bindings published on Hackage.
+            One such package is processing by \citet{hackageProcessing}, which uses p5.js
+                as a backend, producing its output using the HTML5 \texttt{canvas} element, but
+                this was last updated in 2016, and has seemingly been abandoned.
+            Another package, processing-for-haskell by \citet{hackageProcessingForHaskell},
+                was last updated in 2022, and implements almost the entire Processing API in
+                Haskell, using OpenGL as the backend, just as the original Processing does, but
+                does not support generating graphics in web browsers.
 
         \subsection{Code World}
-            Code World is website which provides an environment for creating simple
-                graphics using Haskell~\citep{codeWorld}.
+            Code World is an educational website distributed by Google and created by Chris
+                \citet{codeWorldGitHub}, which provides an environment for creating simple
+                graphics using Haskell.
+            There are three versions of Code World available: one which uses an educational
+                version of Haskell 98; one which uses a full version of Haskell 2010; and one
+                which uses a block editor, designed for beginners.
+            While Code World is a useful tool for teaching Haskell, basic programming
+                concepts, and simple graphics concepts, it lacks certain features which could
+                allow for more creativity from the programmer.
+            For example, the ability to see the results of changes in real-time can be
+                highly beneficial, as it allows the programmer to discover effects which they
+                may not have considered before \citep{inventingOnPrinciple}.
+            This can be achieved through the implementation of livelits, a feature which
+                allows programmers to alter the values of variables, and see the results in
+                real-time, without having to recompile the program \citep{livelits}.
 
 \end{document}
