@@ -1,9 +1,9 @@
 "use client";
 
 import type { MouseEvent, ReactElement, ReactNode } from "react";
-import { DragHandle } from "@mui/icons-material";
+import { useRef, useState } from "react";
+import { DragHandleRounded } from "@mui/icons-material";
 import styles from "styles/components/splitView.module.css";
-import { useRef } from "react";
 
 /**
  * Creates a resizable split view.
@@ -21,39 +21,42 @@ export function SplitView({ className, children, vertical }: {
     const orientation = vertical ?? false ? "vertical" : "horizontal";
     const splitViewClass = `${styles.container} ${styles[orientation]}`;
 
+    const [canDrag, setCanDrag] = useState(false);
     const container = useRef<HTMLDivElement>(null!);
     const handleDrag = (event: MouseEvent<HTMLDivElement>): void => {
-        const firstSection = container.current.children[0] as HTMLDivElement;
-        const secondSection = container.current.children[2] as HTMLDivElement;
-        const containerRect = container.current.getBoundingClientRect();
+        if (canDrag) {
+            const firstSection = container.current.children[0] as HTMLDivElement;
+            const secondSection = container.current.children[2] as HTMLDivElement;
+            const containerRect = container.current.getBoundingClientRect();
 
-        switch (orientation) {
-            case "horizontal": {
-                const offsetX = event.clientX - containerRect.left;
-                const leftWidth = offsetX / containerRect.width * 100;
-                const rightWidth = 100 - leftWidth;
+            switch (orientation) {
+                case "horizontal": {
+                    const offsetX = event.clientX - containerRect.left;
+                    const leftWidth = offsetX / containerRect.width * 100;
+                    const rightWidth = 100 - leftWidth;
 
-                firstSection.style.width = `${leftWidth}%`;
-                secondSection.style.width = `${rightWidth}%`;
-                break;
-            }
-            case "vertical": {
-                const offsetY = event.clientY - containerRect.top;
-                const topHeight = offsetY / containerRect.height * 100;
-                const bottomHeight = 100 - topHeight;
+                    firstSection.style.width = `${leftWidth}%`;
+                    secondSection.style.width = `${rightWidth}%`;
+                    break;
+                }
+                case "vertical": {
+                    const offsetY = event.clientY - containerRect.top;
+                    const topHeight = offsetY / containerRect.height * 100;
+                    const bottomHeight = 100 - topHeight;
 
-                firstSection.style.height = `${topHeight}%`;
-                secondSection.style.height = `${bottomHeight}%`;
-                break;
+                    firstSection.style.height = `${topHeight}%`;
+                    secondSection.style.height = `${bottomHeight}%`;
+                    break;
+                }
             }
         }
     };
 
     return (
-        <div className={className === undefined ? splitViewClass : `${splitViewClass} ${className}`} ref={container}>
+        <div className={`${splitViewClass} ${className}`} ref={container} onMouseMove={handleDrag}>
             {children[0]}
-            <div className={styles.splitter} onDrag={handleDrag} draggable>
-                <DragHandle className={styles.dragIcon!} />
+            <div className={styles.splitter} onMouseDown={() => setCanDrag(true)} onMouseUp={() => setCanDrag(false)}>
+                <DragHandleRounded className={styles.dragIcon!} />
             </div>
             {children[1]}
         </div>

@@ -18,6 +18,7 @@
 }
 
 .splitter {
+    --size: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -27,12 +28,12 @@
 .horizontal .splitter {
     cursor: ew-resize;
     height: 100%;
-    width: max-content;
+    width: var(--size);
 }
 
 .vertical .splitter {
     cursor: ns-resize;
-    height: max-content;
+    height: var(--size);
     width: 100%;
 }
 
