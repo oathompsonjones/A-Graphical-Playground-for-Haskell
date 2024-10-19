@@ -54,6 +54,7 @@ header {
 
 main {
     grid-row: main;
+    padding-top: 1rem;
 }
 
 footer {

@@ -1,6 +1,4 @@
-"use client";
-
-import { Paper } from "@mui/material";
+import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import styles from "styles/components/console.module.css";
 
@@ -12,7 +10,7 @@ import styles from "styles/components/console.module.css";
  */
 export function Console({ content }: { content?: string; }): ReactNode {
     return (
-        <Paper className={styles.console!}>
+        <PlainPaper className={styles.console!}>
             <pre>
                 {content}
                 Lorem ipsum dolor sit amet consectetur, adipisicing elit.
@@ -39,17 +37,7 @@ export function Console({ content }: { content?: string; }): ReactNode {
                 Aperiam distinctio cumque qui alias sequi neque asperiores suscipit,
                 nesciunt est fugiat hic dicta. Saepe enim, facilis porro ab
                 a placeat assumenda!
-                <br /><br />
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Non voluptas illo sunt rerum ea ad consequatur doloremque ipsa
-                provident, consectetur excepturi? Odio placeat recusandae pariatur.
-                Maxime voluptatibus perspiciatis alias voluptates.
-                <br /><br />
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Aperiam distinctio cumque qui alias sequi neque asperiores suscipit,
-                nesciunt est fugiat hic dicta. Saepe enim, facilis porro ab
-                a placeat assumenda!
             </pre>
-        </Paper>
+        </PlainPaper>
     );
 }

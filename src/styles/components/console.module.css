@@ -1,11 +1,11 @@
 .console {
-    border-radius: 0;
-    height: 25%;
     overflow: clip;
+    border-radius: 0;
+    width: 100%;
+    height: 100%;
 }
 
 .console pre {
-    white-space: pre-wrap;
     height: 100%;
     width: 100%;
     padding: 1rem;

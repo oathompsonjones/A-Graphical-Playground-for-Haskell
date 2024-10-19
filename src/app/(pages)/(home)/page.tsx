@@ -8,7 +8,6 @@ import { Typography } from "@mui/material";
 export default function Home(): ReactNode {
     return (
         <div>
-            <br />
             <Typography variant="h2">Home Page</Typography>
             <br />
             <Typography>

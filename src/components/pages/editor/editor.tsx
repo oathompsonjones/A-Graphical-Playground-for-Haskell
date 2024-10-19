@@ -4,7 +4,7 @@ import "styles/components/codeTheme.css";
 import type { FormEvent, ReactNode, UIEvent } from "react";
 import { useEffect, useState } from "react";
 import type { HLJSApi } from "highlight.js";
-import { Paper } from "@mui/material";
+import { PlainPaper } from "./plainPaper";
 import styles from "styles/components/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
 
@@ -15,6 +15,9 @@ TODO:
 * Keyboard controls
     * Allow use of the tab key.
     * Support shortcuts like Ctrl+S to save, Ctrl+Enter to run, etc.
+* Livelits
+    * Number sliders
+    * Colour pickers
 * Allow the Haskell code to be executed, displaying text output in the console.
 * Add accounts to allow users to save their code.
     * Set up database
@@ -106,9 +109,9 @@ export function Editor(): ReactNode {
 
     // Render the editor.
     return (
-        <Paper className={styles.editor!}>
+        <PlainPaper className={styles.editor!}>
             <pre id="code-editor-pre">{displayCode}</pre>
             <textarea id="code-editor-textarea" onChange={handleChange} onScroll={handleScroll} />
-        </Paper>
+        </PlainPaper>
     );
 }

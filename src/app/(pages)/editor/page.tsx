@@ -16,7 +16,7 @@ export default function EditorPage(): ReactNode {
     const isPortrait = useMediaQuery("(orientation: portrait)");
 
     return (
-        <SplitView className={`edge ${styles.container}`} vertical={isPortrait}>
+        <SplitView className={`full-width ${styles.container}`} vertical={isPortrait}>
             <SplitView vertical>
                 <Editor />
                 <Console />

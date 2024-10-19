@@ -19,7 +19,7 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
                 MuiDivider: { styleOverrides: { root: { margin: "1.25% 0" } } },
                 MuiInputBase: { styleOverrides: { root: { borderRadius: "1rem 1rem 0 0 !important" } } },
                 MuiMenuItem: { styleOverrides: { root: { borderRadius: "999px" } } },
-                MuiPaper: { styleOverrides: { rounded: { borderRadius: "0" } } },
+                MuiPaper: { styleOverrides: { rounded: { borderRadius: "2vmin" } } },
                 MuiSkeleton: { styleOverrides: { root: { borderRadius: "2vmin" } } },
             },
             cssVariables: { colorSchemeSelector: "class" },
@@ -39,7 +39,11 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
         /** Injects MUI styles before anything else. */
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
-                <DefaultPropsProvider value={{ MuiButton: { variant: "contained" }, MuiPaper: { elevation: 5 } }}>
+                <DefaultPropsProvider value={{
+                    MuiButton: { variant: "contained" },
+                    MuiPaper: { elevation: 5 },
+                    MuiTextField: { fullWidth: true, required: true, variant: "filled" },
+                }}>
                     <CssBaseline enableColorScheme />
                     {children}
                 </DefaultPropsProvider>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper } from "@mui/material";
+import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import styles from "styles/components/canvas.module.css";
 import { useEffect } from "react";
@@ -22,8 +22,8 @@ export function Canvas({ height, width }: { height?: number; width?: number; }):
     }, []);
 
     return (
-        <Paper className={styles.wrapper!}>
+        <PlainPaper className={styles.wrapper!}>
             <canvas id="canvas" width={width ?? 500} height={height ?? 500} />
-        </Paper>
+        </PlainPaper>
     );
 }
