@@ -53,7 +53,12 @@ export function SplitView({ className, children, vertical }: {
     };
 
     return (
-        <div className={`${splitViewClass} ${className}`} ref={container} onMouseMove={handleDrag}>
+        <div
+            className={`${splitViewClass} ${className}`}
+            ref={container}
+            onMouseMove={handleDrag}
+            onMouseLeave={() => setCanDrag(false)}
+        >
             {children[0]}
             <div className={styles.splitter} onMouseDown={() => setCanDrag(true)} onMouseUp={() => setCanDrag(false)}>
                 <DragHandleRounded className={styles.dragIcon!} />
