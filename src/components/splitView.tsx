@@ -29,26 +29,16 @@ export function SplitView({ className, children, vertical }: {
             const secondSection = container.current.children[2] as HTMLDivElement;
             const containerRect = container.current.getBoundingClientRect();
 
-            switch (orientation) {
-                case "horizontal": {
-                    const offsetX = event.clientX - containerRect.left;
-                    const leftWidth = offsetX / containerRect.width * 100;
-                    const rightWidth = 100 - leftWidth;
+            const clientSize = ({ horizontal: "clientX", vertical: "clientY" } as const)[orientation];
+            const containerPosition = ({ horizontal: "left", vertical: "top" } as const)[orientation];
+            const containerSize = ({ horizontal: "width", vertical: "height" } as const)[orientation];
 
-                    firstSection.style.width = `${leftWidth}%`;
-                    secondSection.style.width = `${rightWidth}%`;
-                    break;
-                }
-                case "vertical": {
-                    const offsetY = event.clientY - containerRect.top;
-                    const topHeight = offsetY / containerRect.height * 100;
-                    const bottomHeight = 100 - topHeight;
+            const offset = event[clientSize] - containerRect[containerPosition];
+            const firstSize = offset / containerRect[containerSize] * 100;
+            const secondSize = 100 - firstSize;
 
-                    firstSection.style.height = `${topHeight}%`;
-                    secondSection.style.height = `${bottomHeight}%`;
-                    break;
-                }
-            }
+            firstSection.style[containerSize] = `${firstSize}%`;
+            secondSection.style[containerSize] = `${secondSize}%`;
         }
     };
 
