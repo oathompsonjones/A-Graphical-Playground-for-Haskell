@@ -38,7 +38,7 @@ Record<"new" | "open" | "run" | "save" | "share" | "stop", () => void>): ReactNo
             </ButtonGroup>
             <ButtonGroup variant="text">
                 <Tooltip title="Share" arrow>
-                    <IconButton disabled onClick={share}>
+                    <IconButton onClick={share}>
                         <IosShare />
                     </IconButton>
                 </Tooltip>

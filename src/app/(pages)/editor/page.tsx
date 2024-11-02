@@ -1,5 +1,6 @@
 "use client";
 
+import { Modal, Paper, Typography, useMediaQuery } from "@mui/material";
 import { Buttons } from "components/pages/editor/buttons";
 import { Canvas } from "components/pages/editor/canvas";
 import { Console } from "components/pages/editor/console";
@@ -9,7 +10,6 @@ import { SplitView } from "components/splitView";
 import { execute } from "actions/code/execute";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { useMediaQuery } from "@mui/material";
 import { useState } from "react";
 
 /**
@@ -21,6 +21,7 @@ export default function EditorPage(): ReactNode {
     const defaultCode = "-- Start writing your code here.\n\n";
     const [code, setCode] = useLocalStorage("code", defaultCode);
     const [consoleOutput, setConsoleOutput] = useState("");
+    const [openShare, setOpenShare] = useState(true);
 
     const new_ = (): void => {
         setConsoleOutput("");
@@ -28,12 +29,22 @@ export default function EditorPage(): ReactNode {
     };
     const open = (): void => undefined;
     const save = (): void => undefined;
-    const share = (): void => undefined;
+    const share = (async (): Promise<void> => {
+        await window.navigator.clipboard.writeText(code);
+        setOpenShare(true);
+    }) as () => void;
     const stop = (): void => undefined;
     const run = (async (): Promise<void> => setConsoleOutput(await execute(code))) as () => void;
 
     return (
         <div className={`full-width ${styles.container}`}>
+            <Modal open={openShare} onClose={() => setOpenShare(false)}>
+                <Paper className={styles.shareMenu!}>
+                    <Typography variant="h6">
+                        The code has been copied to the clipboard.
+                    </Typography>
+                </Paper>
+            </Modal>
             <Buttons new={new_} open={open} save={save} share={share} stop={stop} run={run} />
             <SplitView vertical={isPortrait} id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
