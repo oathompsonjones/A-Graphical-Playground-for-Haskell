@@ -109,7 +109,7 @@ export function Editor({ code, updateCode }: {
                 setDisplayCode(highlightCode(code, _hljs));
             }).catch(() => undefined);
         }).catch(() => undefined);
-    }, []);
+    }, [code]);
 
     // Render the editor.
     return (

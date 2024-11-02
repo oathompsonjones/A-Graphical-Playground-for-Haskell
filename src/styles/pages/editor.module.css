@@ -5,12 +5,3 @@
     flex-direction: column;
     overflow: clip;
 }
-
-.buttons {
-    padding-inline: 2vmin;
-    margin-bottom: 10px;
-}
-
-.buttons>div>button {
-    border-radius: 0;
-}

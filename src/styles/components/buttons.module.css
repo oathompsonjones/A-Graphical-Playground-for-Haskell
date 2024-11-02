@@ -1,0 +1,8 @@
+.container {
+    padding-inline: 2vmin;
+    margin-bottom: 10px;
+}
+
+.container>div>button {
+    border-radius: 0;
+}

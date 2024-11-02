@@ -1,16 +1,16 @@
 "use client";
 
-import { ButtonGroup, IconButton, Tooltip, useMediaQuery } from "@mui/material";
-import { PlayArrow, Save, Stop } from "@mui/icons-material";
+import { Buttons } from "components/pages/editor/buttons";
 import { Canvas } from "components/pages/editor/canvas";
 import { Console } from "components/pages/editor/console";
 import { Editor } from "components/pages/editor/editor";
-import { PlainPaper } from "components/pages/editor/plainPaper";
 import type { ReactNode } from "react";
 import { SplitView } from "components/splitView";
 import { execute } from "actions/code/execute";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { useMediaQuery } from "@mui/material";
+import { useState } from "react";
 
 /**
  * This is the editor page.
@@ -18,31 +18,23 @@ import { useLocalStorage } from "hooks/useLocalStorage";
  */
 export default function EditorPage(): ReactNode {
     const isPortrait = useMediaQuery("(orientation: portrait)");
-    const [code, setCode] = useLocalStorage("code", "-- Start writing your code here.\n\n");
-    const [consoleOutput, setConsoleOutput] = useLocalStorage("console-output", "");
-    const run = async (): Promise<void> => setConsoleOutput(await execute(code));
+    const defaultCode = "-- Start writing your code here.\n\n";
+    const [code, setCode] = useLocalStorage("code", defaultCode);
+    const [consoleOutput, setConsoleOutput] = useState("");
+
+    const new_ = (): void => {
+        setConsoleOutput("");
+        setCode(defaultCode);
+    };
+    const open = (): void => undefined;
+    const save = (): void => undefined;
+    const share = (): void => undefined;
+    const stop = (): void => undefined;
+    const run = (async (): Promise<void> => setConsoleOutput(await execute(code))) as () => void;
 
     return (
         <div className={`full-width ${styles.container}`}>
-            <PlainPaper className={styles.buttons!}>
-                <ButtonGroup variant="text">
-                    <Tooltip title="Save" arrow>
-                        <IconButton disabled>
-                            <Save />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Stop" arrow>
-                        <IconButton color="error" disabled>
-                            <Stop />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Run" arrow>
-                        <IconButton color="success" onClick={run as () => void}>
-                            <PlayArrow />
-                        </IconButton>
-                    </Tooltip>
-                </ButtonGroup>
-            </PlainPaper>
+            <Buttons new={new_} open={open} save={save} share={share} stop={stop} run={run} />
             <SplitView vertical={isPortrait} id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
                     <Editor code={code} updateCode={setCode} />
