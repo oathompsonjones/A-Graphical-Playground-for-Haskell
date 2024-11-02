@@ -9,14 +9,12 @@ import { useLocalStorage } from "hooks/useLocalStorage";
 /**
  * Creates a resizable split view.
  * @param props - The properties of the split view.
- * @param props.className - Any additional CSS classes to apply.
  * @param props.children - The two elements to split.
  * @param props.id - The unique identifier of the split view.
  * @param props.vertical - Whether the split view is vertical.
  * @returns The split view element.
  */
-export function SplitView({ className, children, id, vertical }: {
-    className?: string;
+export function SplitView({ children, id, vertical }: {
     children: [ReactElement, ReactElement];
     id: string;
     vertical?: boolean;
@@ -28,7 +26,7 @@ export function SplitView({ className, children, id, vertical }: {
     const disableDrag = (): void => setCanDrag(false);
 
     const orientation = vertical ?? false ? "vertical" : "horizontal";
-    const splitViewClass = `${styles.container} ${styles[orientation]} ${className}`;
+    const splitViewClass = `${styles.container} ${styles[orientation]}`;
     const clientSize = ({ horizontal: "clientX", vertical: "clientY" } as const)[orientation];
     const containerPosition = ({ horizontal: "left", vertical: "top" } as const)[orientation];
     const containerSize = ({ horizontal: "width", vertical: "height" } as const)[orientation];

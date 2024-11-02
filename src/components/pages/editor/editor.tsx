@@ -1,12 +1,11 @@
 "use client";
 
 import "styles/components/codeTheme.css";
-import type { FormEvent, ReactNode, UIEvent } from "react";
+import type { Dispatch, FormEvent, ReactNode, SetStateAction, UIEvent } from "react";
 import { useEffect, useState } from "react";
 import type { HLJSApi } from "highlight.js";
 import { PlainPaper } from "./plainPaper";
 import styles from "styles/components/editor.module.css";
-import { useLocalStorage } from "hooks/useLocalStorage";
 
 /*
 TODO:
@@ -40,22 +39,27 @@ That's why we are storing the highlight.js instance in a state variable,
 
 /**
  * This is the text editor.
+ * @param props - The properties of the editor.
+ * @param props.code - The initial code to display.
+ * @param props.updateCode - The function to call when the code changes.
  * @returns The editor element.
  */
-export function Editor(): ReactNode {
+export function Editor({ code, updateCode }: {
+    code: string;
+    updateCode: Dispatch<SetStateAction<string>>;
+}): ReactNode {
     // Setup state variables.
     const [hljs, setHljs] = useState<HLJSApi>(null!);
-    const [rawCode, setRawCode] = useLocalStorage("code", "-- Start writing your code here.\n\n");
     const [displayCode, setDisplayCode] = useState<ReactNode>(null);
 
     /**
      * Highlights the code.
-     * @param code - The code to highlight.
+     * @param _code - The code to highlight.
      * @param _hljs - The highlight.js instance. If not provided, the state variable will be used.
      * @returns The highlighted code.
      */
-    function highlightCode(code: string, _hljs: HLJSApi = hljs): ReactNode {
-        return code.split("\n").map((line, i) => (
+    function highlightCode(_code: string, _hljs: HLJSApi = hljs): ReactNode {
+        return _code.split("\n").map((line, i) => (
             <code
                 key={i}
                 className="language-haskell"
@@ -70,10 +74,10 @@ export function Editor(): ReactNode {
      * @param event - The form event.
      */
     function handleChange(event: FormEvent<HTMLTextAreaElement>): void {
-        if (event.currentTarget.value === rawCode)
+        if (event.currentTarget.value === code)
             return;
 
-        setRawCode(event.currentTarget.value);
+        updateCode(event.currentTarget.value);
         setDisplayCode(highlightCode(event.currentTarget.value));
     }
 
@@ -93,7 +97,7 @@ export function Editor(): ReactNode {
     // Initialize
     useEffect(() => {
         // Set the textarea value to the code stored in local storage.
-        (document.getElementById("code-editor-textarea") as HTMLTextAreaElement).value = rawCode;
+        (document.getElementById("code-editor-textarea") as HTMLTextAreaElement).value = code;
 
         // Load highlight.js and highlight the initial code.
         import("highlight.js/lib/core").then(({ default: _hljs }) => {
@@ -102,7 +106,7 @@ export function Editor(): ReactNode {
                     _hljs.registerLanguage("haskell", haskell);
 
                 setHljs(_hljs);
-                setDisplayCode(highlightCode(rawCode, _hljs));
+                setDisplayCode(highlightCode(code, _hljs));
             }).catch(() => undefined);
         }).catch(() => undefined);
     }, []);
