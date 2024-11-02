@@ -21,7 +21,7 @@ export default function EditorPage(): ReactNode {
     const defaultCode = "-- Start writing your code here.\n\n";
     const [code, setCode] = useLocalStorage("code", defaultCode);
     const [consoleOutput, setConsoleOutput] = useState("");
-    const [openShare, setOpenShare] = useState(true);
+    const [openShare, setOpenShare] = useState(false);
 
     const new_ = (): void => {
         setConsoleOutput("");
