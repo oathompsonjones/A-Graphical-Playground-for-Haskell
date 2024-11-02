@@ -32,6 +32,12 @@
             "hooks/*": [
                 "./src/hooks/*"
             ],
+            "actions/*": [
+                "./src/actions/*"
+            ],
+            "database/*": [
+                "./src/database/*"
+            ],
             "images/*": [
                 "./src/images/*"
             ],
