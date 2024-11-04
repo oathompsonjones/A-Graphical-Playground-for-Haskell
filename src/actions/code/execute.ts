@@ -18,6 +18,7 @@ export async function execute(code: string): Promise<string> {
 
         if (typeof err === "object" && err !== null && "stderr" in err) {
             return String(err.stderr)
+                .trim()
                 .split("\n")
                 .slice(1)
                 .join("\n");
