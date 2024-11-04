@@ -11,8 +11,6 @@ const exec = promisify(execSync);
  * @returns The output of the code.
  */
 export async function execute(code: string): Promise<string> {
-    await Promise.resolve();
-
     try {
         return (await exec(`echo '${code}' | runghc`)).stdout;
     } catch (err) {
