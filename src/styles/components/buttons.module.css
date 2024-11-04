@@ -1,8 +1,25 @@
 .container {
     padding-inline: 2vmin;
     margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.container>div>button {
+.container button {
     border-radius: 0;
+}
+
+.divider {
+    display: inline;
+    height: 75%;
+}
+
+.heading {
+    background-color: rgba(var(--mui-palette-secondary-mainChannel) / 0.25);
+    border: 1px solid var(--mui-palette-secondary-main);
+    border-radius: 999px;
+    margin: 0 10px;
+    flex: 1;
+    text-align: center;
 }

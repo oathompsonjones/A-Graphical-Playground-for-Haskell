@@ -49,9 +49,11 @@ export function SplitView({ children, id, vertical }: {
     useEffect(updateSizes, []);
 
     return (
-        <div className={splitViewClass} ref={container} onMouseMove={handleDrag} onMouseLeave={disableDrag}>
+        <div
+            className={splitViewClass} ref={container}
+            onMouseMove={handleDrag} onMouseLeave={disableDrag} onMouseUp={disableDrag}>
             {children[0]}
-            <div className={styles.splitter} onMouseDown={enableDrag} onMouseUp={disableDrag}>
+            <div className={styles.splitter} onMouseDown={enableDrag}>
                 <DragHandleRounded className={styles.dragIcon!} />
             </div>
             {children[1]}

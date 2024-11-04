@@ -1,4 +1,4 @@
-import { ButtonGroup, IconButton, Tooltip } from "@mui/material";
+import { ButtonGroup, Divider, IconButton, Tooltip, Typography } from "@mui/material";
 import { FileOpen, InsertDriveFile, IosShare, PlayArrow, Save, Stop } from "@mui/icons-material";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
@@ -7,6 +7,7 @@ import styles from "styles/components/buttons.module.css";
 /**
  * Contains the buttons to interact with the editor.
  * @param props - The properties of the component.
+ * @param props.title - The name of the current sketch.
  * @param props.new - The function to create a new file.
  * @param props.open - The function to open a file.
  * @param props.run - The function to run the code.
@@ -15,8 +16,8 @@ import styles from "styles/components/buttons.module.css";
  * @param props.stop - The function to stop the code.
  * @returns The buttons element.
  */
-export function Buttons({ new: new_, open, run, save, share, stop }:
-Record<"new" | "open" | "run" | "save" | "share" | "stop", () => void>): ReactNode {
+export function Buttons({ title, new: new_, open, run, save, share, stop }:
+Record<"new" | "open" | "run" | "save" | "share" | "stop", () => void> & { title: string; }): ReactNode {
     return (
         <PlainPaper className={styles.container!}>
             <ButtonGroup variant="text">
@@ -36,6 +37,11 @@ Record<"new" | "open" | "run" | "save" | "share" | "stop", () => void>): ReactNo
                     </IconButton>
                 </Tooltip>
             </ButtonGroup>
+            <Divider orientation="vertical" className={styles.divider!} />
+            <Typography className={styles.heading!}>
+                {title}
+            </Typography>
+            <Divider orientation="vertical" className={styles.divider!} />
             <ButtonGroup variant="text">
                 <Tooltip title="Share" arrow>
                     <IconButton onClick={share}>
@@ -43,7 +49,8 @@ Record<"new" | "open" | "run" | "save" | "share" | "stop", () => void>): ReactNo
                     </IconButton>
                 </Tooltip>
             </ButtonGroup>
-            <ButtonGroup variant="text">
+            <Divider orientation="vertical" className={styles.divider!} />
+            <ButtonGroup variant="text" className={styles.right!}>
                 <Tooltip title="Stop" arrow>
                     <IconButton color="error" disabled onClick={stop}>
                         <Stop />
