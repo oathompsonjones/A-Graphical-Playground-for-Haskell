@@ -14,8 +14,6 @@ export async function execute(code: string): Promise<string> {
     try {
         return (await exec(`echo '${code.replace(/'/g, "\\'")}' | runghc`)).stdout;
     } catch (err) {
-        console.log(err);
-
         if (typeof err === "object" && err !== null && "stderr" in err) {
             return String(err.stderr)
                 .trim()
