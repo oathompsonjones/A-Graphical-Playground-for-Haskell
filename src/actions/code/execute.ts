@@ -12,8 +12,10 @@ const exec = promisify(execSync);
  */
 export async function execute(code: string): Promise<string> {
     try {
-        return (await exec(`echo '${code}' | runghc`)).stdout;
+        return (await exec(`echo "${code.replace(/"/g, "\\\"")}" | runghc`)).stdout;
     } catch (err) {
+        console.log(err);
+
         if (typeof err === "object" && err !== null && "stderr" in err) {
             return String(err.stderr)
                 .split("\n")
