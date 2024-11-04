@@ -14,10 +14,15 @@ export async function execute(code: string): Promise<string> {
     await Promise.resolve();
 
     try {
-        const { stdout, stderr } = await exec(`echo '${code}' | runghc`);
-
-        return stderr || stdout;
+        return (await exec(`echo '${code}' | runghc`)).stdout;
     } catch (err) {
+        if (typeof err === "object" && err !== null && "stderr" in err) {
+            return String(err.stderr)
+                .split("\n")
+                .slice(1)
+                .join("\n");
+        }
+
         return `Error: ${err instanceof Error ? err.message : String(err)}`;
     }
 }
