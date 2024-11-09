@@ -1,7 +1,7 @@
 "use client";
 
 import "styles/components/codeTheme.css";
-import type { Dispatch, FormEvent, ReactNode, SetStateAction, UIEvent } from "react";
+import type { Dispatch, FormEvent, KeyboardEvent, ReactNode, SetStateAction, UIEvent } from "react";
 import { useEffect, useState } from "react";
 import type { HLJSApi } from "highlight.js";
 import { PlainPaper } from "./plainPaper";
@@ -10,9 +10,7 @@ import styles from "styles/components/editor.module.css";
 /*
 TODO:
 
-* Remove things like macOS double space inserting a dot.
 * Keyboard controls
-    * Allow use of the tab key.
     * Support shortcuts like Ctrl+S to save, Ctrl+Enter to run, etc.
 * Livelits
     * Number sliders
@@ -42,11 +40,15 @@ That's why we are storing the highlight.js instance in a state variable,
  * @param props - The properties of the editor.
  * @param props.code - The initial code to display.
  * @param props.updateCode - The function to call when the code changes.
+ * @param props.run - The function to call when the code is run.
+ * @param props.save - The function to call when the code is saved.
  * @returns The editor element.
  */
-export function Editor({ code, updateCode }: {
+export function Editor({ code, updateCode, run, save }: {
     code: string;
     updateCode: Dispatch<SetStateAction<string>>;
+    run: () => void;
+    save: () => void;
 }): ReactNode {
     // Setup state variables.
     const [hljs, setHljs] = useState<HLJSApi>(null!);
@@ -74,9 +76,24 @@ export function Editor({ code, updateCode }: {
      * @param event - The form event.
      */
     function handleChange(event: FormEvent<HTMLTextAreaElement>): void {
+        // Ignore the event if the code hasn't changed.
         if (event.currentTarget.value === code)
             return;
 
+        // Prevent macOS double space inserting a dot.
+        if (event.nativeEvent.type === "input" && "data" in event.nativeEvent &&
+            typeof event.nativeEvent.data === "string" && event.nativeEvent.data.length > 1
+        ) {
+            const textarea = event.currentTarget;
+            const { selectionEnd: end, selectionStart: start } = textarea;
+            const inputSize = event.nativeEvent.data.length;
+
+            textarea.value = `${textarea.value.substring(0, start - inputSize)}  ${textarea.value.substring(end)}`;
+            textarea.selectionStart = start + inputSize;
+            textarea.selectionEnd = textarea.selectionStart;
+        }
+
+        // Update the code and display.
         updateCode(event.currentTarget.value);
         setDisplayCode(highlightCode(event.currentTarget.value));
     }
@@ -91,6 +108,107 @@ export function Editor({ code, updateCode }: {
         if (pre !== null) {
             pre.scrollTop = event.currentTarget.scrollTop;
             pre.scrollLeft = event.currentTarget.scrollLeft;
+        }
+    }
+
+    /**
+     * Inserts 2 spaces when the tab key is pressed.
+     * @param event - The keyboard event.
+     */
+    function handleTab(event: KeyboardEvent<HTMLTextAreaElement>): void {
+        event.preventDefault();
+
+        const tabSize = 2;
+        const textarea = event.currentTarget;
+        const { selectionEnd: end, selectionStart: start } = textarea;
+
+        textarea.value = textarea.value.substring(0, start) +
+                    " ".repeat(tabSize) + textarea.value.substring(end);
+        textarea.selectionStart = start + tabSize;
+        textarea.selectionEnd = textarea.selectionStart;
+
+        handleChange(event as FormEvent<HTMLTextAreaElement>);
+    }
+
+    /**
+     * Comments out the current line when the slash key is pressed with the command/control key.
+     * @param event - The keyboard event.
+     */
+    function handleSlash(event: KeyboardEvent<HTMLTextAreaElement>): void {
+        event.preventDefault();
+
+        const textarea = event.currentTarget;
+        const beforeText = textarea.value.substring(0, textarea.selectionStart);
+        const lineStart = beforeText.lastIndexOf("\n") + 1;
+        const lineIndex = beforeText.split("").filter((char) => char === "\n").length;
+        const line = textarea.value.split("\n")[lineIndex];
+
+        if (line === undefined)
+            return;
+
+        const beforeLines = textarea.value.substring(0, lineStart);
+        const afterLines = textarea.value.substring(lineStart + line.length);
+
+        if (line.startsWith("--")) {
+            const len = line.startsWith("-- ") ? 3 : 2;
+
+            textarea.value = `${beforeLines}${line.substring(len)}${afterLines}`;
+            textarea.selectionStart = lineStart + line.length - len;
+            textarea.selectionEnd = textarea.selectionStart;
+        } else {
+            textarea.value = `${beforeLines}-- ${line}${afterLines}`;
+            textarea.selectionStart = lineStart + line.length + 3;
+            textarea.selectionEnd = textarea.selectionStart;
+        }
+
+        handleChange(event as FormEvent<HTMLTextAreaElement>);
+    }
+
+    /**
+     * Saves the code when the s key is pressed with the command/control key.
+     * @param event - The keyboard event.
+     */
+    function handleS(event: KeyboardEvent<HTMLTextAreaElement>): void {
+        event.preventDefault();
+        save();
+    }
+
+    /**
+     * Runs the code when the enter key is pressed with the command/control key.
+     * @param event - The form event.
+     */
+    function handleEnter(event: KeyboardEvent<HTMLTextAreaElement>): void {
+        event.preventDefault();
+        run();
+    }
+
+    /**
+     * Handles key presses, allowing for keyboard shortcuts and use of the tab key.
+     * @param event - The keyboard event.
+     */
+    function handleKey(event: KeyboardEvent<HTMLTextAreaElement>): void {
+        const isMacOS = navigator.platform.includes("Mac");
+        const controlKey = isMacOS ? event.metaKey : event.ctrlKey;
+
+        switch (event.key) {
+            case "Tab":
+                handleTab(event);
+                break;
+            case "/":
+                if (controlKey)
+                    handleSlash(event);
+
+                break;
+            case "s":
+                if (controlKey)
+                    handleS(event);
+
+                break;
+            case "Enter":
+                if (controlKey)
+                    handleEnter(event);
+
+                break;
         }
     }
 
@@ -115,7 +233,7 @@ export function Editor({ code, updateCode }: {
     return (
         <PlainPaper className={styles.editor!}>
             <pre id="code-editor-pre">{displayCode}</pre>
-            <textarea id="code-editor-textarea" onChange={handleChange} onScroll={handleScroll} />
+            <textarea id="code-editor-textarea" onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} />
         </PlainPaper>
     );
 }

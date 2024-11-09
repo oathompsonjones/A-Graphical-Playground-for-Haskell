@@ -48,7 +48,7 @@ export default function EditorPage(): ReactNode {
             <Buttons title="untitled" new={new_} open={open} save={save} share={share} stop={stop} run={run} />
             <SplitView vertical={isPortrait} id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
-                    <Editor code={code} updateCode={setCode} />
+                    <Editor code={code} updateCode={setCode} save={save} run={run} />
                     <Console content={consoleOutput} />
                 </SplitView>
                 <Canvas />
