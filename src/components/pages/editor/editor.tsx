@@ -81,15 +81,14 @@ export function Editor({ code, updateCode, run, save }: {
             return;
 
         // Prevent macOS double space inserting a dot.
-        if (event.nativeEvent.type === "input" && "data" in event.nativeEvent &&
-            typeof event.nativeEvent.data === "string" && event.nativeEvent.data.length > 1
+        if ("inputType" in event.nativeEvent && event.nativeEvent.inputType === "insertReplacementText" &&
+            "data" in event.nativeEvent && typeof event.nativeEvent.data === "string" && event.nativeEvent.data === ". "
         ) {
             const textarea = event.currentTarget;
             const { selectionEnd: end, selectionStart: start } = textarea;
-            const inputSize = event.nativeEvent.data.length;
 
-            textarea.value = `${textarea.value.substring(0, start - inputSize)}  ${textarea.value.substring(end)}`;
-            textarea.selectionStart = start + inputSize;
+            textarea.value = `${textarea.value.substring(0, start - 2)}  ${textarea.value.substring(end)}`;
+            textarea.selectionStart = start;
             textarea.selectionEnd = textarea.selectionStart;
         }
 
