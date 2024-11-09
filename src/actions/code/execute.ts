@@ -15,6 +15,7 @@ function escapeChars(str: string): string {
     const replacements: Array<[RegExp, string]> = [
         [/'/g, "\\'"],
         [/"/g, "\\\""],
+        [/`/g, "\\`"],
     ];
 
     for (const [regex, replacement] of replacements)
