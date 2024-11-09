@@ -11,7 +11,6 @@ import styles from "styles/components/editor.module.css";
 TODO:
 
 * Keyboard controls
-    * Support shortcuts like Ctrl+S to save, Ctrl+Enter to run, etc.
 * Livelits
     * Number sliders
     * Colour pickers
