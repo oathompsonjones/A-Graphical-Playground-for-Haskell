@@ -1,12 +1,4 @@
-"use server";
-
-import { exec as execSync } from "child_process";
-import { promisify } from "util";
-
-const exec = promisify(execSync);
-
-/* eslint-disable max-len */
-const lib = `drawToCanvas :: String -> IO ()
+drawToCanvas :: String -> IO ()
 drawToCanvas x = putStrLn $ "drawToCanvas(" ++ x ++ ")"
 
 -- Setting
@@ -54,46 +46,3 @@ square x y s = drawToCanvas $ "square(" ++ show x ++ ", " ++ show y ++ ", " ++ s
 
 triangle :: Float -> Float -> Float -> Float -> Float -> Float -> IO ()
 triangle x1 y1 x2 y2 x3 y3 = drawToCanvas $ "triangle(" ++ show x1 ++ ", " ++ show y1 ++ ", " ++ show x2 ++ ", " ++ show y2 ++ ", " ++ show x3 ++ ", " ++ show y3 ++ ")"
-`;
-/* eslint-enable max-len */
-
-/**
- * Escapes special characters in a string.
- * @param str - The string to escape.
- * @returns The escaped string.
- */
-function escapeChars(str: string): string {
-    let escapedStr = str;
-    const replacements: Array<[RegExp, string]> = [
-        [/'/g, "\\'"],
-        [/"/g, "\\\""],
-        [/`/g, "\\`"],
-    ];
-
-    for (const [regex, replacement] of replacements)
-        escapedStr = escapedStr.replace(regex, replacement);
-
-    return escapedStr;
-}
-
-/**
- * Executes Haskell code.
- * @param code - The code to execute.
- * @returns The output of the code.
- */
-export async function execute(code: string): Promise<string> {
-    try {
-        const cpuLimit = 0.5;
-        const dockerCmd = `docker run --rm -m 128m --cpus=${cpuLimit} haskell:latest`;
-        // eslint-disable-next-line max-len
-        const bashCmd = `bash -c "echo '${escapeChars(code)}\n\n${escapeChars(lib)}' > /tmp/script.hs && runghc /tmp/script.hs"`;
-
-        return (await exec(`${dockerCmd} ${bashCmd}`)).stdout;
-    } catch (err) {
-        if (typeof err === "object" && err !== null && "stderr" in err)
-            return String(err.stderr);
-        // .trim().split("\n").slice(1).join("\n");
-
-        return `Error: ${err instanceof Error ? err.message : String(err)}`;
-    }
-}

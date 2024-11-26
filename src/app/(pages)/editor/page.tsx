@@ -21,6 +21,7 @@ export default function EditorPage(): ReactNode {
     const defaultCode = "-- Start writing your code here.\n\n";
     const [code, setCode] = useLocalStorage("code", defaultCode);
     const [consoleOutput, setConsoleOutput] = useState("");
+    const [canvasOutput, setCanvasOutput] = useState<string[]>([]);
     const [openShare, setOpenShare] = useState(false);
 
     const new_ = (): void => {
@@ -34,7 +35,25 @@ export default function EditorPage(): ReactNode {
         setOpenShare(true);
     }) as () => void;
     const stop = (): void => undefined;
-    const run = (async (): Promise<void> => setConsoleOutput(await execute(code))) as () => void;
+    const run = (async (): Promise<void> => {
+        // Stop any currently executing code.
+        stop();
+
+        // Execute the code.
+        let output = await execute(code);
+
+        // Extract the graphics commands, and send them to the canvas.
+        const graphicsRegEx = /drawToCanvas\((.*)\)/g;
+        const graphics = output.match(graphicsRegEx);
+
+        if (graphics !== null) {
+            setCanvasOutput(graphics);
+            output = output.split("\n").map((line) => line.replace(graphicsRegEx, "")).join("\n");
+        }
+
+        // Update the console output.
+        setConsoleOutput(output);
+    }) as () => void;
 
     return (
         <div className={`full-width ${styles.container}`}>
@@ -51,7 +70,7 @@ export default function EditorPage(): ReactNode {
                     <Editor code={code} updateCode={setCode} save={save} run={run} />
                     <Console content={consoleOutput} />
                 </SplitView>
-                <Canvas />
+                <Canvas content={canvasOutput} />
             </SplitView>
         </div>
     );
