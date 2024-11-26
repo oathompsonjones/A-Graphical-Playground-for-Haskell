@@ -22,7 +22,7 @@ export async function authenticate(formData: FormData): Promise<void> {
         if (user.passwordHash !== passwordHash)
             throw new Error("Invalid credentials.");
 
-        cookies().set("user", user.email);
+        (await cookies()).set("user", user.email);
     } catch (err) {
         throw new Error(`authenticate-${err instanceof Error ? err.message : String(err)}`);
     }

@@ -23,7 +23,7 @@ export async function register(formData: FormData): Promise<void> {
         const passwordHash = await hash(parsedData.password, 11);
         const user = await createUser(parsedData.email, passwordHash);
 
-        cookies().set("user", user.email);
+        (await cookies()).set("user", user.email);
     } catch (err) {
         throw new Error(`register-${err instanceof Error ? err.message : String(err)}`);
     }
