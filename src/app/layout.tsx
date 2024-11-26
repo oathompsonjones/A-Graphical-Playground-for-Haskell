@@ -4,8 +4,8 @@ import "styles/typography.css";
 import type { Metadata, Viewport } from "next";
 import { Footer } from "components/footer";
 import { Header } from "components/header";
+import { Providers } from "./providers";
 import type { ReactNode } from "react";
-import { ThemeContextProvider } from "contexts/theme";
 
 // https://realfavicongenerator.net (remove the mask icon and msapplication stuff)
 export const metadata: Metadata = {
@@ -37,11 +37,11 @@ export default function Layout({ children }: { children: ReactNode; }): ReactNod
         <html lang="en">
             <body>
                 <noscript>You need to enable JavaScript to run this app.</noscript>
-                <ThemeContextProvider>
+                <Providers>
                     <Header />
                     <main>{children}</main>
                     <Footer />
-                </ThemeContextProvider>
+                </Providers>
             </body>
         </html>
     );
