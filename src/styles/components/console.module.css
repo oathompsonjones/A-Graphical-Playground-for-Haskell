@@ -11,4 +11,6 @@
     padding: 1rem;
     overflow: auto;
     margin: 0;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
