@@ -25,6 +25,7 @@ export function Header(): ReactNode {
                 </Typography>
                 <MenuItem component={Link} href="/">Home</MenuItem>
                 <MenuItem component={Link} href="/editor">Editor</MenuItem>
+                <MenuItem component={Link} href="/reference">Reference</MenuItem>
                 <div style={{ flexGrow: 1 }} />
                 <MenuItem component={Link} href="/account" sx={{ gap: "1rem" }}>
                     <Typography>
