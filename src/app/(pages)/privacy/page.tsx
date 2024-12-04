@@ -8,7 +8,6 @@ import { Typography } from "@mui/material";
 export default function Privacy(): ReactNode {
     return (
         <div>
-            <br />
             <Typography variant="h2">Privacy Policy</Typography>
             <br />
             <Typography>
