@@ -11,6 +11,7 @@ import { execute } from "actions/code/execute";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { useState } from "react";
+import { useStreamAction } from "hooks/useStreamAction";
 
 /**
  * This is the editor page.
@@ -18,14 +19,14 @@ import { useState } from "react";
  */
 export default function EditorPage(): ReactNode {
     const isPortrait = useMediaQuery("(orientation: portrait)");
+    const [openShare, setOpenShare] = useState(false);
     const defaultCode = "-- Start writing your code here.\n\n";
     const [code, setCode] = useLocalStorage("code", defaultCode);
-    const [consoleOutput, setConsoleOutput] = useState("");
-    const [canvasOutput, setCanvasOutput] = useState<string[]>([]);
-    const [openShare, setOpenShare] = useState(false);
+    const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
 
+    const clear = clearStream;
     const new_ = (): void => {
-        setConsoleOutput("");
+        clearStream();
         setCode(defaultCode);
     };
     const open = (): void => undefined;
@@ -34,26 +35,25 @@ export default function EditorPage(): ReactNode {
         await window.navigator.clipboard.writeText(code);
         setOpenShare(true);
     }) as () => void;
-    const stop = (): void => undefined;
-    const run = (async (): Promise<void> => {
+    const stop = terminateStream;
+    const run = ((): void => {
         // Stop any currently executing code.
         stop();
 
         // Execute the code.
-        let output = await execute(code);
-
-        // Extract the graphics commands, and send them to the canvas.
-        const graphicsRegEx = /drawToCanvas\((.*)\)/g;
-        const graphics = output.match(graphicsRegEx);
-
-        if (graphics !== null) {
-            setCanvasOutput(graphics);
-            output = output.split("\n").map((line) => line.replace(graphicsRegEx, "")).join("\n");
-        }
-
-        // Update the console output.
-        setConsoleOutput(output);
+        executeStream(code);
     }) as () => void;
+
+    // Extract the graphics commands, and send them to the canvas.
+    const graphicsRegEx = /drawToCanvas\((.*)\)/g;
+    const graphics = codeOutput.join("").match(graphicsRegEx) ?? [];
+
+    // Remove the graphics commands from the console output.
+    const consoleOutput = codeOutput.join("")
+        .split("\n")
+        .map((output) => output.replace(graphicsRegEx, ""))
+        .join("\n")
+        .replace(/\n+/g, "\n");
 
     return (
         <div className={`full-width ${styles.container}`}>
@@ -64,13 +64,22 @@ export default function EditorPage(): ReactNode {
                     </Typography>
                 </Paper>
             </Modal>
-            <Buttons title="untitled" new={new_} open={open} save={save} share={share} stop={stop} run={run} />
+            <Buttons
+                title="untitled"
+                new={new_}
+                clear={clear}
+                open={open}
+                save={save}
+                share={share}
+                stop={stop}
+                run={run}
+            />
             <SplitView vertical={isPortrait} id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
                     <Editor code={code} updateCode={setCode} save={save} run={run} />
                     <Console content={consoleOutput} />
                 </SplitView>
-                <Canvas content={canvasOutput} />
+                <Canvas content={graphics} />
             </SplitView>
         </div>
     );

@@ -1,9 +1,6 @@
 "use server";
 
-import { exec as execSync } from "child_process";
-import { promisify } from "util";
-
-const exec = promisify(execSync);
+import { exec } from "child_process";
 
 /* eslint-disable max-len */
 const lib = `drawToCanvas :: String -> IO ()
@@ -77,23 +74,92 @@ function escapeChars(str: string): string {
 }
 
 /**
- * Executes Haskell code.
+ * Executes Haskell code, streaming the response into a ReadableStream.
  * @param code - The code to execute.
- * @returns The output of the code.
+ * @returns A ReadableStream containing the output of the code.
  */
-export async function execute(code: string): Promise<string> {
+export async function execute(code: string): Promise<ReadableStream<string>> {
+    await Promise.resolve();
+
     try {
-        const cpuLimit = 0.5;
-        const dockerCmd = `docker run --rm -m 128m --cpus=${cpuLimit} haskell:latest`;
-        // eslint-disable-next-line max-len
-        const bashCmd = `bash -c "echo '${escapeChars(code)}\n\n${escapeChars(lib)}' > /tmp/script.hs && runghc /tmp/script.hs"`;
+        // ! const cpuLimit = 0.5; const dockerCmd = `docker run --rm -m 128m --cpus=${cpuLimit} haskell:latest`;
+        const bashCmd = `echo '${escapeChars(code)}\n\n${escapeChars(lib)}' > /tmp/script.hs && runghc /tmp/script.hs`;
 
-        return (await exec(`${dockerCmd} ${bashCmd}`)).stdout;
+        const timeout = 3_600_000;
+        const updateDelay = 10;
+        const stopDelay = 1_000;
+
+        const stream = exec(`bash -c "${bashCmd}"`, { timeout });
+        let limitTimer: NodeJS.Timeout;
+        let updateInterval: NodeJS.Timeout;
+
+        // TODO: consider adding back in the queue using an interval to update the stream, may be less blocking
+
+        const cancel = (): void => {
+            stream.kill();
+            clearTimeout(limitTimer);
+            clearInterval(updateInterval);
+        };
+
+        return new ReadableStream({
+            cancel,
+            start(controller): () => void {
+                const updateQueue: string[] = [];
+                let timeOfLastNewData = Date.now();
+
+                limitTimer = setTimeout(() => {
+                    controller.enqueue("\n\nTIMEOUT");
+                    handleStreamEnd();
+                }, timeout);
+
+                updateInterval = setInterval(() => {
+                    const newData: string | undefined = updateQueue.shift();
+
+                    if (newData === undefined) {
+                        if (Date.now() - timeOfLastNewData > stopDelay) {
+                            controller.enqueue(`\n\nNo data received for ${stopDelay}ms, listener killed`);
+                            handleStreamEnd();
+                        }
+
+                        return;
+                    }
+
+                    timeOfLastNewData = Date.now();
+                    controller.enqueue(newData);
+
+                    if (updateQueue.length === 0)
+                        handleStreamEnd();
+                }, updateDelay);
+
+                if (stream.stdout === null || stream.stderr === null)
+                    throw new Error("Stream stdout or stderr is null");
+
+                stream.stdout.on("data", (data) => updateQueue.push(String(data)));
+                stream.stderr.on("data", (data) => updateQueue.push(String(data)));
+                stream.on("error", (error) => {
+                    controller.enqueue(error.message);
+                    handleStreamEnd();
+                });
+
+                /** Handles the end of the stream. */
+                function handleStreamEnd(): void {
+                    cancel();
+                    controller.close();
+                }
+
+                return handleStreamEnd;
+            },
+        });
     } catch (err) {
-        if (typeof err === "object" && err !== null && "stderr" in err)
-            return String(err.stderr);
-        // .trim().split("\n").slice(1).join("\n");
-
-        return `Error: ${err instanceof Error ? err.message : String(err)}`;
+        return new ReadableStream({
+            start(controller): void {
+                controller.enqueue(
+                    typeof err === "object" && err !== null && "stderr" in err
+                        ? String(err.stderr)
+                        : `Error: ${err instanceof Error ? err.message : String(err)}`,
+                );
+                controller.close();
+            },
+        });
     }
 }

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { DragHandleRounded } from "@mui/icons-material";
 import styles from "styles/components/splitView.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { useWindowSize } from "hooks/useWindowSize";
 
 /**
  * Creates a resizable split view.
@@ -19,6 +20,8 @@ export function SplitView({ children, id, vertical }: {
     id: string;
     vertical?: boolean;
 }): ReactNode {
+    const { height, width } = useWindowSize();
+    const [containerRect, setContainerRect] = useState<DOMRect | null>(null);
     const container = useRef<HTMLDivElement>(null!);
     const [size, setSize] = useLocalStorage(`${id}-size`, NaN);
     const [canDrag, setCanDrag] = useState(false);
@@ -32,20 +35,24 @@ export function SplitView({ children, id, vertical }: {
     const containerSize = ({ horizontal: "width", vertical: "height" } as const)[orientation];
 
     const updateSizes = (): void => {
-        (container.current.children[0] as HTMLDivElement).style[containerSize] = `${size}%`;
-        (container.current.children[2] as HTMLDivElement).style[containerSize] = `${100 - size}%`;
+        (container.current.children[0] as HTMLDivElement)
+            .style[containerSize] = `${size}px`;
+        (container.current.children[2] as HTMLDivElement)
+            .style[containerSize] = `${(containerRect?.[containerSize] ?? 0) - size}px`;
     };
 
     const handleDrag = (event: MouseEvent<HTMLDivElement>): void => {
-        if (!canDrag)
+        if (!canDrag || !containerRect)
             return;
 
-        const containerRect = container.current.getBoundingClientRect();
-
-        setSize((event[clientSize] - containerRect[containerPosition]) / containerRect[containerSize] * 100);
+        setSize(event[clientSize] - containerRect[containerPosition]);
         updateSizes();
     };
 
+    useEffect(() => {
+        setContainerRect(container.current.getBoundingClientRect());
+        updateSizes();
+    }, [height, width]);
     useEffect(updateSizes, []);
 
     return (

@@ -8,21 +8,6 @@ import { PlainPaper } from "./plainPaper";
 import styles from "styles/components/editor.module.css";
 
 /*
-TODO:
-
-* Keyboard controls
-* Livelits
-    * Number sliders
-    * Colour pickers
-* Allow the Haskell code to be executed, displaying text output in the console.
-* Add accounts to allow users to save their code.
-    * Set up database
-* Add the ability to share code via a URL.
-* Add autocomplete for Haskell code.
-* Implement graphics and animations.
-*/
-
-/*
 ! Some of this code looks cumbersome and unnecessary.
 It's a workaround for a bug in the next.js build process.
 ? What caused the bug?
