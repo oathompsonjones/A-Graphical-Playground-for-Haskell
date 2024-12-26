@@ -1,6 +1,9 @@
 "use client";
 
-import { Modal, Paper, Typography, useMediaQuery } from "@mui/material";
+import { Alert, IconButton, Modal, Paper, Typography, useMediaQuery } from "@mui/material";
+import { ContentCopy, CopyAll } from "@mui/icons-material";
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
+import { useEffect, useState } from "react";
 import { Buttons } from "components/pages/editor/buttons";
 import { Canvas } from "components/pages/editor/canvas";
 import { Console } from "components/pages/editor/console";
@@ -10,7 +13,6 @@ import { SplitView } from "components/splitView";
 import { execute } from "actions/code/execute";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { useState } from "react";
 import { useStreamAction } from "hooks/useStreamAction";
 
 /**
@@ -23,6 +25,15 @@ export default function EditorPage(): ReactNode {
     const defaultCode = "-- Start writing your code here.\n\n";
     const [code, setCode] = useLocalStorage("code", defaultCode);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
+    const [alert, setAlert] = useState<string | null>(null);
+
+    useEffect(() => {
+        const url = new URL(window.location.href);
+        const codeParam = url.searchParams.get("code");
+
+        if (codeParam !== null)
+            setCode(decompressFromEncodedURIComponent(codeParam));
+    }, []);
 
     const clear = clearStream;
     const new_ = (): void => {
@@ -31,9 +42,17 @@ export default function EditorPage(): ReactNode {
     };
     const open = (): void => undefined;
     const save = (): void => undefined;
-    const share = (async (): Promise<void> => {
+    const share = (): void => setOpenShare(true);
+    const copyCode = (async (): Promise<void> => {
         await window.navigator.clipboard.writeText(code);
-        setOpenShare(true);
+        setAlert("Code copied to clipboard.");
+    }) as () => void;
+    const copyUrl = (async (): Promise<void> => {
+        const codeURL = new URL(window.location.href);
+
+        codeURL.searchParams.set("code", compressToEncodedURIComponent(code));
+        await window.navigator.clipboard.writeText(codeURL.toString());
+        setAlert("URL copied to clipboard.");
     }) as () => void;
     const stop = terminateStream;
     const run = ((): void => {
@@ -55,13 +74,25 @@ export default function EditorPage(): ReactNode {
         .join("\n")
         .replace(/\n+/g, "\n");
 
+    // Share options
+    const shareOptions: Array<{ action: () => void; icon: ReactNode; label: string; }> = [
+        { action: copyCode, icon: <ContentCopy />, label: "Copy Code" },
+        { action: copyUrl, icon: <CopyAll />, label: "Copy URL" },
+    ];
+
     return (
         <div className={`full-width ${styles.container}`}>
             <Modal open={openShare} onClose={() => setOpenShare(false)}>
-                <Paper className={styles.shareMenu!}>
-                    <Typography variant="h6">
-                        The code has been copied to the clipboard.
-                    </Typography>
+                <Paper className={styles.shareMenuWrapper!}>
+                    {alert !== null && <Alert severity="success">{alert}</Alert>}
+                    <div className={styles.shareMenu}>
+                        {shareOptions.map(({ action, icon, label }) => (
+                            <div className={styles.shareOption}>
+                                <IconButton onClick={action}>{icon}</IconButton>
+                                <Typography>{label}</Typography>
+                            </div>
+                        ))}
+                    </div>
                 </Paper>
             </Modal>
             <Buttons
