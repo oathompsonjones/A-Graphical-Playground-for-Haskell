@@ -86,8 +86,8 @@ export default function EditorPage(): ReactNode {
                 <Paper className={styles.shareMenuWrapper!}>
                     {alert !== null && <Alert severity="success">{alert}</Alert>}
                     <div className={styles.shareMenu}>
-                        {shareOptions.map(({ action, icon, label }) => (
-                            <div className={styles.shareOption}>
+                        {shareOptions.map(({ action, icon, label }, i) => (
+                            <div className={styles.shareOption} key={i}>
                                 <IconButton onClick={action}>{icon}</IconButton>
                                 <Typography>{label}</Typography>
                             </div>
