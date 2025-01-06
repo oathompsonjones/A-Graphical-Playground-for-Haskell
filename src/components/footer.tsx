@@ -18,7 +18,7 @@ export function Footer(): ReactNode {
                     Privacy Policy
                 </Typography>
                 <Typography>
-                    Copyright © 2024 Oliver Jones
+                    Copyright © 2024-{new Date().getFullYear()} Oliver Jones
                 </Typography>
             </Stack>
         </footer>
