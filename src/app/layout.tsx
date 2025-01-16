@@ -10,7 +10,9 @@ import type { ReactNode } from "react";
 
 // https://realfavicongenerator.net (remove the mask icon and msapplication stuff)
 export const metadata: Metadata = {
-    description: "My website description.",
+    description: "Experience Haskell like never before. This educational tool allows you to create graphics and " +
+        "animations using Haskell, all from within your browser. So no more installing libraries or setting up " +
+        "environments. Just start coding!",
     icons: {
         apple: "https://cdn.worldvectorlogo.com/logos/next-js.svg",
         icon: [],
