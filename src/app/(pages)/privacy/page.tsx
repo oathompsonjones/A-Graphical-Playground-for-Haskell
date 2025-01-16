@@ -10,25 +10,24 @@ export default function Privacy(): ReactNode {
         <div>
             <Typography variant="h2">Privacy Policy</Typography>
             <br />
-            <Typography>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                Hic, cupiditate natus eaque voluptatem eum magni voluptates,
-                doloribus at illum animi voluptate saepe praesentium perspiciatis
-                fugit esse! Pariatur veniam recusandae repellat.
+            <Typography variant="h4">Personal Data</Typography>
+            <Typography component="ul">
+                <li>This website uses your email address to identify you.</li>
+                <li>Your email address is stored securely, and will never be shared with a third party.</li>
+                <li>Your email address is only used to allow you to log in and reset your password.</li>
+                <li>You can use this website without an account, but you will not be able to save your work.</li>
             </Typography>
             <br />
-            <Typography>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Quo, esse voluptates nam nisi molestias a amet reprehenderit
-                quaerat dolorem doloribus ab veritatis modi debitis exercitationem,
-                obcaecati similique. Officia, consequatur id?
+            <Typography variant="h4">Cookies</Typography>
+            <Typography component="ul">
+                <li>This website uses cookies to allow you to log in and to remember your preferences.</li>
+                <li>This website does not use cookies for tracking or advertising.</li>
+                <li>This website does not use any third party cookies.</li>
             </Typography>
             <br />
-            <Typography>
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Laborum pariatur hic inventore neque quam impedit nemo cumque
-                maxime magnam veritatis fuga obcaecati dolor natus ipsum ratione
-                corporis, voluptas praesentium consectetur?
+            <Typography variant="caption">
+                If you have any queries regarding this privacy policy,
+                please contact me <a href="mailto:oathompsonjones@gmail.com">here</a>.
             </Typography>
         </div>
     );
