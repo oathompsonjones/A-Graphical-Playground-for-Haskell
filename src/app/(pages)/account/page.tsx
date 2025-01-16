@@ -1,60 +1,65 @@
 "use client";
 
+import { Button, FormControl, Typography } from "@mui/material";
+import { useContext, useState } from "react";
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { Typography } from "@mui/material";
+import type { Sketch } from "database/schemas/sketch";
 import { UserContext } from "contexts/user";
-import { useContext } from "react";
+import { getSketches } from "database/database";
+import { logout } from "actions/auth/logout";
 
 /**
  * This is the account page.
  * @returns The page element.
- * @throws Error if the user is not logged in.
  */
 export default function Account(): ReactNode {
     const { user } = useContext(UserContext);
+    const [sketches, setSketches] = useState<Sketch[] | null>(null);
 
     // This should never happen, middleware should prevent it.
     if (user === null)
         return <></>;
 
+    if (sketches === null) {
+        getSketches(user._id.toString())
+            .then(setSketches)
+            .catch(() => undefined);
+    }
+
     return (
         <div>
-            <Typography variant="h2">Account</Typography>
+            <Typography variant="h2">Welcome back, <b>{user.username ?? user.email.split("@")[0]}</b>!</Typography>
             <br />
-            <Typography variant="h3" sx={{ color: "#dd2222", fontWeight: "bold", textAlign: "center" }}>
-                This is a placeholder page!
-            </Typography>
-            <br />
-            <div style={{ display: "flex", gap: "1rem" }}>
-                <div>
-                    <Typography>Welcome back, <b>{user.username ?? user.email.split("@")[0]}</b>!</Typography>
-                    {user.avatar !== null && <Image
-                        src={user.avatar}
-                        alt="User avatar"
-                        height={500}
-                        width={500}
-                        style={{ height: "auto", width: "500px" }}
-                    />}
-                </div>
-                <div>
-                    <Typography>Your saved code:</Typography>
-                    <ul>
-                        {user.sketches.map((sketch, i) => (
-                            <li key={i}>
-                                <Typography>{sketch.name}</Typography>
-                                <Typography variant="caption">
-                                    Created At: {new Date(sketch.createdAt).toUTCString()}
-                                </Typography>
-                                <Typography variant="caption">
-                                    Modified At: {new Date(sketch.modifiedAt).toUTCString()}
-                                </Typography>
-                                <pre>{sketch.content}</pre>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
+            <div>
+                {user.avatar !== null && <Image
+                    src={user.avatar}
+                    alt="User avatar"
+                    height={500}
+                    width={500}
+                    style={{ height: "auto", width: "500px" }}
+                />}
             </div>
+            <div>
+                <Typography>Your saved code:</Typography>
+                <ul>
+                    {(sketches ?? []).map((sketch, i) => (
+                        <li key={i}>
+                            <Typography>{sketch.name}</Typography>
+                            <Typography variant="caption">
+                                    Created At: {new Date(sketch.createdAt).toUTCString()}
+                            </Typography>
+                            <Typography variant="caption">
+                                    Modified At: {new Date(sketch.modifiedAt).toUTCString()}
+                            </Typography>
+                            <pre>{sketch.content}</pre>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+            <FormControl component="form" action={logout}>
+                <Button type="submit">Sign Out</Button>
+            </FormControl>
         </div>
     );
 }

@@ -5,21 +5,10 @@
     overflow: clip;
 }
 
-.shareMenuWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 0.5rem;
-}
-
 .shareMenu {
     display: flex;
     gap: 1rem;
-    padding: 0.5rem;
+    padding: 1rem;
 }
 
 .shareOption {

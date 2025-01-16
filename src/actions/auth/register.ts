@@ -3,6 +3,7 @@
 import { cookies } from "next/headers";
 import { createUser } from "database/database";
 import { hash } from "bcrypt";
+import { redirect } from "next/navigation";
 import { registrationSchema } from "database/schemas/forms";
 
 /**
@@ -26,5 +27,7 @@ export async function register(formData: FormData): Promise<void> {
         (await cookies()).set("user", user.email);
     } catch (err) {
         throw new Error(`register-${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+        redirect("/account");
     }
 }

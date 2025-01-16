@@ -1,8 +1,9 @@
 "use client";
 
-import { Alert, Button, ButtonGroup, FormControl, Paper, TextField, Typography } from "@mui/material";
-import { Apple, GitHub, Google } from "@mui/icons-material";
+import { Alert, Button, FormControl, Paper, TextField, Typography } from "@mui/material";
+// Import { Apple, GitHub, Google, StackOverflow } from "@mui/icons-material";
 import Link from "next/link";
+import { PasswordField } from "components/pages/login/passwordField";
 import type { ReactNode } from "react";
 import { authenticate } from "actions/auth/authenticate";
 import { register } from "actions/auth/register";
@@ -15,7 +16,7 @@ import { useState } from "react";
  * @param props.error - The error to display.
  * @returns The page element.
  */
-export default function LogIn({ error }: { error: Error | undefined; }): ReactNode {
+export default function LogIn({ error }: { error?: Error; }): ReactNode {
     const [err, setErr] = useState<Error | undefined>(error);
     // Checks if the error is from the register or authenticate function, and sets the form type accordingly.
     const [formType, setFormType] = useState<"authenticate" | "register">(
@@ -36,15 +37,12 @@ export default function LogIn({ error }: { error: Error | undefined; }): ReactNo
                 {err !== undefined && <Alert severity="error">{err.message}</Alert>}
                 <FormControl component="form" action={action} className={styles.form!}>
                     <TextField label="Email" name="email" type="email" />
-                    <TextField label="Password" name="password" type="password" />
-                    {
-                        formType === "register" &&
-                        <TextField label="Confirm Password" name="confirmPassword" type="password" />
-                    }
+                    <PasswordField label="Password" name="password" />
+                    {formType === "register" && <PasswordField label="Confirm Password" name="confirmPassword" />}
                     <Button className={styles.button!} type="submit">
                         {title}
                     </Button>
-                    <ButtonGroup>
+                    {/* <ButtonGroup>
                         <Button className={styles.button!} color="secondary" startIcon={<Apple />} href="">
                             {title} with Apple
                         </Button>
@@ -54,7 +52,10 @@ export default function LogIn({ error }: { error: Error | undefined; }): ReactNo
                         <Button className={styles.button!} color="secondary" startIcon={<GitHub />} href="">
                             {title} with GitHub
                         </Button>
-                    </ButtonGroup>
+                        <Button className={styles.button!} color="secondary" startIcon={<StackOverflow />} href="">
+                            {title} with StackOverflow
+                        </Button>
+                    </ButtonGroup> */}
                     <Typography variant="caption" textAlign="center">
                         {{ authenticate: "Don't have an account?", register: "Already have an account?" }[formType]}
                         <Link onClick={switchFormType} href="">

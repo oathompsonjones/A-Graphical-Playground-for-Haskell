@@ -29,7 +29,7 @@ export function Header(): ReactNode {
                 <div style={{ flexGrow: 1 }} />
                 <MenuItem component={Link} href="/account" sx={{ gap: "1rem" }}>
                     <Typography>
-                        {user?.username ?? "Sign In"}
+                        {user?.username ?? user?.email.split("@")[0] ?? "Sign In"}
                     </Typography>
                     <Avatar src={user?.avatar ?? ""} />
                 </MenuItem>

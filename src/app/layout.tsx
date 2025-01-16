@@ -4,6 +4,7 @@ import "styles/typography.css";
 import type { Metadata, Viewport } from "next";
 import { Footer } from "components/footer";
 import { Header } from "components/header";
+import { Notifications } from "components/notifications";
 import { Providers } from "./providers";
 import type { ReactNode } from "react";
 
@@ -41,6 +42,7 @@ export default function Layout({ children }: { children: ReactNode; }): ReactNod
                     <Header />
                     <main>{children}</main>
                     <Footer />
+                    <Notifications />
                 </Providers>
             </body>
         </html>

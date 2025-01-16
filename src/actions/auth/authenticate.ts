@@ -1,9 +1,10 @@
 "use server";
 
+import { compare, hash } from "bcrypt";
 import { authenticationSchema } from "database/schemas/forms";
 import { cookies } from "next/headers";
 import { getUser } from "database/database";
-import { hash } from "bcrypt";
+import { redirect } from "next/navigation";
 
 /**
  * Authenticate the user with the server.
@@ -18,12 +19,15 @@ export async function authenticate(formData: FormData): Promise<void> {
 
         const user = await getUser(parsedData.email);
         const passwordHash = await hash(parsedData.password, 11);
+        const isCorrectPassword = await compare(user.passwordHash, passwordHash);
 
-        if (user.passwordHash !== passwordHash)
+        if (isCorrectPassword)
             throw new Error("Invalid credentials.");
 
         (await cookies()).set("user", user.email);
     } catch (err) {
         throw new Error(`authenticate-${err instanceof Error ? err.message : String(err)}`);
+    } finally {
+        redirect("/account");
     }
 }
