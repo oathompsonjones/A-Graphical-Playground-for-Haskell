@@ -23,6 +23,7 @@ export function SplitView({ children, id, vertical }: {
     const { height, width } = useWindowSize();
     const [containerRect, setContainerRect] = useState<DOMRect | null>(null);
     const container = useRef<HTMLDivElement>(null!);
+    // TODO: This isn't automatically taking effect.
     const [size, setSize] = useLocalStorage(`${id}-size`, NaN);
     const [canDrag, setCanDrag] = useState(false);
     const enableDrag = (): void => setCanDrag(true);

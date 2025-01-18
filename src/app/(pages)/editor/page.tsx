@@ -10,7 +10,7 @@ import { Console } from "components/pages/editor/console";
 import { Editor } from "components/pages/editor/editor";
 import { NotificationsContext } from "contexts/notifications";
 import type { ReactNode } from "react";
-import { SplitView } from "components/splitView";
+import { SplitView } from "components/pages/editor/splitView";
 import { execute } from "actions/code/execute";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
