@@ -6,9 +6,9 @@ import Link from "next/link";
 import { NotificationsContext } from "contexts/notifications";
 import type { ReactNode } from "react";
 import { ThemeContextProvider } from "contexts/theme";
-import type { User } from "database/schemas/user";
+import type { User } from "schemas/database";
 import { UserContext } from "contexts/user";
-import { getUser } from "database/database";
+import { getUser } from "database/index";
 
 /**
  * Contains any context providers.

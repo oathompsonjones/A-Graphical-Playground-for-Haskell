@@ -1,8 +1,7 @@
 "use server";
 
 import type { Collection, Db } from "mongodb";
-import type { Sketch, SketchWithoutId } from "./schemas/sketch";
-import type { User, UserWithoutId } from "./schemas/user";
+import type { Sketch, SketchWithoutId, User, UserWithoutId } from "schemas/database";
 import { MongoClient } from "mongodb";
 
 /**

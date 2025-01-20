@@ -1,9 +1,9 @@
 "use server";
 
 import { compare, hash } from "bcrypt";
-import { authenticationSchema } from "database/schemas/forms";
+import { authenticationSchema } from "schemas/forms";
 import { cookies } from "next/headers";
-import { getUser } from "database/database";
+import { getUser } from "database/index";
 import { redirect } from "next/navigation";
 
 /**

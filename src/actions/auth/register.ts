@@ -1,10 +1,10 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { createUser } from "database/database";
+import { createUser } from "database/index";
 import { hash } from "bcrypt";
 import { redirect } from "next/navigation";
-import { registrationSchema } from "database/schemas/forms";
+import { registrationSchema } from "schemas/forms";
 
 /**
  * Register the user with the server.

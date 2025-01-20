@@ -4,9 +4,9 @@ import { Button, FormControl, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import Image from "next/image";
 import type { ReactNode } from "react";
-import type { Sketch } from "database/schemas/sketch";
+import type { Sketch } from "schemas/database";
 import { UserContext } from "contexts/user";
-import { getSketches } from "database/database";
+import { getSketches } from "database/index";
 import { logout } from "actions/auth/logout";
 
 /**

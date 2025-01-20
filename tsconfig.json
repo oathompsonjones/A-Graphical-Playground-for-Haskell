@@ -38,6 +38,9 @@
             "database/*": [
                 "./src/database/*"
             ],
+            "schemas/*": [
+                "./src/schemas/*"
+            ],
             "images/*": [
                 "./src/images/*"
             ],
