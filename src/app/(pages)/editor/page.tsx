@@ -23,7 +23,14 @@ import { useStreamAction } from "hooks/useStreamAction";
 export default function EditorPage(): ReactNode {
     const isPortrait = useMediaQuery("(orientation: portrait)");
     const [openShare, setOpenShare] = useState(false);
-    const defaultCode = "-- Start writing your code here.\n\n";
+    const defaultCode = [
+        "import Lib",
+        "",
+        "-- Start writing your code here.",
+        "main :: IO ()",
+        "main = render $ background (createCanvas 800 600) LightGrey",
+        "",
+    ].join("\n");
     const [code, setCode] = useLocalStorage("code", defaultCode);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
     const { setType, setMessage } = useContext(NotificationsContext);

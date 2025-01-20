@@ -1,18 +1,39 @@
-// Import Link from "next/link";
+"use client";
+
+import { Grid2, Icon, Typography } from "@mui/material";
+import { KeyboardCommandKey, KeyboardControlKey, KeyboardReturn } from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
-import { Typography } from "@mui/material";
 
 /**
  * This is the reference page.
  * @returns The home reference.
  */
 export default function Reference(): ReactNode {
+    const [metaKey, setMetaKey] = useState(<KeyboardControlKey />);
+
+    useEffect(() => {
+        if (navigator.platform.includes("Mac"))
+            setMetaKey(<KeyboardCommandKey />);
+    }, [navigator.platform]);
+
     return (
         <div>
             <Typography variant="h2">Reference</Typography>
-            {/* <Link href="/lib.hs">View library</Link> */}
+            <br />
+            <Typography variant="h4">Hot Keys</Typography>
+            <br />
+            <Grid2 container alignItems="center">
+                <Grid2 size={1}><Typography variant="h4">{metaKey}<KeyboardReturn /></Typography></Grid2>
+                <Grid2 size={11}>Run the code.</Grid2>
+                <Grid2 size={1}><Typography variant="h4">{metaKey}<Icon>S</Icon></Typography></Grid2>
+                <Grid2 size={11}>Save the code.</Grid2>
+                <Grid2 size={1}><Typography variant="h4">{metaKey}<Icon>/</Icon></Typography></Grid2>
+                <Grid2 size={11}>Comment/uncomment the line.</Grid2>
+            </Grid2>
             <br />
             <Typography variant="h4">Data Types</Typography>
+            <br />
             <Typography variant="h6">
                 {"data Point = Point { x :: Float, y :: Float }"}
             </Typography>

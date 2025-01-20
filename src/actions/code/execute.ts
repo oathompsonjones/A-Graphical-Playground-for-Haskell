@@ -1,26 +1,7 @@
 "use server";
 
+import { readFile, readdir } from "fs/promises";
 import { exec } from "child_process";
-import { readFile } from "fs/promises";
-
-/**
- * Escapes special characters in a string.
- * @param str - The string to escape.
- * @returns The escaped string.
- */
-function escapeChars(str: string): string {
-    let escapedStr = str;
-    const replacements: Array<[RegExp, string]> = [
-        [/'/g, "\\'"],
-        [/"/g, "\\\""],
-        [/`/g, "\\`"],
-    ];
-
-    for (const [regex, replacement] of replacements)
-        escapedStr = escapedStr.replace(regex, replacement);
-
-    return escapedStr;
-}
 
 /**
  * Executes Haskell code, streaming the response into a ReadableStream.
@@ -29,10 +10,21 @@ function escapeChars(str: string): string {
  */
 export async function execute(code: string): Promise<ReadableStream<string>> {
     try {
-        const lib = await readFile("public/lib.hs", "utf8");
+        const base64 = (str: string): string => Buffer.from(str).toString("base64");
+        const files = await readdir("public/lib");
+        const lib = await Promise.all(files.map(async (name) => ({
+            content: await readFile(`public/lib/${name}`, "utf8"),
+            name,
+        })));
+
         const cpuLimit = 0.5;
         const dockerCmd = `docker run --rm -m 128m --cpus=${cpuLimit} haskell:latest`;
-        const bashCmd = `echo '${escapeChars(lib)}\n\n${escapeChars(code)}' > /tmp/script.hs && runghc /tmp/script.hs`;
+        const bashCmd = [
+            "cd /tmp",
+            ...lib.map(({ content, name }) => `base64 -d <<< ${base64(content)} > ${name}`),
+            `base64 -d <<< ${base64(code)} > main.hs`,
+            "runhaskell main.hs",
+        ].join(" && ");
 
         const timeout = 3_600_000;
         const updateDelay = 10;

@@ -64,6 +64,11 @@ export function Editor({ code, updateCode, run, save }: {
         if (event.currentTarget.value === code)
             return;
 
+        // Make sure the library is imported.
+        if (!code.startsWith("import HaskellGraphics\n")) {
+            // TODO: Automatically add the import statement.
+        }
+
         // Prevent macOS double space inserting a dot.
         if ("inputType" in event.nativeEvent && event.nativeEvent.inputType === "insertReplacementText" &&
             "data" in event.nativeEvent && typeof event.nativeEvent.data === "string" && event.nativeEvent.data === ". "
@@ -173,25 +178,24 @@ export function Editor({ code, updateCode, run, save }: {
         const isMacOS = navigator.platform.includes("Mac");
         const controlKey = isMacOS ? event.metaKey : event.ctrlKey;
 
-        switch (event.key) {
-            case "Tab":
-                handleTab(event);
-                break;
-            case "/":
-                if (controlKey)
+        if (controlKey) {
+            switch (event.key) {
+                case "/":
                     handleSlash(event);
-
-                break;
-            case "s":
-                if (controlKey)
+                    break;
+                case "s":
                     handleS(event);
-
-                break;
-            case "Enter":
-                if (controlKey)
+                    break;
+                case "Enter":
                     handleEnter(event);
-
-                break;
+                    break;
+            }
+        } else {
+            switch (event.key) {
+                case "Tab":
+                    handleTab(event);
+                    break;
+            }
         }
     }
 
