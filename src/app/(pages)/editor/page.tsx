@@ -79,7 +79,7 @@ export default function EditorPage(): ReactNode {
     // Remove the graphics commands from the console output.
     const consoleOutput = codeOutput.join("")
         .split("\n")
-        .map((output) => output.replace(graphicsRegEx, ""))
+        .map((output) => (output.startsWith("drawToCanvas(") ? "Compiling..." : output))
         .join("\n")
         .replace(/\n+/g, "\n");
 
