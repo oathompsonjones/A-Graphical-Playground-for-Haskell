@@ -65,19 +65,28 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                             shape.position.y,
                             shape.horizontalAxis,
                             shape.verticalAxis,
-                            0,
+                            shape.angle,
                             0,
                             2 * Math.PI,
                         );
                         break;
                     case "polygon":
+                        // Apply rotation about the position of the polygon.
+                        context.translate(shape.position.x, shape.position.y);
+                        context.rotate(shape.angle);
+                        context.translate(-shape.position.x, -shape.position.y);
+
+                        // Draw the polygon.
                         context.beginPath();
-                        context.moveTo(shape.points[0]!.x, shape.points[0]!.y);
+                        context.moveTo(shape.points[0]!.x + shape.position.x, shape.points[0]!.y + shape.position.y);
 
                         for (const point of shape.points.slice(1))
-                            context.lineTo(point.x, point.y);
+                            context.lineTo(point.x + shape.position.x, point.y + shape.position.y);
 
                         context.closePath();
+
+                        // Reset the rotation.
+                        context.setTransform(1, 0, 0, 1, 0, 0);
                         break;
                 }
 
