@@ -1,12 +1,13 @@
 module Shape (
     Shape (),
+    (&),
     circle,
     ellipse,
     line,
     rect,
     square,
     polygon,
-    (&),
+    (>>>),
     translate,
     fill,
     stroke,
@@ -16,19 +17,24 @@ module Shape (
     reflect,
 ) where
 
-import Color
+import Color (Color (Black, Transparent))
 import Data.List (intercalate)
-import Point
+import Maths (Vector (..))
+
+----------------
+---- Shapes ----
+----------------
 
 -- Data structure to represent shapes
 data Shape
-    = Shape {shape :: Shape, position :: Point, angle :: Float, fillColor :: Color, strokeColor :: Color, strokeThickness :: Float}
+    = Shape {shape :: Shape, position :: Vector, angle :: Float, fillColor :: Color, strokeColor :: Color, strokeThickness :: Float}
     | Ellipse Float Float -- horizontal radius, vertical radius
-    | Polygon [Point] -- points
+    | Polygon [Vector] -- points
     | Group [Shape] -- shapes
 
 -- Convert a shape to a JSON string
 instance Show Shape where
+    show :: Shape -> String
     show (Shape shape position angle fill stroke strokeThickness) = "{ " ++ show shape ++ ", \"position\": " ++ show position ++ ", \"angle\": " ++ show angle ++ ", \"fill\": " ++ show fill ++ ", \"stroke\": " ++ show stroke ++ ", \"strokeWeight\": " ++ show strokeThickness ++ " }"
     show (Ellipse horizontalAxis verticalAxis) = "\"type\": \"ellipse\", \"horizontalAxis\": " ++ show horizontalAxis ++ ", \"verticalAxis\": " ++ show verticalAxis
     show (Polygon points) = "\"type\": \"polygon\", \"points\": " ++ show points
@@ -36,51 +42,69 @@ instance Show Shape where
 
 -- Combine two shapes into a group
 (&) :: Shape -> Shape -> Shape
-(&) (Group (leftHead : leftTail)) (Group (rightHead : rightTail)) = Group (leftHead : leftTail ++ rightHead : rightTail)
-(&) (Group (leftHead : leftTail)) rightShape = Group (leftHead : leftTail ++ [rightShape])
-(&) leftShape (Group (rightHead : rightTail)) = Group (leftShape : rightHead : rightTail)
-(&) leftShape rightShape = Group [leftShape, rightShape]
+(&) (Group left) (Group right) = Group (left ++ right)
+(&) (Group left) right = Group (left ++ [right])
+(&) left (Group right) = Group (left : right)
+(&) left right = Group [left, right]
+
+-- Identity shape
+emptyShape :: Shape
+emptyShape = Shape (Polygon []) (Vector 0 0) 0 Transparent Black 1
 
 -- Functions to create shapes
 circle :: Float -> Shape
-circle radius = Shape (Ellipse radius radius) (Point 0 0) 0 Transparent Black 1
+circle radius = Shape (Ellipse radius radius) (Vector 0 0) 0 Transparent Black 1
 
 ellipse :: Float -> Float -> Shape
-ellipse horizontalAxis verticalAxis = Shape (Ellipse horizontalAxis verticalAxis) (Point 0 0) 0 Transparent Black 1
+ellipse horizontalAxis verticalAxis = Shape (Ellipse horizontalAxis verticalAxis) (Vector 0 0) 0 Transparent Black 1
 
 line :: Float -> Shape
-line length = Shape (Polygon [Point 0 0, Point length 0]) (Point 0 0) 0 Transparent Black 1
+line length = Shape (Polygon [Vector 0 0, Vector length 0]) (Vector 0 0) 0 Transparent Black 1
 
 rect :: Float -> Float -> Shape
-rect width height = Shape (Polygon [Point 0 0, Point width 0, Point width height, Point 0 height]) (Point 0 0) 0 Transparent Black 1
+rect width height = Shape (Polygon [Vector 0 0, Vector width 0, Vector width height, Vector 0 height]) (Vector 0 0) 0 Transparent Black 1
 
 square :: Float -> Shape
-square size = Shape (Polygon [Point 0 0, Point size 0, Point size size, Point 0 size]) (Point 0 0) 0 Transparent Black 1
+square size = Shape (Polygon [Vector 0 0, Vector size 0, Vector size size, Vector 0 size]) (Vector 0 0) 0 Transparent Black 1
 
-polygon :: [Point] -> Shape
-polygon points = Shape (Polygon points) (Point 0 0) 0 Transparent Black 1
+polygon :: [Vector] -> Shape
+polygon points = Shape (Polygon points) (Vector 0 0) 0 Transparent Black 1
+
+-------------------------
+---- Transformations ----
+-------------------------
+
+-- Chain transformations
+(>>>) :: Shape -> (Shape -> Shape) -> Shape
+(>>>) shape function = function shape
+
+-- Identity transformation
+identityTransformation :: Shape -> Shape
+identityTransformation shape = shape
 
 -- Functions to manipulate shapes
-translate :: Shape -> Point -> Shape
-translate shape point = shape{position = point}
+fill :: Color -> Shape -> Shape
+fill color shape = shape{fillColor = color}
 
-fill :: Shape -> Color -> Shape
-fill shape color = shape{fillColor = color}
+stroke :: Color -> Shape -> Shape
+stroke color shape = shape{strokeColor = color}
 
-stroke :: Shape -> Color -> Shape
-stroke shape color = shape{strokeColor = color}
+strokeWeight :: Float -> Shape -> Shape
+strokeWeight weight shape = shape{strokeThickness = weight}
 
-strokeWeight :: Shape -> Float -> Shape
-strokeWeight shape weight = shape{strokeThickness = weight}
+translate :: Vector -> Shape -> Shape
+translate vector shape = shape{position = Vector (x vector + x (position shape)) (y vector + y (position shape))}
 
-scale :: Shape -> Float -> Shape
-scale (Ellipse horizontalAxis verticalAxis) float = Ellipse (horizontalAxis * float) (verticalAxis * float)
-scale (Polygon points) float = Polygon [Point (x * float) (y * float) | Point x y <- points]
-scale (Group shapes) float = Group [scale shape float | shape <- shapes]
+rotate :: Float -> Shape -> Shape
+rotate angle shape = shape{angle = angle}
 
-rotate :: Shape -> Float -> Shape
-rotate shape angle = shape{angle = angle}
+-- TODO: This doesn't work
+scale :: Float -> Shape -> Shape
+scale scaleFactor (Ellipse horizontalAxis verticalAxis) = Ellipse (horizontalAxis * scaleFactor) (verticalAxis * scaleFactor)
+scale scaleFactor (Polygon points) = Polygon [Vector (x * scaleFactor) (y * scaleFactor) | Vector x y <- points]
+scale scaleFactor (Group shapes) = Group [scale scaleFactor shape | shape <- shapes]
+scale scaleFactor shape' = scale scaleFactor (shape shape')
 
--- TODO: This is not actually a reflection
-reflect :: Shape -> Float -> Shape
-reflect shape angle = shape{angle = angle + 180}
+-- TODO: This isn't actually a reflection
+reflect :: Float -> Shape -> Shape
+reflect angle shape = shape{angle = angle + 180}
