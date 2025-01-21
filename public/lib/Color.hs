@@ -158,8 +158,10 @@ data Color
 
 -- Convert a color to a JSON string
 instance Show Color where
+    show :: Color -> String
     show (RGBA r g b a) = "\"rgba(" ++ show r ++ "," ++ show g ++ "," ++ show b ++ "," ++ show a ++ ")\""
     show (RGB r g b) = "\"rgb(" ++ show r ++ "," ++ show g ++ "," ++ show b ++ ")\""
+    show (Hex ('#' : hex)) = "\"#" ++ hex ++ "\""
     show (Hex hex) = "\"#" ++ hex ++ "\""
     show (HSL h s l) = "\"hsl(" ++ show h ++ "," ++ show s ++ "%," ++ show l ++ "%)\""
     show (HSLA h s l a) = "\"hsla(" ++ show h ++ "," ++ show s ++ "%," ++ show l ++ "%," ++ show a ++ ")\""
