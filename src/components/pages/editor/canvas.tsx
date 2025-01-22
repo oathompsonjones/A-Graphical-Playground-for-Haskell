@@ -71,6 +71,9 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                         );
                         break;
                     case "polygon":
+                        if (shape.points.length === 0)
+                            break;
+
                         // Apply rotation about the position of the polygon.
                         context.translate(shape.position.x, shape.position.y);
                         context.rotate(shape.angle);
