@@ -1,6 +1,6 @@
 "use client";
 
-import { ContentCopy, CopyAll } from "@mui/icons-material";
+import { ContentCopy, CopyAll, Download, Image } from "@mui/icons-material";
 import { Dialog, IconButton, Typography, useMediaQuery } from "@mui/material";
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { useContext, useEffect, useState } from "react";
@@ -66,6 +66,28 @@ export default function EditorPage(): ReactNode {
         setMessage("URL copied to clipboard.");
         setOpenShare(false);
     }) as () => void;
+    const copyImage = (): void => {
+        const canvas = document.querySelector("canvas")!;
+
+        canvas.toBlob((async (blob) => {
+            await window.navigator.clipboard.write([new ClipboardItem({ [blob!.type]: blob! })]);
+            setType("success");
+            setMessage("Image copied to clipboard.");
+            setOpenShare(false);
+        }) as BlobCallback);
+    };
+    const downloadImage = (): void => {
+        const canvas = document.querySelector("canvas")!;
+        const image = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+
+        a.href = image;
+        a.download = "image.png";
+        a.click();
+        setType("success");
+        setMessage("Image downloaded.");
+        setOpenShare(false);
+    };
     const stop = terminateStream;
     const run = ((): void => {
         stop();
@@ -87,6 +109,8 @@ export default function EditorPage(): ReactNode {
     const shareOptions: Array<{ action: () => void; icon: ReactNode; label: string; }> = [
         { action: copyCode, icon: <ContentCopy />, label: "Copy Code" },
         { action: copyUrl, icon: <CopyAll />, label: "Copy URL" },
+        { action: copyImage, icon: <Image />, label: "Copy Image" },
+        { action: downloadImage, icon: <Download />, label: "Download Image" },
     ];
 
     return (
