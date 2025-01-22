@@ -1,6 +1,7 @@
 module Shape (
     Shape (),
     (&),
+    emptyShape,
     circle,
     ellipse,
     line,
@@ -8,6 +9,7 @@ module Shape (
     square,
     polygon,
     (>>>),
+    identityTransformation,
     translate,
     fill,
     stroke,
@@ -31,6 +33,7 @@ data Shape
     | Ellipse Float Float -- horizontal radius, vertical radius
     | Polygon [Vector] -- points
     | Group [Shape] -- shapes
+    | Empty
 
 -- Convert a shape to a JSON string
 instance Show Shape where
@@ -42,6 +45,8 @@ instance Show Shape where
 
 -- Combine two shapes into a group
 (&) :: Shape -> Shape -> Shape
+(&) Empty right = right
+(&) left Empty = left
 (&) (Group left) (Group right) = Group (left ++ right)
 (&) (Group left) right = Group (left ++ [right])
 (&) left (Group right) = Group (left : right)
@@ -49,7 +54,7 @@ instance Show Shape where
 
 -- Identity shape
 emptyShape :: Shape
-emptyShape = Shape (Polygon []) (Vector 0 0) 0 Transparent Black 1
+emptyShape = Empty
 
 -- Functions to create shapes
 circle :: Float -> Shape
