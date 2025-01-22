@@ -2,8 +2,8 @@ module Color where
 
 -- Data structure to represent CSS colors
 data Color
-    = RGBA {r :: Float, g :: Float, b :: Float, a :: Float}
-    | RGB {r :: Float, g :: Float, b :: Float}
+    = RGB {r :: Float, g :: Float, b :: Float}
+    | RGBA {r :: Float, g :: Float, b :: Float, a :: Float}
     | Hex String
     | HSL {h :: Float, s :: Float, l :: Float}
     | HSLA {h :: Float, s :: Float, l :: Float, a :: Float}
@@ -159,8 +159,8 @@ data Color
 -- Convert a color to a JSON string
 instance Show Color where
     show :: Color -> String
-    show (RGBA r g b a) = "\"rgba(" ++ show r ++ "," ++ show g ++ "," ++ show b ++ "," ++ show a ++ ")\""
     show (RGB r g b) = "\"rgb(" ++ show r ++ "," ++ show g ++ "," ++ show b ++ ")\""
+    show (RGBA r g b a) = "\"rgba(" ++ show r ++ "," ++ show g ++ "," ++ show b ++ "," ++ show a ++ ")\""
     show (Hex ('#' : hex)) = "\"#" ++ hex ++ "\""
     show (Hex hex) = "\"#" ++ hex ++ "\""
     show (HSL h s l) = "\"hsl(" ++ show h ++ "," ++ show s ++ "%," ++ show l ++ "%)\""
