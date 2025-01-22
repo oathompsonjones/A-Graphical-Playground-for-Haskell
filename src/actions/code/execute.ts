@@ -17,8 +17,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
             name,
         })));
 
-        const cpuLimit = 0.5;
-        const dockerCmd = `docker run --rm -m 128m --cpus=${cpuLimit} haskell:latest`;
+        const dockerCmd = "docker run --rm -m 128m --cpus=0.5 haskell:latest";
         const bashCmd = [
             "cd /tmp",
             ...lib.map(({ content, name }) => `base64 -d <<< ${base64(content)} > ${name}`),
@@ -27,7 +26,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
         ].join(" && ");
 
         const timeout = 3_600_000;
-        const updateDelay = 5;
+        const updateDelay = 10;
         const stopDelay = 5_000;
 
         const stream = exec(`${dockerCmd} bash -c "${bashCmd}"`, { timeout });
@@ -47,7 +46,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
                 let timeOfLastNewData = Date.now();
 
                 limitTimer = setTimeout(() => {
-                    controller.enqueue("\n\nTIMEOUT");
+                    controller.enqueue(`INFO: Execution took longer than ${timeout}ms, listener killed.`);
                     handleStreamEnd();
                 }, timeout);
 
@@ -56,7 +55,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
 
                     if (newData === undefined) {
                         if (Date.now() - timeOfLastNewData > stopDelay) {
-                            controller.enqueue(`\n\nNo data received for ${stopDelay}ms, listener killed`);
+                            controller.enqueue(`INFO: No output for ${stopDelay}ms, listener killed.`);
                             handleStreamEnd();
                         }
 
@@ -66,8 +65,8 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
                     timeOfLastNewData = Date.now();
                     controller.enqueue(newData);
 
-                    if (updateQueue.length === 0)
-                        handleStreamEnd();
+                    /* If (updateQueue.length === 0)
+                        handleStreamEnd(); */
                 }, updateDelay);
 
                 if (stream.stdout === null || stream.stderr === null)
