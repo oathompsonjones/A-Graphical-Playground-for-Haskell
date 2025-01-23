@@ -28,7 +28,7 @@ export default function EditorPage(): ReactNode {
         "",
         "-- Start writing your code here.",
         "main :: IO ()",
-        "main = render $ background (createCanvas 800 600) LightGrey",
+        "main = render $ background LightGrey (createCanvas 800 600)",
         "",
     ].join("\n");
     const [code, setCode] = useLocalStorage("code", defaultCode);
