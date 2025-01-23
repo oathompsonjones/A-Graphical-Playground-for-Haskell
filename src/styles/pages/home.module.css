@@ -1,0 +1,13 @@
+.examples {
+    display: flex;
+    gap: 1rem;
+}
+
+.example {
+    text-align: center;
+}
+
+.example img {
+    width: 100%;
+    height: auto;
+}
