@@ -54,7 +54,7 @@ instance Show Shape where
 
 -- Identity shape
 emptyShape :: Shape
-emptyShape = Empty
+emptyShape = Shape Empty (Vector 0 0) 0 Transparent Black 1
 
 -- Functions to create shapes
 circle :: Float -> Shape
