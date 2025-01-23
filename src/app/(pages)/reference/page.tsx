@@ -4,7 +4,296 @@ import { Grid2, Icon, Typography } from "@mui/material";
 import { KeyboardCommandKey, KeyboardControlKey, KeyboardReturn } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import type { Variant } from "@mui/material/styles/createTypography";
 import styles from "styles/pages/reference.module.css";
+
+type Section = ((metaKey?: ReactNode) => ReactNode) | { [key: string]: Section; };
+
+const toId = (title: string): string => title.toLowerCase().replace(/\s/g, "-");
+const list = (items: ReactNode[]): Awaited<ReactNode> => <ul>{items.map((item, i) => <li key={i}>{item}</li>)}</ul>;
+
+const docs: Record<string, Section> = {
+    /* eslint-disable @typescript-eslint/naming-convention, sort-keys */
+    "Editor Controls": (metaKey: ReactNode) => (
+        <div>
+            <Grid2 container alignItems="center">
+                <Grid2 size={2}><Typography variant="h4">{metaKey}<KeyboardReturn /></Typography></Grid2>
+                <Grid2 size={10}>Run the code.</Grid2>
+                <Grid2 size={2}><Typography variant="h4">{metaKey}<Icon>S</Icon></Typography></Grid2>
+                <Grid2 size={10}>Save the code.</Grid2>
+                <Grid2 size={2}><Typography variant="h4">{metaKey}<Icon>/</Icon></Typography></Grid2>
+                <Grid2 size={10}>Comment/uncomment the line.</Grid2>
+            </Grid2>
+        </div>
+    ),
+    Canvas: () => (
+        <div>
+            The <code>Canvas</code> is the main component of the editor. It is a 2D drawing surface using uses a
+            cartesian coordinate system, with the origin at the top-left corner. The x-axis increases to the right,
+            while the y-axis increases downwards.
+            <br />
+            To set up the canvas, use the <code>createCanvas :: Int -&gt; Int -&gt; Canvas</code> function, providing a
+            width and a height.
+        </div>
+    ),
+    Vectors: () => (
+        <div>
+            To represent a point, you use the <code>Vector</code> data type, which stores an <code>x</code> and
+            a <code>y</code> value.
+        </div>
+    ),
+    Shapes: {
+        "2D Primatives": () => (
+            <div>
+                To draw 2D shapes, you can use any of the following functions,
+                which all return the <code>Shape</code> data type:
+
+                {list([
+                    <><code>circle :: Float -&gt; Shape</code> — Takes a radius and returns a circle.</>,
+                    <><code>ellipse :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and returns an
+                        ellipse.</>,
+                    <><code>line :: Float -&gt; Shape</code> — Takes a length and returns a line.</>,
+                    <><code>rect :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and returns a
+                        rectangle.</>,
+                    <><code>square :: Float -&gt; Shape</code> — Takes a side length and returns a square.</>,
+                    <><code>polygon :: [Point] -&gt; Shape</code> — Takes a list of points and returns a polygon.</>,
+                ])}
+
+                Shapes can be combined using the <code>(&amp;) :: Shape -&gt; Shape -&gt; Shape</code> operator.
+                The <code>emptyShape :: Shape</code> function represents the empty shape, and is the identity
+                function for the <code>&amp;</code> operator.
+            </div>
+        ),
+        "Shape Transformations": () => (
+            <div>
+                You can modify a shape using the following functions:
+
+                {list([
+                    <><code>fill :: Color -&gt; Shape -&gt; Shape</code> — Set the fill color of the shape.</>,
+                    <><code>stroke :: Color -&gt; Shape -&gt; Shape</code> — Set the stroke color of the shape.</>,
+                    <><code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> — Set the stroke thickness of the
+                        shape.</>,
+                    <><code>translate :: Vector -&gt; Shape -&gt; Shape</code> — Translate the shape by the given
+                        offset.</>,
+                    <><code>rotate :: Float -&gt; Shape -&gt; Shape</code> — Rotate the shape by the given angle in
+                        radians.</>,
+                    <><code>scale :: Float -&gt; Shape -&gt; Shape</code> — Scale the shape by the given factor.</>,
+                    <><code>reflect :: Float -&gt; Shape -&gt; Shape</code> — Reflect the shape over an axis at the
+                        given angle in radians.</>,
+                ])}
+
+                Transformations can be applied in two ways. The first is to simply apply thre transformation function to
+                the shape directly (e.g. <code>fill Red (circle 50)</code>). <br />
+                The second is to use the <code>(&gt;&gt;&gt;) :: Shape -&gt; (Shape -&gt; Shape) -&gt;
+                    Shape</code> operator to chain transformations together (e.g. <code>circle 50 &gt;&gt;&gt; fill
+                    Red</code>).
+                The <code>identityTransformation :: Shape -&gt; Shape</code> function represents the identity
+                transformation, and is the identity function for the <code>&gt;&gt;&gt;</code> operator.
+            </div>
+        ),
+    },
+    // eslint-disable-next-line max-lines-per-function
+    Colors: () => (
+        <div>
+            Colors are represented using the <code>Color</code> data type, which has the following constructors:
+
+            {list([
+                <><code>RGB {"{r :: Float, g :: Float, b :: Float}"}</code> — Represents a color with red, green, and
+                    blue values.</>,
+                <><code>RGBA {"{r :: Float, g :: Float, b :: Float, a :: Float}"}</code> — Represents a color with red,
+                    green, blue, and alpha values.</>,
+                <><code>Hex String</code> — Represents a color using a hexadecimal string. You can prefix the string
+                    with a hash (e.g. <code>"#ff0000"</code>) or you can leave it out (e.g. <code>"ff0000"</code>).</>,
+                <><code>HSL {"{h :: Float, s :: Float, l :: Float}"}</code> — Represents a color with hue, saturation,
+                    and lightness values.</>,
+                <><code>HSLA {"{h :: Float, s :: Float, l :: Float, a :: Float}"}</code> — Represents a color with hue,
+                    saturation, lightness, and alpha values.</>,
+                <><code>Transparent</code> — Represents a transparent color.</>,
+            ])}
+
+            You can also use the following CSS named colors: {[
+                "AliceBlue",
+                "AntiqueWhite",
+                "Aqua",
+                "AquaMarine",
+                "Azure",
+                "Beige",
+                "Bisque",
+                "Black",
+                "BlanchedAlmond",
+                "Blue",
+                "BlueViolet",
+                "Brown",
+                "BurlyWood",
+                "CadetBlue",
+                "Chartreuse",
+                "Chocolate",
+                "Coral",
+                "CornflowerBlue",
+                "Cornsilk",
+                "Crimson",
+                "Cyan",
+                "DarkBlue",
+                "DarkCyan",
+                "DarkGoldenRod",
+                "DarkGray",
+                "DarkGreen",
+                "DarkGrey",
+                "DarkKhaki",
+                "DarkMagenta",
+                "DarkOliveGreen",
+                "DarkOrange",
+                "DarkOrchid",
+                "DarkRed",
+                "DarkSalmon",
+                "DarkSeaGreen",
+                "DarkSlateBlue",
+                "DarkSlateGray",
+                "DarkSlateGrey",
+                "DarkTurquoise",
+                "DarkViolet",
+                "DeepPink",
+                "DeepSkyBlue",
+                "DimGray",
+                "DimGrey",
+                "DodgerBlue",
+                "FireBrick",
+                "FloralWhite",
+                "ForestGreen",
+                "Fuchsia",
+                "Gainsboro",
+                "GhostWhite",
+                "Gold",
+                "GoldenRod",
+                "Gray",
+                "Green",
+                "GreenYellow",
+                "Grey",
+                "HoneyDew",
+                "HotPink",
+                "IndianRed",
+                "Indigo",
+                "Ivory",
+                "Khaki",
+                "Lavender",
+                "LavenderBlush",
+                "LawnGreen",
+                "LemonChiffon",
+                "LightBlue",
+                "LightCoral",
+                "LightCyan",
+                "LightGoldenRodYellow",
+                "LightGray",
+                "LightGreen",
+                "LightGrey",
+                "LightPink",
+                "LightSalmon",
+                "LightSeaGreen",
+                "LightSkyBlue",
+                "LightSlateGray",
+                "LightSlateGrey",
+                "LightSteelBlue",
+                "LightYellow",
+                "Lime",
+                "LimeGreen",
+                "Linen",
+                "Magenta",
+                "Maroon",
+                "MediumAquaMarine",
+                "MediumBlue",
+                "MediumOrchid",
+                "MediumPurple",
+                "MediumSeaGreen",
+                "MediumSlateBlue",
+                "MediumSpringGreen",
+                "MediumTurquoise",
+                "MediumVioletRed",
+                "MidnightBlue",
+                "MintCream",
+                "MistyRose",
+                "Moccasin",
+                "NavajoWhite",
+                "Navy",
+                "Oldlace",
+                "Olive",
+                "OliveDrab",
+                "Orange",
+                "OrangeRed",
+                "Orchid",
+                "PaleGoldenRod",
+                "PaleGreen",
+                "PaleTurquoise",
+                "PaleVioletRed",
+                "PapayaWhip",
+                "PeachPuff",
+                "Peru",
+                "Pink",
+                "Plum",
+                "PowderBlue",
+                "Purple",
+                "Red",
+                "RosyBrown",
+                "RoyalBlue",
+                "SaddleBrown",
+                "Salmon",
+                "SandyBrown",
+                "SeaGreen",
+                "SeaShell",
+                "Sienna",
+                "Silver",
+                "SkyBlue",
+                "SlateBlue",
+                "SlateGray",
+                "SlateGrey",
+                "Snow",
+                "SpringGreen",
+                "SteelBlue",
+                "Tan",
+                "Teal",
+                "Thistle",
+                "Tomato",
+                "Turquoise",
+                "Violet",
+                "Wheat",
+                "White",
+                "WhiteSmoke",
+                "Yellow",
+                "YellowGreen",
+            ].map((color, i, arr) => <><code key={i}>{color}</code>{i < arr.length - 1 ? ", " : ". "}</>)}
+        </div>
+    ),
+    Other: {
+        "Utility Functions": () => (
+            <div>
+                The following functions convert beetween degrees and radians:
+                {list([
+                    <><code>degrees :: Float -&gt; Float</code> — Converts radians to degrees.</>,
+                    <><code>radians :: Float -&gt; Float</code> — Converts degrees to radians.</>,
+                ])}
+            </div>
+        ),
+    },
+    /* eslint-enable @typescript-eslint/naming-convention */
+};
+
+const contents = (section: Record<string, Section>): Awaited<ReactNode> => list(
+    Object.entries(section).map(([title, content]) => (
+        <>
+            <a href={`#${toId(title)}`}>{title}</a>
+            {typeof content === "object" && contents(content)}
+        </>
+    )),
+);
+const section = (metaKey: ReactNode, title: string, content: Section, depth: number, i: number): Awaited<ReactNode> => (
+    <div key={i}>
+        <br />
+        <Typography variant={`h${depth + 3}` as Variant} id={toId(title)} className={styles.title!}>{title}</Typography>
+        {content instanceof Function
+            ? content(metaKey)
+            : Object.entries(content)
+                .map(([subtitle, subcontent], j) => section(metaKey, subtitle, subcontent, depth + 1, j))}
+    </div>
+);
 
 /**
  * This is the reference page.
@@ -16,77 +305,13 @@ export default function Reference(): ReactNode {
     useEffect(() => {
         if (navigator.platform.includes("Mac"))
             setMetaKey(<KeyboardCommandKey />);
-    }, [navigator.platform]);
+    }, []);
 
     return (
         <div className={styles.wrapper}>
             <Typography variant="h2">Reference</Typography>
-            <br />
-            <Typography variant="h4">Editor Controls</Typography>
-            <Grid2 container alignItems="center">
-                <Grid2 size={1}><Typography variant="h4">{metaKey}<KeyboardReturn /></Typography></Grid2>
-                <Grid2 size={11}>Run the code.</Grid2>
-                <Grid2 size={1}><Typography variant="h4">{metaKey}<Icon>S</Icon></Typography></Grid2>
-                <Grid2 size={11}>Save the code.</Grid2>
-                <Grid2 size={1}><Typography variant="h4">{metaKey}<Icon>/</Icon></Typography></Grid2>
-                <Grid2 size={11}>Comment/uncomment the line.</Grid2>
-            </Grid2>
-            <br />
-            <Typography variant="h4">Points</Typography>
-            <Typography>
-                The canvas uses a cartesian coordinate system, with the origin at the top-left corner,
-                and the x-axis increasing to the right, and the y-axis increasing downwards.
-                To represent a point, you use the <code>Point x y</code> data type, which stores an x and y coordinate.
-            </Typography>
-            <br />
-            <Typography variant="h4">Shapes</Typography>
-            <Typography variant="h5">2D Primitives</Typography>
-            <Typography>
-                To draw 2D shapes, you can use any of the following functions,
-                which all return the <code>Shape</code> data type:
-                <ul>
-                    <li>
-                        <code>circle :: Float -&gt; Shape</code> — Takes a radius and returns a circle.
-                    </li>
-                    <li>
-                        <code>ellipse :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and
-                        returns an ellipse.
-                    </li>
-                    <li>
-                        <code>line :: Float -&gt; Shape</code> — Takes a length and returns a line.
-                    </li>
-                    <li>
-                        <code>rect :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and
-                        returns a rectangle.
-                    </li>
-                    <li>
-                        <code>square :: Float -&gt; Shape</code> — Takes a side length and returns a square.
-                    </li>
-                    <li>
-                        <code>polygon :: [Point] -&gt; Shape</code> — Takes a list of points and returns a polygon.
-                    </li>
-                </ul>
-                You can concatenate shapes using the <code>&amp;</code> operator.
-                The expression <code>(circle 10) &amp; (rect 20 30)</code> will draw a circle and a rectangle.
-            </Typography>
-            <Typography variant="h5">Shape Modifiers</Typography>
-            <Typography>
-                You can modify a shape using the following functions:
-                <ul>
-                    <li>
-                        <code>fill :: Shape -&gt; Color -&gt; Shape</code> — Fill the shape with a color.
-                    </li>
-                    <li>
-                        <code>rotate :: Shape -&gt; Float -&gt; Shape</code> — Rotate the shape by an angle in degrees.
-                    </li>
-                    <li>
-                        <code>scale :: Shape -&gt; Float -&gt; Shape</code> — Scale the shape by a factor.
-                    </li>
-                    <li>
-                        <code>translate :: Shape -&gt; Point -&gt; Shape</code> — Translate the shape by an offset.
-                    </li>
-                </ul>
-            </Typography>
+            {contents(docs)}
+            {Object.entries(docs).map(([title, content], i) => section(metaKey, title, content, 0, i))}
         </div>
     );
 }
