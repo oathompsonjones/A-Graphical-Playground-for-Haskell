@@ -74,8 +74,8 @@ const docs: Record<string, Section> = {
     Shapes: {
         "2D Primatives": () => (
             <div>
-                To draw 2D shapes, you can use any of the following functions,
-                which all return the <code>Shape</code> data type:
+                To draw 2D shapes, you can use any of the following functions, which all return
+                the <code>Shape</code> data type:
 
                 {list([
                     <><code>circle :: Float -&gt; Shape</code> — Takes a radius and returns a circle.</>,
@@ -103,15 +103,20 @@ const docs: Record<string, Section> = {
                     <><code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> — Set the stroke thickness of the
                         shape.</>,
                     <><code>translate :: Vector -&gt; Shape -&gt; Shape</code> — Translate the shape by the given
-                        offset.</>,
+                        offset. For circles and ellipses, this moves the center of the shape. For lines, this
+                        moves the starting point. For squares and rectangles, this moves the top left corner. For
+                        polygons, this translates each point individually, keeping them in the same position relative
+                        to one another.</>,
                     <><code>rotate :: Float -&gt; Shape -&gt; Shape</code> — Rotate the shape by the given angle in
-                        radians.</>,
+                        radians. For circles and ellipses, this rotates the shape about its center. For lines, this
+                        roates about the starting point. For squares and rectangles, this rotates about the top left
+                        corner. For polygons, this rotates about the shape's relative origin point.</>,
                     <><code>scale :: Float -&gt; Shape -&gt; Shape</code> — Scale the shape by the given factor.</>,
                     <><code>reflect :: Float -&gt; Shape -&gt; Shape</code> — Reflect the shape over an axis at the
                         given angle in radians.</>,
                 ])}
 
-                Transformations can be applied in two ways. The first is to simply apply thre transformation function to
+                Transformations can be applied in two ways. The first is to simply apply the transformation function to
                 the shape directly (e.g. <code>fill Red (circle 50)</code>). <br />
                 The second is to use the <code>(&gt;&gt;&gt;) :: Shape -&gt; (Shape -&gt; Shape) -&gt;
                     Shape</code> operator to chain transformations together (e.g. <code>circle 50 &gt;&gt;&gt; fill
