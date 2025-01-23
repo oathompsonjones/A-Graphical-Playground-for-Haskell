@@ -116,6 +116,15 @@ const docs: Record<string, Section> = {
                         given angle in radians.</>,
                 ])}
 
+                There are also a few shorthand functions for common transformations:
+
+                {list([
+                    <><code>noStroke :: Shape -&gt; Shape</code> = <code>stroke Transparent</code></>,
+                    <><code>noFill :: Shape -&gt; Shape</code> = <code>fill Transparent</code></>,
+                    <><code>translateX :: Float -&gt; Shape -&gt; Shape</code> = <code>translate (Vector x 0)</code></>,
+                    <><code>translateY :: Float -&gt; Shape -&gt; Shape</code> = <code>translate (Vector 0 y)</code></>,
+                ])}
+
                 Transformations can be applied in two ways. The first is to simply apply the transformation function to
                 the shape directly (e.g. <code>fill Red (circle 50)</code>). <br />
                 The second is to use the <code>(&gt;&gt;&gt;) :: Shape -&gt; (Shape -&gt; Shape) -&gt;
