@@ -67,14 +67,21 @@ export default function EditorPage(): ReactNode {
         setOpenShare(false);
     }) as () => void;
     const copyImage = (): void => {
-        const canvas = document.querySelector("canvas")!;
+        void window.navigator.clipboard.write([
+            new ClipboardItem({
+                /* eslint-disable */ "image/png": new Promise(async (resolve) => { /* eslint-enable */
+                    const canvas = document.querySelector("canvas")!;
+                    const image = canvas.toDataURL("image/png");
+                    const blob = await (await fetch(image)).blob();
 
-        canvas.toBlob((async (blob) => {
-            await window.navigator.clipboard.write([new ClipboardItem({ [blob!.type]: blob! })]);
+                    resolve(new Blob([blob], { type: "image/png" }));
+                }),
+            }),
+        ]).then(() => {
             setType("success");
             setMessage("Image copied to clipboard.");
             setOpenShare(false);
-        }) as BlobCallback);
+        });
     };
     const downloadImage = (): void => {
         const canvas = document.querySelector("canvas")!;
