@@ -89,27 +89,33 @@ identityTransformation shape = shape
 
 -- Functions to manipulate shapes
 fill :: Color -> Shape -> Shape
+fill color (Group shapes) = Group [fill color shape | shape <- shapes]
 fill color shape = shape{fillColor = color}
 
 stroke :: Color -> Shape -> Shape
+stroke color (Group shapes) = Group [stroke color shape | shape <- shapes]
 stroke color shape = shape{strokeColor = color}
 
 strokeWeight :: Float -> Shape -> Shape
+strokeWeight weight (Group shapes) = Group [strokeWeight weight shape | shape <- shapes]
 strokeWeight weight shape = shape{strokeThickness = weight}
 
 translate :: Vector -> Shape -> Shape
+translate vector (Group shapes) = Group [translate vector shape | shape <- shapes]
 translate vector shape = shape{position = Vector (x vector + x (position shape)) (y vector + y (position shape))}
 
 rotate :: Float -> Shape -> Shape
+rotate angle (Group shapes) = Group [rotate angle shape | shape <- shapes]
 rotate angle shape = shape{angle = angle}
 
 -- TODO: This doesn't work
 scale :: Float -> Shape -> Shape
+scale scaleFactor (Group shapes) = Group [scale scaleFactor shape | shape <- shapes]
 scale scaleFactor (Ellipse horizontalAxis verticalAxis) = Ellipse (horizontalAxis * scaleFactor) (verticalAxis * scaleFactor)
 scale scaleFactor (Polygon points) = Polygon [Vector (x * scaleFactor) (y * scaleFactor) | Vector x y <- points]
-scale scaleFactor (Group shapes) = Group [scale scaleFactor shape | shape <- shapes]
 scale scaleFactor shape' = scale scaleFactor (shape shape')
 
 -- TODO: This isn't actually a reflection
 reflect :: Float -> Shape -> Shape
+reflect angle (Group shapes) = Group [reflect angle shape | shape <- shapes]
 reflect angle shape = shape{angle = angle + 180}
