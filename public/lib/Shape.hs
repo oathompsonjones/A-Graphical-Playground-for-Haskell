@@ -17,6 +17,10 @@ module Shape (
     scale,
     rotate,
     reflect,
+    noStroke,
+    noFill,
+    translateX,
+    translateY,
 ) where
 
 import Color (Color (Black, Transparent))
@@ -29,51 +33,95 @@ import Maths (Vector (..))
 
 -- Data structure to represent shapes
 data Shape
-    = Shape {shape :: Shape, position :: Vector, angle :: Float, fillColor :: Color, strokeColor :: Color, strokeThickness :: Float}
-    | Ellipse Float Float -- horizontal radius, vertical radius
-    | Polygon [Vector] -- points
-    | Group [Shape] -- shapes
+    = Ellipse {hAx :: Float, vAx :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
+    | Polygon {pts :: [Vector], pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
+    | Group [Shape]
     | Empty
 
 -- Convert a shape to a JSON string
 instance Show Shape where
     show :: Shape -> String
-    show (Shape shape position angle fill stroke strokeThickness) = "{ " ++ show shape ++ ", \"position\": " ++ show position ++ ", \"angle\": " ++ show angle ++ ", \"fill\": " ++ show fill ++ ", \"stroke\": " ++ show stroke ++ ", \"strokeWeight\": " ++ show strokeThickness ++ " }"
-    show (Ellipse horizontalAxis verticalAxis) = "\"type\": \"ellipse\", \"horizontalAxis\": " ++ show horizontalAxis ++ ", \"verticalAxis\": " ++ show verticalAxis
-    show (Polygon points) = "\"type\": \"polygon\", \"points\": " ++ show points
-    show (Group shapes) = "[" ++ (intercalate ", " [show shape | shape <- shapes]) ++ "]"
+    show (Ellipse hAx vAx pos ang fc sc sw) =
+        "{ "
+            ++ "\"type\": \"ellipse\", \"horizontalAxis\": "
+            ++ show hAx
+            ++ ", \"verticalAxis\": "
+            ++ show vAx
+            ++ ", \"position\": "
+            ++ show pos
+            ++ ", \"angle\": "
+            ++ show ang
+            ++ ", \"fill\": "
+            ++ show fc
+            ++ ", \"stroke\": "
+            ++ show sc
+            ++ ", \"strokeWeight\": "
+            ++ show sw
+            ++ " }"
+    show (Polygon pts pos ang fc sc sw) =
+        "{ "
+            ++ "\"type\": \"polygon\", \"points\": "
+            ++ show pts
+            ++ ", \"position\": "
+            ++ show pos
+            ++ ", \"angle\": "
+            ++ show ang
+            ++ ", \"fill\": "
+            ++ show fc
+            ++ ", \"stroke\": "
+            ++ show sc
+            ++ ", \"strokeWeight\": "
+            ++ show sw
+            ++ " }"
+    show (Group ss) = "[" ++ (intercalate ", " [show s | s <- ss]) ++ "]"
+
+-- Default arguments for shapes
+defFC :: Color
+defFC = Transparent
+
+defSC :: Color
+defSC = Black
+
+defSW :: Float
+defSW = 1
+
+defPos :: Vector
+defPos = Vector 0 0
+
+defAng :: Float
+defAng = 0
 
 -- Combine two shapes into a group
 (&) :: Shape -> Shape -> Shape
-(&) Empty right = right
-(&) left Empty = left
-(&) (Group left) (Group right) = Group (left ++ right)
-(&) (Group left) right = Group (left ++ [right])
-(&) left (Group right) = Group (left : right)
-(&) left right = Group [left, right]
+(&) Empty r = r
+(&) l Empty = l
+(&) (Group l) (Group r) = Group (l ++ r)
+(&) (Group l) r = Group (l ++ [r])
+(&) l (Group r) = Group (l : r)
+(&) l r = Group [l, r]
 
 -- Identity shape
 emptyShape :: Shape
-emptyShape = Shape Empty (Vector 0 0) 0 Transparent Black 1
+emptyShape = Empty
 
 -- Functions to create shapes
 circle :: Float -> Shape
-circle radius = Shape (Ellipse radius radius) (Vector 0 0) 0 Transparent Black 1
+circle r = Ellipse r r defPos defAng defFC defSC defSW
 
 ellipse :: Float -> Float -> Shape
-ellipse horizontalAxis verticalAxis = Shape (Ellipse horizontalAxis verticalAxis) (Vector 0 0) 0 Transparent Black 1
+ellipse hAx vAx = Ellipse hAx vAx defPos defAng defFC defSC defSW
 
 line :: Float -> Shape
-line length = Shape (Polygon [Vector 0 0, Vector length 0]) (Vector 0 0) 0 Transparent Black 1
+line l = Polygon [Vector 0 0, Vector l 0] defPos defAng defFC defSC defSW
 
 rect :: Float -> Float -> Shape
-rect width height = Shape (Polygon [Vector 0 0, Vector width 0, Vector width height, Vector 0 height]) (Vector 0 0) 0 Transparent Black 1
+rect w h = Polygon [Vector 0 0, Vector w 0, Vector w h, Vector 0 h] defPos defAng defFC defSC defSW
 
 square :: Float -> Shape
-square size = Shape (Polygon [Vector 0 0, Vector size 0, Vector size size, Vector 0 size]) (Vector 0 0) 0 Transparent Black 1
+square s = Polygon [Vector 0 0, Vector s 0, Vector s s, Vector 0 s] defPos defAng defFC defSC defSW
 
 polygon :: [Vector] -> Shape
-polygon points = Shape (Polygon points) (Vector 0 0) 0 Transparent Black 1
+polygon pts = Polygon pts defPos defAng defFC defSC defSW
 
 -------------------------
 ---- Transformations ----
@@ -81,41 +129,60 @@ polygon points = Shape (Polygon points) (Vector 0 0) 0 Transparent Black 1
 
 -- Chain transformations
 (>>>) :: Shape -> (Shape -> Shape) -> Shape
-(>>>) shape function = function shape
+(>>>) s f = f s
 
 -- Identity transformation
 identityTransformation :: Shape -> Shape
-identityTransformation shape = shape
+identityTransformation s = s
 
 -- Functions to manipulate shapes
 fill :: Color -> Shape -> Shape
-fill color (Group shapes) = Group [fill color shape | shape <- shapes]
-fill color shape = shape{fillColor = color}
+fill c Empty = Empty
+fill c (Group ss) = Group [fill c s | s <- ss]
+fill c s = s{fc = c}
 
 stroke :: Color -> Shape -> Shape
-stroke color (Group shapes) = Group [stroke color shape | shape <- shapes]
-stroke color shape = shape{strokeColor = color}
+stroke c Empty = Empty
+stroke c (Group ss) = Group [stroke c s | s <- ss]
+stroke c s = s{sc = c}
 
 strokeWeight :: Float -> Shape -> Shape
-strokeWeight weight (Group shapes) = Group [strokeWeight weight shape | shape <- shapes]
-strokeWeight weight shape = shape{strokeThickness = weight}
+strokeWeight w Empty = Empty
+strokeWeight w (Group ss) = Group [strokeWeight w s | s <- ss]
+strokeWeight w s = s{sw = w}
 
 translate :: Vector -> Shape -> Shape
-translate vector (Group shapes) = Group [translate vector shape | shape <- shapes]
-translate vector shape = shape{position = Vector (x vector + x (position shape)) (y vector + y (position shape))}
+translate v Empty = Empty
+translate v (Group ss) = Group [translate v s | s <- ss]
+translate v s = s{pos = Vector (x v + x (pos s)) (y v + y (pos s))}
 
 rotate :: Float -> Shape -> Shape
-rotate angle (Group shapes) = Group [rotate angle shape | shape <- shapes]
-rotate angle shape = shape{angle = angle}
+rotate a Empty = Empty
+rotate a (Group ss) = Group [rotate a s | s <- ss]
+rotate a s = s{ang = a}
 
 -- TODO: This doesn't work
 scale :: Float -> Shape -> Shape
-scale scaleFactor (Group shapes) = Group [scale scaleFactor shape | shape <- shapes]
-scale scaleFactor (Ellipse horizontalAxis verticalAxis) = Ellipse (horizontalAxis * scaleFactor) (verticalAxis * scaleFactor)
-scale scaleFactor (Polygon points) = Polygon [Vector (x * scaleFactor) (y * scaleFactor) | Vector x y <- points]
-scale scaleFactor shape' = scale scaleFactor (shape shape')
+scale f Empty = Empty
+scale f (Group ss) = Group [scale f s | s <- ss]
+scale f (Ellipse hAx vAx pos ang fc sc sw) = Ellipse (hAx * f) (vAx * f) pos ang fc sc sw
+scale f (Polygon pts pos ang fc sc sw) = Polygon [Vector (x * f) (y * f) | Vector x y <- pts] pos ang fc sc sw
 
 -- TODO: This isn't actually a reflection
 reflect :: Float -> Shape -> Shape
-reflect angle (Group shapes) = Group [reflect angle shape | shape <- shapes]
-reflect angle shape = shape{angle = angle + 180}
+reflect a Empty = Empty
+reflect a (Group ss) = Group [reflect a s | s <- ss]
+reflect a s = s{ang = a + 180}
+
+-- Shorthand transformations
+noStroke :: Shape -> Shape
+noStroke = stroke Transparent
+
+noFill :: Shape -> Shape
+noFill = fill Transparent
+
+translateX :: Float -> Shape -> Shape
+translateX x = translate (Vector x 0)
+
+translateY :: Float -> Shape -> Shape
+translateY y = translate (Vector 0 y)
