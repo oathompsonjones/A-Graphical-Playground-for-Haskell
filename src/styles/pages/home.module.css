@@ -4,10 +4,13 @@
 }
 
 .example {
+    display: flex;
+    flex-direction: column;
     text-align: center;
 }
 
 .example img {
-    width: 100%;
+    width: auto;
     height: auto;
+    max-height: 200px;
 }
