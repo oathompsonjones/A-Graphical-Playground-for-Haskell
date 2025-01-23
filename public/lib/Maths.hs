@@ -5,10 +5,10 @@ module Maths where
 ----------------
 
 radians :: Float -> Float
-radians degrees = degrees * pi / 180
+radians d = d * pi / 180
 
 degrees :: Float -> Float
-degrees radians = radians * 180 / pi
+degrees r = r * 180 / pi
 
 -----------------
 ---- Vectors ----
@@ -30,16 +30,16 @@ instance Show Vector where
 (<->) (Vector x1 y1) (Vector x2 y2) = Vector (x1 - x2) (y1 - y2)
 
 (<*>) :: Vector -> Float -> Vector
-(<*>) (Vector x y) scalar = Vector (x * scalar) (y * scalar)
+(<*>) (Vector x y) s = Vector (x * s) (y * s)
 
 (</>) :: Vector -> Float -> Vector
-(</>) (Vector x y) scalar = Vector (x / scalar) (y / scalar)
+(</>) (Vector x y) s = Vector (x / s) (y / s)
 
 mag :: Vector -> Float
 mag (Vector x y) = sqrt (x ^ 2 + y ^ 2)
 
 norm :: Vector -> Vector
-norm vector = vector </> mag vector
+norm v = v </> mag v
 
 dot :: Vector -> Vector -> Float
 dot (Vector x1 y1) (Vector x2 y2) = x1 * x2 + y1 * y2

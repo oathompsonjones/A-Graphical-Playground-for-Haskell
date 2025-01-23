@@ -15,40 +15,38 @@ import Maths
 import Shape
 
 -- Data structure to represent a canvas
-data Canvas = Canvas {width :: Int, height :: Int, backgroundColor :: Color, shapes :: [Shape]}
+data Canvas = Canvas {w :: Int, h :: Int, bg :: Color, ss :: [Shape]}
 
 -- Convert a canvas to a JSON string
 instance Show Canvas where
     show :: Canvas -> String
-    show (Canvas width height backgroundColor shapes) =
+    show (Canvas w h bg ss) =
         "{ \"width\": "
-            ++ show width
+            ++ show w
             ++ ", \"height\": "
-            ++ show height
+            ++ show h
             ++ ", \"backgroundColor\": "
-            ++ show backgroundColor
+            ++ show bg
             ++ ", \"shapes\": "
-            ++ show shapes
+            ++ show ss
             ++ " }"
 
 -- Outputs the canvas in JSON format, wrapped in a function call
 render :: Canvas -> IO ()
-render canvas = putStrLn $ "drawToCanvas(" ++ show canvas ++ ")"
+render c = putStrLn $ "drawToCanvas(" ++ show c ++ ")"
 
 -- Creates a new canvas, setting the size of canvas element
 createCanvas :: Int -> Int -> Canvas
-createCanvas width height = Canvas width height Transparent []
+createCanvas w h = Canvas w h Transparent []
 
 -- Set the background color of the canvas
 background :: Color -> Canvas -> Canvas
-background color canvas = canvas{backgroundColor = color}
+background cl cv = cv{bg = cl}
 
 -- Add a shape to the canvas
 (<<<) :: Canvas -> Shape -> Canvas
-(<<<) canvas shape = canvas{shapes = shapes canvas ++ [shape]}
+(<<<) c s = c{ss = ss c ++ [s]}
 
 -- Individually modifies pixels in the canvas
 setPixel :: Canvas -> Vector -> Color -> Canvas
-setPixel canvas position color = canvas{shapes = shapes canvas ++ [pixel]}
-  where
-    pixel = fill color (stroke Transparent (translate position (square 1)))
+setPixel cv pos cl = cv{ss = ss cv ++ [fill cl (stroke Transparent (translate pos (square 1)))]}
