@@ -302,7 +302,7 @@ const docs: Record<string, Section> = {
                 "WhiteSmoke",
                 "Yellow",
                 "YellowGreen",
-            ].map((color, i, arr) => <><code key={i}>{color}</code>{i < arr.length - 1 ? ", " : ". "}</>)}
+            ].map((color, i, arr) => <span key={i}><code>{color}</code>{i < arr.length - 1 ? ", " : ". "}</span>)}
         </div>
     ),
     Other: {
@@ -310,8 +310,8 @@ const docs: Record<string, Section> = {
             <div>
                 The following functions convert beetween degrees and radians:
                 {list([
-                    <><code>degrees :: Float -&gt; Float</code> — Converts radians to degrees.</>,
-                    <><code>radians :: Float -&gt; Float</code> — Converts degrees to radians.</>,
+                    <span key={0}><code>degrees :: Float -&gt; Float</code> — Converts radians to degrees.</span>,
+                    <span key={1}><code>radians :: Float -&gt; Float</code> — Converts degrees to radians.</span>,
                 ])}
             </div>
         ),
@@ -320,11 +320,11 @@ const docs: Record<string, Section> = {
 };
 
 const contents = (section: Record<string, Section>): Awaited<ReactNode> => list(
-    Object.entries(section).map(([title, content]) => (
-        <>
+    Object.entries(section).map(([title, content], i) => (
+        <span key={i}>
             <a href={`#${toId(title)}`}>{title}</a>
             {typeof content === "object" && contents(content)}
-        </>
+        </span>
     )),
 );
 const section = (metaKey: ReactNode, title: string, content: Section, depth: number, i: number): Awaited<ReactNode> => (
