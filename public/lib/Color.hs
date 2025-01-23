@@ -2,11 +2,11 @@ module Color where
 
 -- Data structure to represent CSS colors
 data Color
-    = RGB {r :: Float, g :: Float, b :: Float}
-    | RGBA {r :: Float, g :: Float, b :: Float, a :: Float}
+    = RGB Float Float Float
+    | RGBA Float Float Float Float
     | Hex String
-    | HSL {h :: Float, s :: Float, l :: Float}
-    | HSLA {h :: Float, s :: Float, l :: Float, a :: Float}
+    | HSL Float Float Float
+    | HSLA Float Float Float Float
     | Transparent
     | AliceBlue
     | AntiqueWhite
