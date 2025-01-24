@@ -182,16 +182,15 @@ const docs: Record<string, Section> = {
         <div>
             Colors are represented using the <code>Color</code> data type, which has the following constructors:
             {list([
-                <><code>RGB {"{r :: Float, g :: Float, b :: Float}"}</code> — Represents a color with red, green, and
-                    blue values.</>,
-                <><code>RGBA {"{r :: Float, g :: Float, b :: Float, a :: Float}"}</code> — Represents a color with red,
-                    green, blue, and alpha values.</>,
+                <><code>RGB Float Float Float</code> — Represents a color with red, green, and blue values.</>,
+                <><code>RGBA Float Float Float Float</code> — Represents a color with red, green, blue, and alpha
+                    values.</>,
                 <><code>Hex String</code> — Represents a color using a hexadecimal string. You can prefix the string
                     with a hash (e.g. <code>"#ff0000"</code>) or you can leave it out (e.g. <code>"ff0000"</code>).</>,
-                <><code>HSL {"{h :: Float, s :: Float, l :: Float}"}</code> — Represents a color with hue, saturation,
+                <><code>HSL Float Float Float</code> — Represents a color with hue, saturation,
                     and lightness values.</>,
-                <><code>HSLA {"{h :: Float, s :: Float, l :: Float, a :: Float}"}</code> — Represents a color with hue,
-                    saturation, lightness, and alpha values.</>,
+                <><code>HSLA Float Float Float Float</code> — Represents a color with hue, saturation, lightness, and
+                    alpha values.</>,
                 <><code>Transparent</code> — Represents a transparent color.</>,
             ])}
 
