@@ -159,7 +159,7 @@ translate v s = s{pos = pos s ^+^ v}
 rotate :: Float -> Shape -> Shape
 rotate a Empty = Empty
 rotate a (Group ss) = Group [rotate a s | s <- ss]
-rotate a s = s{ang = a}
+rotate a s = s{ang = ang s + a}
 
 -- TODO: This doesn't work
 scale :: Float -> Shape -> Shape
