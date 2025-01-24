@@ -25,7 +25,7 @@ module Shape (
 
 import Color (Color (Black, Transparent))
 import Data.List (intercalate)
-import Maths (Vector (..))
+import Maths (Vector (..), (^+^))
 
 ----------------
 ---- Shapes ----
@@ -154,7 +154,7 @@ strokeWeight w s = s{sw = w}
 translate :: Vector -> Shape -> Shape
 translate v Empty = Empty
 translate v (Group ss) = Group [translate v s | s <- ss]
-translate v s = s{pos = Vector (x v + x (pos s)) (y v + y (pos s))}
+translate v s = s{pos = pos s ^+^ v}
 
 rotate :: Float -> Shape -> Shape
 rotate a Empty = Empty
