@@ -29,6 +29,8 @@ const docs: Record<string, Section> = {
             function that takes a <code>Type1</code> and returns a <code>Type2</code>.
             <br />
             Infix operators in Haskell are defined the same way as functions, but with the operator name in parentheses.
+            <br />
+            <br />
             <Typography variant="h4">Examples</Typography>
             <code>add :: Int -&gt; Int -&gt; Int</code> — A function that takes two integers and returns an integer (
             <code>add 6 7</code> = <code>13</code>).
@@ -58,25 +60,53 @@ const docs: Record<string, Section> = {
     Canvas: () => (
         <div>
             The <code>Canvas</code> is the main component of the editor. It is a 2D drawing surface using uses a
-            cartesian coordinate system, with the origin at the top-left corner. The x-axis increases to the right,
-            while the y-axis increases downwards.
+                cartesian coordinate system, with the origin at the top-left corner. The x-axis increases to the right,
+                while the y-axis increases downwards.
             <br />
             To set up the canvas, use the <code>createCanvas :: Int -&gt; Int -&gt; Canvas</code> function, providing a
-            width and a height.
+                width and a height. Once you've created the canvas, you can set a background color using
+                the <code>background :: Color -&gt; Canvas -&gt; Canvas</code> function, providing a color, and the
+                canvas you created earlier.
+            <br />
+            Having created the canvas, you can draw shapes on it using the <code>(&lt;&lt;&lt;) :: Canvas -&gt; Shape
+                -&gt; Canvas</code> operator.
+            <br />
+            Finally, to render the canvas in the editor, use the <code>render :: Canvas -&gt; IO ()</code> function.
         </div>
     ),
     Vectors: () => (
         <div>
             To represent a point, you use the <code>Vector</code> data type, which stores an <code>x</code> and
-            a <code>y</code> value.
+                a <code>y</code> value.
+            <br />
+            <br />
+            Vectors support the following operators:
+            {list([
+                <><code>(^+^) :: Vector -&gt; Vector -&gt; Vector</code> — Adds the second vector to the first.</>,
+                <><code>(^-^) :: Vector -&gt; Vector -&gt; Vector</code> — Subtracts the second vector from the
+                    first.</>,
+                <><code>(^*^) :: Vector -&gt; Float -&gt; Vector</code> — Multiplies each component of the vector by the
+                    given scalar value.</>,
+                <><code>(^/^) :: Vector -&gt; Float -&gt; Vector</code> — Divides each component of the vector by the
+                    given scalar value.</>,
+            ])}
+            and the following functions:
+            {list([
+                <><code>mag :: Vector -&gt; Float</code> — Calculates the magnitude (length) of the vector.</>,
+                <><code>arg :: Vector -&gt; Float</code> — Calculates the argument (angle) of the vector.</>,
+                <><code>norm :: Vector -&gt; Vector</code> — Calculates the normal (unit) vector.</>,
+                <><code>dot :: Vector -&gt; Vector -&gt; Float</code> — Calculates the dot product of the two
+                    vectors.</>,
+                <><code>cross :: Vector -&gt; Vector -&gt; Float</code> — Calculates the cross product of the two
+                    vectors.</>,
+            ])}
         </div>
     ),
     Shapes: {
         "2D Primatives": () => (
             <div>
                 To draw 2D shapes, you can use any of the following functions, which all return
-                the <code>Shape</code> data type:
-
+                    the <code>Shape</code> data type:
                 {list([
                     <><code>circle :: Float -&gt; Shape</code> — Takes a radius and returns a circle.</>,
                     <><code>ellipse :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and returns an
@@ -90,13 +120,12 @@ const docs: Record<string, Section> = {
 
                 Shapes can be combined using the <code>(&amp;) :: Shape -&gt; Shape -&gt; Shape</code> operator.
                 The <code>emptyShape :: Shape</code> function represents the empty shape, and is the identity
-                function for the <code>&amp;</code> operator.
+                    function for the <code>&amp;</code> operator.
             </div>
         ),
         "Shape Transformations": () => (
             <div>
                 You can modify a shape using the following functions:
-
                 {list([
                     <><code>fill :: Color -&gt; Shape -&gt; Shape</code> — Set the fill color of the shape.</>,
                     <><code>stroke :: Color -&gt; Shape -&gt; Shape</code> — Set the stroke color of the shape.</>,
@@ -117,7 +146,6 @@ const docs: Record<string, Section> = {
                 ])}
 
                 There are also a few shorthand functions for common transformations:
-
                 {list([
                     <><code>noStroke :: Shape -&gt; Shape</code> = <code>stroke Transparent</code></>,
                     <><code>noFill :: Shape -&gt; Shape</code> = <code>fill Transparent</code></>,
@@ -126,12 +154,12 @@ const docs: Record<string, Section> = {
                 ])}
 
                 Transformations can be applied in two ways. The first is to simply apply the transformation function to
-                the shape directly (e.g. <code>fill Red (circle 50)</code>). <br />
+                    the shape directly (e.g. <code>fill Red (circle 50)</code>). <br />
                 The second is to use the <code>(&gt;&gt;&gt;) :: Shape -&gt; (Shape -&gt; Shape) -&gt;
                     Shape</code> operator to chain transformations together (e.g. <code>circle 50 &gt;&gt;&gt; fill
                     Red</code>).
                 The <code>identityTransformation :: Shape -&gt; Shape</code> function represents the identity
-                transformation, and is the identity function for the <code>&gt;&gt;&gt;</code> operator.
+                    transformation, and is the identity function for the <code>&gt;&gt;&gt;</code> operator.
                 <br />
                 <br />
                 To apply multiple transformations, you can do any of the following to achieve the same result:
@@ -153,7 +181,6 @@ const docs: Record<string, Section> = {
     Colors: () => (
         <div>
             Colors are represented using the <code>Color</code> data type, which has the following constructors:
-
             {list([
                 <><code>RGB {"{r :: Float, g :: Float, b :: Float}"}</code> — Represents a color with red, green, and
                     blue values.</>,
@@ -342,7 +369,7 @@ const contents = (section: Record<string, Section>): Awaited<ReactNode> => list(
     )),
 );
 const section = (metaKey: ReactNode, title: string, content: Section, depth: number, i: number): Awaited<ReactNode> => (
-    <div key={i}>
+    <div key={i} className={`${styles.wrapper} ${i % 2 === 0 && depth === 0 ? styles.colored : ""} edge wrapper`}>
         <br />
         <Typography variant={`h${depth + 3}` as Variant} id={toId(title)} className={styles.title!}>{title}</Typography>
         {content instanceof Function
@@ -365,10 +392,10 @@ export default function Reference(): ReactNode {
     }, []);
 
     return (
-        <div className={styles.wrapper}>
+        <>
             <Typography variant="h2">Reference</Typography>
             {contents(docs)}
             {Object.entries(docs).map(([title, content], i) => section(metaKey, title, content, 0, i))}
-        </div>
+        </>
     );
 }

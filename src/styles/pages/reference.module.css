@@ -1,6 +1,10 @@
+.wrapper {
+    padding-block: 1rem;
+}
+
 .wrapper code {
-    background-color: #282a36;
-    border: 1px solid #44475a;
+    background-color: var(--mui-palette-background-paper);
+    color: var(--mui-palette-secondary-main);
     padding: 0.1em 0.4em;
     border-radius: 0.5em;
     font-size: 0.8em;
@@ -10,4 +14,8 @@
 .title {
     padding: 3em;
     margin: -3em;
+}
+
+.colored {
+    background-color: var(--mui-palette-primary-main);
 }
