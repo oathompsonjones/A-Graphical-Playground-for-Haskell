@@ -36,7 +36,7 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
     );
 
     return (
-        /** Injects MUI styles before anything else. */
+        // Injects MUI styles before anything else.
         <StyledEngineProvider injectFirst>
             <ThemeProvider theme={theme}>
                 <DefaultPropsProvider value={{

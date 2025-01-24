@@ -4,8 +4,7 @@ import "styles/typography.css";
 import type { Metadata, Viewport } from "next";
 import { Footer } from "components/footer";
 import { Header } from "components/header";
-import { Notifications } from "components/notifications";
-import { Providers } from "./providers";
+import { Providers } from "../contexts/providers";
 import type { ReactNode } from "react";
 
 // https://realfavicongenerator.net (remove the mask icon and msapplication stuff)
@@ -44,7 +43,6 @@ export default function Layout({ children }: { children: ReactNode; }): ReactNod
                     <Header />
                     <main>{children}</main>
                     <Footer />
-                    <Notifications />
                 </Providers>
             </body>
         </html>
