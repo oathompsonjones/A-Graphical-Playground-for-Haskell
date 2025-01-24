@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid2, Icon, Typography } from "@mui/material";
+import { Grid2, Icon, Tooltip, Typography } from "@mui/material";
 import { KeyboardCommandKey, KeyboardControlKey, KeyboardReturn } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
@@ -343,7 +343,21 @@ const docs: Record<string, Section> = {
                 "WhiteSmoke",
                 "Yellow",
                 "YellowGreen",
-            ].map((color, i, arr) => <span key={i}><code>{color}</code>{i < arr.length - 1 ? ", " : ". "}</span>)}
+            ].map((color, i, arr) => (
+                <Tooltip
+                    key={i} placement="top" title={
+                        <div style={{
+                            backgroundColor: color,
+                            borderRadius: "1vmin",
+                            height: "3em",
+                            width: "3em",
+                        }} />}>
+                    <span>
+                        <code>{color}</code>
+                        {i < arr.length - 1 ? ", " : ". "}
+                    </span>
+                </Tooltip>
+            ))}
         </div>
     ),
     Other: {
