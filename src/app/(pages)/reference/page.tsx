@@ -132,6 +132,20 @@ const docs: Record<string, Section> = {
                     Red</code>).
                 The <code>identityTransformation :: Shape -&gt; Shape</code> function represents the identity
                 transformation, and is the identity function for the <code>&gt;&gt;&gt;</code> operator.
+                <br />
+                <br />
+                To apply multiple transformations, you can do any of the following to achieve the same result:
+                {list([
+                    <><code>fill Red (translate (Vector 50 50) (rotate (radians 45) (circle 50)))</code></>,
+                    <><code>circle 50 &gt;&gt;&gt; fill Red &gt;&gt;&gt; translate (Vector 50 50) &gt;&gt;&gt; rotate
+                        (radians 45)</code></>,
+                    <><code>circle 50 &gt;&gt;&gt; (fill Red . translate (Vector 50 50) . rotate (radians
+                        45))</code></>,
+                    <><code>circle 50 &gt;&gt;&gt; (foldr (.) identityTransformation [fill Red, translate (Vector 50
+                        50), rotate (radians 45)])</code></>,
+                    <><code>foldl (&gt;&gt;&gt;) (circle 50) [fill Red, translate (Vector 50 50), rotate (radians
+                        45)]</code></>,
+                ])}
             </div>
         ),
     },
