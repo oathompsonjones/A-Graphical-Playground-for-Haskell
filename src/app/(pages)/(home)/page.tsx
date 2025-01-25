@@ -36,7 +36,7 @@ export default function Home(): ReactNode {
                 {examples.map(({ name, code, image }, i) => (
                     <div className={styles.example} key={i}>
                         <Image src={image} alt={name} width={1000} height={600} />
-                        <Link href={`/editor?code=${code}`}>{name}</Link>
+                        <Link href={`/editor?code=${code}&title=${encodeURIComponent(name)}`}>{name}</Link>
                     </div>
                 ))}
             </div>

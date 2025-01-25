@@ -23,6 +23,7 @@ import { useStreamAction } from "hooks/useStreamAction";
 export default function EditorPage(): ReactNode {
     const isPortrait = useMediaQuery("(orientation: portrait)");
     const [openShare, setOpenShare] = useState(false);
+    const defaultTitle = "untitled";
     const defaultCode = [
         "import Lib",
         "",
@@ -31,6 +32,7 @@ export default function EditorPage(): ReactNode {
         "main = render $ background LightGrey (createCanvas 800 600)",
         "",
     ].join("\n");
+    const [title, setTitle] = useLocalStorage("title", defaultTitle);
     const [code, setCode] = useLocalStorage("code", defaultCode);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
     const { setType, setMessage } = useContext(NotificationsContext);
@@ -38,34 +40,45 @@ export default function EditorPage(): ReactNode {
     useEffect(() => {
         const url = new URL(window.location.href);
         const codeParam = url.searchParams.get("code");
+        const titleParam = url.searchParams.get("title");
 
         if (codeParam !== null)
             setCode(decompressFromEncodedURIComponent(codeParam));
+
+        if (titleParam !== null)
+            setTitle(decodeURIComponent(titleParam));
     }, []);
 
     const clear = clearStream;
     const new_ = (): void => {
         clearStream();
+        setTitle(defaultTitle);
         setCode(defaultCode);
     };
     const open = (): void => undefined;
     const save = (): void => undefined;
     const share = (): void => setOpenShare(true);
-    const copyCode = (async (): Promise<void> => {
-        await window.navigator.clipboard.writeText(code);
-        setType("success");
-        setMessage("Code copied to clipboard.");
-        setOpenShare(false);
-    }) as () => void;
-    const copyUrl = (async (): Promise<void> => {
+    const copyCode = (): void => {
+        void window.navigator.clipboard.writeText(code).then(() => {
+            setType("success");
+            setMessage("Code copied to clipboard.");
+            setOpenShare(false);
+        });
+    };
+    const copyUrl = (): void => {
         const codeURL = new URL(window.location.href);
 
         codeURL.searchParams.set("code", compressToEncodedURIComponent(code));
-        await window.navigator.clipboard.writeText(codeURL.toString());
-        setType("success");
-        setMessage("URL copied to clipboard.");
-        setOpenShare(false);
-    }) as () => void;
+
+        if (title !== defaultTitle)
+            codeURL.searchParams.set("title", encodeURIComponent(title));
+
+        void window.navigator.clipboard.writeText(codeURL.toString()).then(() => {
+            setType("success");
+            setMessage("URL copied to clipboard.");
+            setOpenShare(false);
+        });
+    };
     const copyImage = (): void => {
         void window.navigator.clipboard.write([
             new ClipboardItem({
@@ -96,10 +109,10 @@ export default function EditorPage(): ReactNode {
         setOpenShare(false);
     };
     const stop = terminateStream;
-    const run = ((): void => {
+    const run = (): void => {
         stop();
         executeStream(code);
-    }) as () => void;
+    };
 
     // Extract the graphics commands, and send them to the canvas.
     const graphicsRegEx = /drawToCanvas\((.*)\)/g;
@@ -133,7 +146,7 @@ export default function EditorPage(): ReactNode {
                 </div>
             </Dialog>
             <Buttons
-                title="untitled"
+                title={title}
                 new={new_}
                 clear={clear}
                 open={open}
