@@ -52,7 +52,7 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<S
         }
     };
 
-    useEffect(() => setStoredValue(readValue()), [key]);
+    useEffect(() => setStoredValue(readValue), [key]);
 
     return [storedValue, setValue];
 }
