@@ -3,8 +3,7 @@
 }
 
 .wrapper code {
-    background-color: var(--mui-palette-background-paper);
-    color: var(--mui-palette-secondary-main);
+    background: var(--mui-palette-background-paper);
     padding: 0.1em 0.4em;
     border-radius: 0.5em;
     font-size: 0.8em;
