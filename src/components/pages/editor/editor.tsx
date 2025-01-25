@@ -24,15 +24,19 @@ That's why we are storing the highlight.js instance in a state variable,
  * @param props - The properties of the editor.
  * @param props.code - The initial code to display.
  * @param props.updateCode - The function to call when the code changes.
- * @param props.run - The function to call when the code is run.
- * @param props.save - The function to call when the code is saved.
+ * @param props.run - The function to call to run the code.
+ * @param props.save - The function to call to save a file.
+ * @param props.open - The function to call to open a file.
+ * @param props.new - The function to call to create a new file.
  * @returns The editor element.
  */
-export function Editor({ code, updateCode, run, save }: {
+export function Editor({ code, updateCode, run, save, open, new: new_ }: {
     code: string;
     updateCode: Dispatch<SetStateAction<string>>;
     run: () => void;
     save: () => void;
+    open: () => void;
+    new: () => void;
 }): ReactNode {
     // Setup state variables.
     const [hljs, setHljs] = useState<HLJSApi>(null!);
@@ -100,101 +104,103 @@ export function Editor({ code, updateCode, run, save }: {
     }
 
     /**
-     * Inserts 2 spaces when the tab key is pressed.
-     * @param event - The keyboard event.
-     */
-    function handleTab(event: KeyboardEvent<HTMLTextAreaElement>): void {
-        event.preventDefault();
-
-        const tabSize = 2;
-        const textarea = event.currentTarget;
-        const { selectionEnd: end, selectionStart: start } = textarea;
-
-        textarea.value = textarea.value.substring(0, start) +
-                    " ".repeat(tabSize) + textarea.value.substring(end);
-        textarea.selectionStart = start + tabSize;
-        textarea.selectionEnd = textarea.selectionStart;
-
-        handleChange(event as FormEvent<HTMLTextAreaElement>);
-    }
-
-    /**
-     * Comments out the current line when the slash key is pressed with the command/control key.
-     * @param event - The keyboard event.
-     */
-    function handleSlash(event: KeyboardEvent<HTMLTextAreaElement>): void {
-        event.preventDefault();
-
-        const textarea = event.currentTarget;
-        const beforeText = textarea.value.substring(0, textarea.selectionStart);
-        const lineStart = beforeText.lastIndexOf("\n") + 1;
-        const lineIndex = beforeText.split("").filter((char) => char === "\n").length;
-        const line = textarea.value.split("\n")[lineIndex];
-
-        if (line === undefined)
-            return;
-
-        const beforeLines = textarea.value.substring(0, lineStart);
-        const afterLines = textarea.value.substring(lineStart + line.length);
-
-        if (line.startsWith("--")) {
-            const len = line.startsWith("-- ") ? 3 : 2;
-
-            textarea.value = `${beforeLines}${line.substring(len)}${afterLines}`;
-            textarea.selectionStart = lineStart + line.length - len;
-            textarea.selectionEnd = textarea.selectionStart;
-        } else {
-            textarea.value = `${beforeLines}-- ${line}${afterLines}`;
-            textarea.selectionStart = lineStart + line.length + 3;
-            textarea.selectionEnd = textarea.selectionStart;
-        }
-
-        handleChange(event as FormEvent<HTMLTextAreaElement>);
-    }
-
-    /**
-     * Saves the code when the s key is pressed with the command/control key.
-     * @param event - The keyboard event.
-     */
-    function handleS(event: KeyboardEvent<HTMLTextAreaElement>): void {
-        event.preventDefault();
-        save();
-    }
-
-    /**
-     * Runs the code when the enter key is pressed with the command/control key.
-     * @param event - The form event.
-     */
-    function handleEnter(event: KeyboardEvent<HTMLTextAreaElement>): void {
-        event.preventDefault();
-        run();
-    }
-
-    /**
      * Handles key presses, allowing for keyboard shortcuts and use of the tab key.
      * @param event - The keyboard event.
      */
+    // eslint-disable-next-line max-statements
     function handleKey(event: KeyboardEvent<HTMLTextAreaElement>): void {
         const isMacOS = navigator.platform.includes("Mac");
         const controlKey = isMacOS ? event.metaKey : event.ctrlKey;
 
+        const textarea = event.currentTarget;
+        const { selectionEnd: end, selectionStart: start } = textarea;
+
         if (controlKey) {
             switch (event.key) {
-                case "/":
-                    handleSlash(event);
+                case "/": {
+                    // TODO: Put the comment syntax at the correct indent level.
+                    // TODO: Comment multiple lines at once.
+                    event.preventDefault();
+
+                    const beforeText = textarea.value.substring(0, start);
+                    const lineStart = beforeText.lastIndexOf("\n") + 1;
+                    const lineIndex = beforeText.split("").filter((char) => char === "\n").length;
+                    const line = textarea.value.split("\n")[lineIndex];
+
+                    if (line === undefined)
+                        break;
+
+                    const beforeLines = textarea.value.substring(0, lineStart);
+                    const afterLines = textarea.value.substring(lineStart + line.length);
+
+                    if (line.startsWith("--")) {
+                        const len = line.startsWith("-- ") ? 3 : 2;
+
+                        textarea.value = `${beforeLines}${line.substring(len)}${afterLines}`;
+                        textarea.selectionStart = lineStart + line.length - len;
+                        textarea.selectionEnd = textarea.selectionStart;
+                    } else {
+                        textarea.value = `${beforeLines}-- ${line}${afterLines}`;
+                        textarea.selectionStart = lineStart + line.length + 3;
+                        textarea.selectionEnd = textarea.selectionStart;
+                    }
+
+                    handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
+                }
                 case "s":
-                    handleS(event);
+                    event.preventDefault();
+                    save();
+                    break;
+                case "o":
+                    event.preventDefault();
+                    open();
+                    break;
+                case "n":
+                    event.preventDefault();
+                    new_();
                     break;
                 case "Enter":
-                    handleEnter(event);
+                    event.preventDefault();
+                    run();
                     break;
             }
         } else {
             switch (event.key) {
-                case "Tab":
-                    handleTab(event);
+                case "Tab": {
+                    // TODO: Indent multiple lines at once.
+                    event.preventDefault();
+                    const tabSize = 2;
+
+                    textarea.value = textarea.value.substring(0, start) +
+                        " ".repeat(tabSize) + textarea.value.substring(end);
+                    textarea.selectionStart = start + tabSize;
+                    textarea.selectionEnd = textarea.selectionStart;
+
+                    handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
+                }
+                case "(": case "[": case "{": case "<": case "\"": case "'": case "`": {
+                    if (start === end)
+                        break;
+
+                    event.preventDefault();
+
+                    textarea.value = [
+                        textarea.value.substring(0, start),
+                        event.key,
+                        textarea.value.slice(start, end),
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        { "\"": "\"", "'": "'", "(": ")", "<": ">", "[": "]", "`": "`", "{": "}" }[event.key],
+                        textarea.value.substring(end),
+                    ].join("");
+
+                    textarea.selectionStart = start + 1;
+                    textarea.selectionEnd = end + 1;
+
+                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    break;
+                }
             }
         }
     }
