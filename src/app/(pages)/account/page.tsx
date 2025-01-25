@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, FormControl, Typography } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import type { Sketch } from "schemas/database";
@@ -17,17 +17,15 @@ export default function Account(): ReactNode {
     const { user } = useContext(UserContext);
     const [sketches, setSketches] = useState<Sketch[] | null>(null);
 
-    // This should never happen, middleware should prevent it.
-    if (user === null)
-        return <></>;
+    useEffect(() => {
+        if (user && sketches === null) {
+            getSketches(user._id.toString())
+                .then((json) => setSketches(JSON.parse(json) as Sketch[]))
+                .catch(() => undefined);
+        }
+    }, [sketches, user]);
 
-    if (sketches === null) {
-        getSketches(user._id.toString())
-            .then(setSketches)
-            .catch(() => undefined);
-    }
-
-    return (
+    return user && (
         <div>
             <Typography variant="h2">Welcome back, <b>{user.username ?? user.email.split("@")[0]}</b>!</Typography>
             <br />
@@ -43,7 +41,7 @@ export default function Account(): ReactNode {
             <div>
                 <Typography>Your saved code:</Typography>
                 <ul>
-                    {(sketches ?? []).map((sketch, i) => (
+                    {sketches?.map((sketch, i) => (
                         <li key={i}>
                             <Typography>{sketch.name}</Typography>
                             <Typography variant="caption">

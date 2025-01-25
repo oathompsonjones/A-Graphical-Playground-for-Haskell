@@ -1,8 +1,8 @@
 "use server";
 
 import type { Collection, Db } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import type { Sketch, SketchWithoutId, User, UserWithoutId } from "schemas/database";
-import { MongoClient } from "mongodb";
 
 /**
  * Connects to the database.
@@ -19,26 +19,44 @@ async function connect(): Promise<Db> {
 /**
  * Gets the user with the specified email.
  * @param email - The email of the user to get.
- * @returns The user with the specified email.
+ * @returns A JSON string representing the user with the given email.
  */
-export async function getUser(email: string): Promise<User> {
+export async function getUserFromEmail(email: string): Promise<string> {
     const db = await connect();
     const users: Collection<User> = db.collection("users");
+
     const user = await users.findOne({ email });
 
     if (user === null)
         throw new Error("User not found.");
 
-    return user;
+    return JSON.stringify(user);
+}
+
+/**
+ * Gets the user with the specified email.
+ * @param id - The id of the user to get.
+ * @returns A JSON string representing the user with the given id.
+ */
+export async function getUserFromId(id: string): Promise<string> {
+    const db = await connect();
+    const users: Collection<User> = db.collection("users");
+
+    const user = await users.findOne({ _id: new ObjectId(id) });
+
+    if (user === null)
+        throw new Error("User not found.");
+
+    return JSON.stringify(user);
 }
 
 /**
  * Creates a user.
  * @param email - The email of the user to create.
  * @param passwordHash - The password of the user to create.
- * @returns The created user.
+ * @returns A JSON string representing the created user.
  */
-export async function createUser(email: string, passwordHash: string): Promise<User> {
+export async function createUser(email: string, passwordHash: string): Promise<string> {
     const db = await connect();
     const users: Collection<UserWithoutId> = db.collection("users");
     let user = await users.findOne({ email });
@@ -56,16 +74,16 @@ export async function createUser(email: string, passwordHash: string): Promise<U
     if (user === null)
         throw new Error("Failed to register user.");
 
-    return user;
+    return JSON.stringify(user);
 }
 
 /**
  * Updates the user with the specified email.
  * @param email - The email of the user to update.
  * @param user - The new user data.
- * @returns The updated user.
+ * @returns A JSON string representing the updated user.
  */
-export async function updateUser(email: string, user: Partial<User>): Promise<User> {
+export async function updateUser(email: string, user: Partial<User>): Promise<string> {
     const db = await connect();
     const users: Collection<User> = db.collection("users");
     const result = await users.findOneAndUpdate({ email }, { $set: user });
@@ -73,16 +91,16 @@ export async function updateUser(email: string, user: Partial<User>): Promise<Us
     if (result === null)
         throw new Error("User not found.");
 
-    return result;
+    return JSON.stringify(result);
 }
 
 /**
  * Gets the sketch with the specified name for the specified user.
  * @param authorId - The email of the user who owns the sketch.
  * @param name - The name of the sketch to get.
- * @returns The sketch with the specified name for the specified user.
+ * @returns A JSON string representing the sketch with the given name and author.
  */
-export async function getSketch(authorId: string, name: string): Promise<Sketch> {
+export async function getSketch(authorId: string, name: string): Promise<string> {
     const db = await connect();
     const sketches: Collection<Sketch> = db.collection("sketches");
     const sketch = await sketches.findOne({ author: authorId, name });
@@ -90,29 +108,30 @@ export async function getSketch(authorId: string, name: string): Promise<Sketch>
     if (sketch === null)
         throw new Error("Sketch not found.");
 
-    return sketch;
+    return JSON.stringify(sketch);
 }
 
 /**
  * Gets all sketches for the specified user.
- * @param authorId - The email of the user who owns the sketches.
- * @returns All sketches for the specified user.
+ * @param authorId - The id of the user who owns the sketches.
+ * @returns A JSON string representing all sketches for the given user.
  */
-export async function getSketches(authorId: string): Promise<Sketch[]> {
+export async function getSketches(authorId: string): Promise<string> {
     const db = await connect();
     const sketches: Collection<Sketch> = db.collection("sketches");
+    const sketchArray = await sketches.find({ authorId }).toArray();
 
-    return sketches.find({ authorId }).toArray();
+    return JSON.stringify(sketchArray);
 }
 
 /**
  * Creates a sketch.
  * @param authorId - The email of the user who owns the sketch.
- * @param name - The name of the sketch to create.
+ * @param name - The id of the sketch to create.
  * @param content - The content of the sketch to create.
- * @returns The created sketch.
+ * @returns A JSON string representing the created sketch.
  */
-export async function createSketch(authorId: string, name: string, content: string): Promise<Sketch> {
+export async function createSketch(authorId: string, name: string, content: string): Promise<string> {
     const db = await connect();
     const sketches: Collection<SketchWithoutId> = db.collection("sketches");
     let sketch = await sketches.findOne({ author: authorId, name });
@@ -139,7 +158,7 @@ export async function createSketch(authorId: string, name: string, content: stri
     if (sketch === null)
         throw new Error("Failed to create sketch.");
 
-    return sketch;
+    return JSON.stringify(sketch);
 }
 
 /**
@@ -147,9 +166,9 @@ export async function createSketch(authorId: string, name: string, content: stri
  * @param authorId - The email of the user who owns the sketch.
  * @param name - The name of the sketch to update.
  * @param sketch - The new sketch data.
- * @returns The updated sketch.
+ * @returns A JSON string representing the updated sketch.
  */
-export async function updateSketch(authorId: string, name: string, sketch: Partial<Sketch>): Promise<Sketch> {
+export async function updateSketch(authorId: string, name: string, sketch: Partial<Sketch>): Promise<string> {
     const db = await connect();
     const sketches: Collection<Sketch> = db.collection("sketches");
     const result = await sketches.findOneAndUpdate({ author: authorId, name }, { $set: sketch });
@@ -157,5 +176,5 @@ export async function updateSketch(authorId: string, name: string, sketch: Parti
     if (result === null)
         throw new Error("Sketch not found.");
 
-    return result;
+    return JSON.stringify(result);
 }

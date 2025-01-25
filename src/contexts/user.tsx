@@ -3,7 +3,7 @@
 import { createContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { User } from "schemas/database";
-import { getUser } from "database/index";
+import { getUserFromId } from "database/index";
 
 export const UserContext = createContext<{ user: User | null; setUser: (user: User | null) => void; }>(null!);
 
@@ -21,8 +21,8 @@ export function UserContextProvider({ children }: { children: ReactNode; }): Rea
             .split(";").map((c) => c.trim().split("=") as [string, string]));
 
         if ("user" in cookies) {
-            getUser(decodeURIComponent(cookies.user))
-                .then(setUser)
+            getUserFromId(decodeURIComponent(cookies.user))
+                .then((json) => setUser(JSON.parse(json) as User))
                 .catch(() => undefined);
         }
     }, []);

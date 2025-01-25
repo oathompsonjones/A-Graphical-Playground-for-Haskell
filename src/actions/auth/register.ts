@@ -1,9 +1,10 @@
 "use server";
 
+import { RedirectType, redirect } from "next/navigation";
+import type { User } from "schemas/database";
 import { cookies } from "next/headers";
 import { createUser } from "database/index";
 import { hash } from "bcrypt";
-import { redirect } from "next/navigation";
 import { registrationSchema } from "schemas/forms";
 
 /**
@@ -22,12 +23,12 @@ export async function register(formData: FormData): Promise<void> {
             throw new Error("Passwords do not match.");
 
         const passwordHash = await hash(parsedData.password, 11);
-        const user = await createUser(parsedData.email, passwordHash);
+        const user = JSON.parse(await createUser(parsedData.email, passwordHash)) as User;
 
-        (await cookies()).set("user", user.email);
+        (await cookies()).set("user", user._id.toString());
     } catch (err) {
         throw new Error(`register-${err instanceof Error ? err.message : String(err)}`);
     } finally {
-        redirect("/account");
+        redirect("/account", RedirectType.replace);
     }
 }
