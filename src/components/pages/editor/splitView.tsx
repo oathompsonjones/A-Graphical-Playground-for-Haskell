@@ -21,47 +21,55 @@ export function SplitView({ children, id, vertical }: {
     vertical?: boolean;
 }): ReactNode {
     const { height, width } = useWindowSize();
-    const [containerRect, setContainerRect] = useState<DOMRect | null>(null);
-    const container = useRef<HTMLDivElement>(null!);
-    // TODO: This isn't automatically taking effect.
-    const [size, setSize] = useLocalStorage(`${id}-size`, NaN);
+    const container = useRef<HTMLDivElement & { children: [HTMLDivElement, HTMLDivElement, HTMLDivElement]; }>(null!);
+    const [size, setSize] = useLocalStorage(`${id}-size`, 0.5);
     const [canDrag, setCanDrag] = useState(false);
-    const enableDrag = (): void => setCanDrag(true);
-    const disableDrag = (): void => setCanDrag(false);
 
     const orientation = vertical ?? false ? "vertical" : "horizontal";
-    const splitViewClass = `${styles.container} ${styles[orientation]}`;
-    const clientSize = ({ horizontal: "clientX", vertical: "clientY" } as const)[orientation];
-    const containerPosition = ({ horizontal: "left", vertical: "top" } as const)[orientation];
-    const containerSize = ({ horizontal: "width", vertical: "height" } as const)[orientation];
 
     const updateSizes = (): void => {
-        (container.current.children[0] as HTMLDivElement)
-            .style[containerSize] = `${size}px`;
-        (container.current.children[2] as HTMLDivElement)
-            .style[containerSize] = `${(containerRect?.[containerSize] ?? 0) - size}px`;
+        const [div1, , div2] = container.current.children;
+
+        switch (orientation) {
+            case "horizontal":
+                div1.style.width = `${100 * size}%`;
+                div2.style.width = `${100 * (1 - size)}%`;
+                break;
+            case "vertical":
+                div1.style.height = `${100 * size}%`;
+                div2.style.height = `${100 * (1 - size)}%`;
+                break;
+        }
     };
 
     const handleDrag = (event: MouseEvent<HTMLDivElement>): void => {
-        if (!canDrag || !containerRect)
+        if (!canDrag)
             return;
 
-        setSize(event[clientSize] - containerRect[containerPosition]);
-        updateSizes();
+        const rect = container.current.getBoundingClientRect();
+
+        switch (orientation) {
+            case "horizontal":
+                setSize((event.clientX - rect.left) / rect.width);
+                break;
+            case "vertical":
+                setSize((event.clientY - rect.top) / rect.height);
+                break;
+        }
     };
 
-    useEffect(() => {
-        setContainerRect(container.current.getBoundingClientRect());
-        updateSizes();
-    }, [height, width]);
-    useEffect(updateSizes, []);
+    useEffect(updateSizes, [height, width, size]);
 
     return (
         <div
-            className={splitViewClass} ref={container}
-            onMouseMove={handleDrag} onMouseLeave={disableDrag} onMouseUp={disableDrag}>
+            className={`${styles.container} ${styles[orientation]}`}
+            ref={container}
+            onMouseMove={handleDrag}
+            onMouseLeave={setCanDrag.bind(null, false)}
+            onMouseUp={setCanDrag.bind(null, false)}
+        >
             {children[0]}
-            <div className={styles.splitter} onMouseDown={enableDrag}>
+            <div className={styles.splitter} onMouseDown={setCanDrag.bind(null, true)}>
                 <DragHandleRounded className={styles.dragIcon!} />
             </div>
             {children[1]}
