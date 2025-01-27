@@ -42,28 +42,16 @@ export function Editor({ code, updateCode, run, save, open, new: new_ }: {
     const [hljs, setHljs] = useState<HLJSApi>(null!);
     const [displayCode, setDisplayCode] = useState<ReactNode>(null);
 
-    /**
-     * Highlights the code.
-     * @param _code - The code to highlight.
-     * @param _hljs - The highlight.js instance. If not provided, the state variable will be used.
-     * @returns The highlighted code.
-     */
-    function highlightCode(_code: string, _hljs: HLJSApi = hljs): ReactNode {
-        return _code.split("\n").map((line, i) => (
-            <code
-                key={i}
-                className="language-haskell"
-                // eslint-disable-next-line @typescript-eslint/naming-convention
-                dangerouslySetInnerHTML={{ __html: _hljs.highlight(line, { language: "haskell" }).value }}
-            />
-        ));
-    }
+    const highlightCode = (_code: string, _hljs: HLJSApi = hljs): ReactNode => _code.split("\n").map((line, i) => (
+        <code
+            key={i}
+            className="language-haskell"
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            dangerouslySetInnerHTML={{ __html: _hljs.highlight(line, { language: "haskell" }).value }}
+        />
+    ));
 
-    /**
-     * Updates the state variables when the textarea changes, keeping the highlighted code in sync.
-     * @param event - The form event.
-     */
-    function handleChange(event: FormEvent<HTMLTextAreaElement>): void {
+    const handleChange = (event: FormEvent<HTMLTextAreaElement>): void => {
         // Ignore the event if the code hasn't changed.
         if (event.currentTarget.value === code)
             return;
@@ -88,27 +76,19 @@ export function Editor({ code, updateCode, run, save, open, new: new_ }: {
         // Update the code and display.
         updateCode(event.currentTarget.value);
         setDisplayCode(highlightCode(event.currentTarget.value));
-    }
+    };
 
-    /**
-     * Makes sure the pre element scrolls with the textarea.
-     * @param event - The UI event.
-     */
-    function handleScroll(event: UIEvent<HTMLTextAreaElement>): void {
+    const handleScroll = (event: UIEvent<HTMLTextAreaElement>): void => {
         const pre = document.getElementById("code-editor-pre");
 
         if (pre !== null) {
             pre.scrollTop = event.currentTarget.scrollTop;
             pre.scrollLeft = event.currentTarget.scrollLeft;
         }
-    }
+    };
 
-    /**
-     * Handles key presses, allowing for keyboard shortcuts and use of the tab key.
-     * @param event - The keyboard event.
-     */
     // eslint-disable-next-line max-statements
-    function handleKey(event: KeyboardEvent<HTMLTextAreaElement>): void {
+    const handleKey = (event: KeyboardEvent<HTMLTextAreaElement>): void => {
         const isMacOS = navigator.platform.includes("Mac");
         const controlKey = isMacOS ? event.metaKey : event.ctrlKey;
 
@@ -203,13 +183,14 @@ export function Editor({ code, updateCode, run, save, open, new: new_ }: {
                 }
             }
         }
-    }
+    };
 
-    // Initialize
+    const setValue = (textarea: HTMLTextAreaElement | null): void => {
+        if (textarea !== null)
+            textarea.value = code;
+    };
+
     useEffect(() => {
-        // Set the textarea value to the code stored in local storage.
-        (document.getElementById("code-editor-textarea") as HTMLTextAreaElement).value = code;
-
         // Load highlight.js and highlight the initial code.
         import("highlight.js/lib/core").then(({ default: _hljs }) => {
             import("highlight.js/lib/languages/haskell").then(({ default: haskell }) => {
@@ -222,11 +203,10 @@ export function Editor({ code, updateCode, run, save, open, new: new_ }: {
         }).catch(() => undefined);
     }, [code]);
 
-    // Render the editor.
     return (
         <PlainPaper className={styles.editor!}>
             <pre id="code-editor-pre">{displayCode}</pre>
-            <textarea id="code-editor-textarea" onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} />
+            <textarea onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} ref={setValue} />
         </PlainPaper>
     );
 }
