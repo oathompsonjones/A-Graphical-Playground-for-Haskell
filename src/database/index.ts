@@ -134,8 +134,6 @@ export async function getSketches(authorId: string): Promise<string> {
  * @returns A JSON string representing the created sketch.
  */
 export async function createSketch(authorId: string, name: string, content: string): Promise<string> {
-    console.log("createSketch", authorId, name);
-
     const db = (await client).db("database");
     const sketches: Collection<SketchWithoutId> = db.collection("sketches");
     let sketch = await sketches.findOne({ authorId, name });
@@ -188,8 +186,6 @@ export async function updateSketch(authorId: string, name: string, sketch: Parti
  * @param id - The id of the sketch to delete.
  */
 export async function deleteSketch(id: string): Promise<void> {
-    console.log("deleteSketch", id);
-
     const db = (await client).db("database");
     const sketches: Collection<Sketch> = db.collection("sketches");
 
