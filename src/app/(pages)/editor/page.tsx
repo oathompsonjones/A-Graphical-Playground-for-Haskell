@@ -145,7 +145,7 @@ export default function EditorPage(): ReactNode {
     const stop = terminateStream;
     const run = (): void => {
         stop();
-        executeStream(code);
+        executeStream(decompressFromEncodedURIComponent(code));
     };
 
     // Extract the graphics commands, and send them to the canvas.
