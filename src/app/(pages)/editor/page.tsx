@@ -90,7 +90,7 @@ export default function EditorPage(): ReactNode {
     const save = (): void => setOpenSave(true);
     const share = (): void => setOpenShare(true);
     const copyCode = (): void => {
-        void window.navigator.clipboard.writeText(code).then(() => {
+        void window.navigator.clipboard.writeText(decompressFromEncodedURIComponent(code)).then(() => {
             setType("success");
             setMessage("Code copied to clipboard.");
             setOpenShare(false);
@@ -99,7 +99,7 @@ export default function EditorPage(): ReactNode {
     const copyUrl = (): void => {
         const codeURL = new URL(window.location.href);
 
-        codeURL.searchParams.set("code", compressToEncodedURIComponent(code));
+        codeURL.searchParams.set("code", code);
 
         if (title !== defaultTitle)
             codeURL.searchParams.set("title", encodeURIComponent(title));
