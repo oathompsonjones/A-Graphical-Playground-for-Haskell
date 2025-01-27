@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import type { Frame } from "schemas/graphics";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import { frameSchema } from "schemas/graphics";
 import styles from "styles/components/canvas.module.css";
+import { useState } from "react";
 
 /**
  * This is the canvas which renders the output from the editor.
@@ -19,8 +19,10 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
     const [width, setWidth] = useState(500);
     const [height, setHeight] = useState(500);
 
-    useEffect(() => {
-        const canvas = document.getElementById("canvas") as HTMLCanvasElement;
+    const render = (canvas: HTMLCanvasElement | null): void => {
+        if (canvas === null)
+            return;
+
         const context = canvas.getContext("2d")!;
 
         // Reset the canvas.
@@ -98,11 +100,11 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                 context.closePath();
             }
         }
-    }, [content]);
+    };
 
     return (
         <PlainPaper className={styles.wrapper!}>
-            <canvas id="canvas" width={width} height={height} />
+            <canvas id="canvas" width={width} height={height} ref={render} />
         </PlainPaper>
     );
 }
