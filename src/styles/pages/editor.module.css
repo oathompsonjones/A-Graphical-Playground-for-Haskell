@@ -5,8 +5,13 @@
     overflow: clip;
 }
 
-.shareMenu {
+.shareDialog {
     display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.openSaveDialog {
     gap: 1rem;
     padding: 1rem;
 }

@@ -1,5 +1,9 @@
-import { ButtonGroup, Divider, IconButton, Tooltip, Typography } from "@mui/material";
-import { Clear, FileOpen, InsertDriveFile, IosShare, PlayArrow, Save, Stop } from "@mui/icons-material";
+import { ButtonGroup, Divider, Icon, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+    Clear, FileOpen, InsertDriveFile, IosShare, KeyboardCommandKey,
+    KeyboardControlKey, KeyboardReturn, PlayArrow, Save, Stop,
+} from "@mui/icons-material";
+import { useEffect, useState } from "react";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import styles from "styles/components/buttons.module.css";
@@ -15,33 +19,45 @@ import styles from "styles/components/buttons.module.css";
  * @param props.save - The function to save the file.
  * @param props.share - The function to share the file.
  * @param props.stop - The function to stop the code.
+ * @param props.loggedIn - Whether the user is logged in.
+ * @param props.author - The author of the sketch.
  * @returns The buttons element.
  */
-export function Buttons({ title, clear, new: new_, open, run, save, share, stop }:
-Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void> & { title: string; }): ReactNode {
+export function Buttons({ title, clear, new: new_, open, run, save, share, stop, loggedIn, author }:
+Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void> & {
+    title: string;
+    loggedIn: boolean;
+    author: string | null;
+}): ReactNode {
+    const [metaKey, setMetaKey] = useState(<KeyboardControlKey fontSize="small" />);
+
+    useEffect(() => {
+        if (navigator.platform.includes("Mac"))
+            setMetaKey(<KeyboardCommandKey fontSize="small" />);
+    }, []);
+
     return (
         <PlainPaper className={styles.container!}>
             <ButtonGroup variant="text">
-                <Tooltip title="New" arrow>
+                <Tooltip title={<>New ({metaKey}<Icon fontSize="small">N</Icon>)</>} arrow>
                     <IconButton onClick={new_}>
                         <InsertDriveFile />
                     </IconButton>
                 </Tooltip>
-                {/* <Tooltip title="Open" arrow> */}
-                <IconButton disabled onClick={open}>
-                    <FileOpen />
-                </IconButton>
-                {/* </Tooltip> */}
-                {/* <Tooltip title="Save" arrow> */}
-                <IconButton disabled onClick={save}>
-                    <Save />
-                </IconButton>
-                {/* </Tooltip> */}
             </ButtonGroup>
             <Divider orientation="vertical" className={styles.divider!} />
-            <Typography className={styles.heading!}>
-                {title}
-            </Typography>
+            <ButtonGroup variant="text" disabled={!loggedIn}>
+                <Tooltip title={<>Open ({metaKey}<Icon fontSize="small">O</Icon>)</>} arrow>
+                    <IconButton onClick={open} disabled={!loggedIn}>
+                        <FileOpen />
+                    </IconButton>
+                </Tooltip>
+                <Tooltip title={<>Save ({metaKey}<Icon fontSize="small">S</Icon>)</>} arrow>
+                    <IconButton onClick={save} disabled={!loggedIn}>
+                        <Save />
+                    </IconButton>
+                </Tooltip>
+            </ButtonGroup>
             <Divider orientation="vertical" className={styles.divider!} />
             <ButtonGroup variant="text">
                 <Tooltip title="Share" arrow>
@@ -50,6 +66,10 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
                     </IconButton>
                 </Tooltip>
             </ButtonGroup>
+            <Divider orientation="vertical" className={styles.divider!} />
+            <Typography className={styles.heading!}>
+                {author === null ? title : `${author}/${title}`}
+            </Typography>
             <Divider orientation="vertical" className={styles.divider!} />
             <ButtonGroup variant="text" className={styles.right!}>
                 <Tooltip title="Clear Output" arrow>
@@ -62,7 +82,8 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
                         <Stop />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Run" arrow>
+                <Tooltip
+                    title={<>Run ({metaKey}<KeyboardReturn fontSize="small" />)</>} arrow>
                     <IconButton color="success" onClick={run}>
                         <PlayArrow />
                     </IconButton>

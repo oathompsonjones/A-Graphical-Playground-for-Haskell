@@ -1,7 +1,7 @@
 "use client";
 
+import { Button, Dialog, FormControl, IconButton, TextField, Typography, useMediaQuery } from "@mui/material";
 import { ContentCopy, CopyAll, Download, Image } from "@mui/icons-material";
-import { Dialog, IconButton, Typography, useMediaQuery } from "@mui/material";
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { useContext, useEffect, useState } from "react";
 import { Buttons } from "components/pages/editor/buttons";
@@ -10,43 +10,74 @@ import { Console } from "components/pages/editor/console";
 import { Editor } from "components/pages/editor/editor";
 import { NotificationsContext } from "contexts/notifications";
 import type { ReactNode } from "react";
+import type { Sketch } from "schemas/database";
 import { SplitView } from "components/pages/editor/splitView";
+import { UserContext } from "contexts/user";
 import { execute } from "actions/code/execute";
+import { getSketches } from "database/index";
+import { saveSketch } from "actions/code/saveSketch";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
+import { useOutsideClick } from "hooks/useOutsideClick";
 import { useStreamAction } from "hooks/useStreamAction";
 
 /**
  * This is the editor page.
  * @returns The page element.
  */
+// eslint-disable-next-line max-statements, max-lines-per-function
 export default function EditorPage(): ReactNode {
+    const { user } = useContext(UserContext);
+    const [sketches, setSketches] = useState<Sketch[] | null>(null);
     const isPortrait = useMediaQuery("(orientation: portrait)");
     const [openShare, setOpenShare] = useState(false);
+    const shareRef = useOutsideClick<HTMLDivElement>(() => setOpenShare(false));
+    const [openOpen, setOpenOpen] = useState(false);
+    const openRef = useOutsideClick<HTMLDivElement>(() => setOpenOpen(false));
+    const [openSave, setOpenSave] = useState(false);
+    const saveRef = useOutsideClick<HTMLDivElement>(() => setOpenSave(false));
+    // Const [sketchID, setSketchID] = useState<string | null>(null);
     const defaultTitle = "untitled";
-    const defaultCode = [
+    const defaultCode = compressToEncodedURIComponent([
         "import Lib",
         "",
         "-- Start writing your code here.",
         "main :: IO ()",
         "main = render $ background LightGrey (createCanvas 800 600)",
         "",
-    ].join("\n");
+    ].join("\n"));
     const [title, setTitle] = useLocalStorage("title", defaultTitle);
     const [code, setCode] = useLocalStorage("code", defaultCode);
+    const [author, setAuthor] = useState<string | null>(user === null
+        ? null
+        : user.username ?? user.email.split("@")[0]!);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
     const { setType, setMessage } = useContext(NotificationsContext);
+
+    const fetchSketches = (): void => {
+        if (user && sketches === null) {
+            getSketches(user._id.toString())
+                .then((json) => setSketches(JSON.parse(json) as Sketch[]))
+                .catch(() => undefined);
+        }
+    };
 
     useEffect(() => {
         const url = new URL(window.location.href);
         const codeParam = url.searchParams.get("code");
         const titleParam = url.searchParams.get("title");
+        const authorParam = url.searchParams.get("author");
 
         if (codeParam !== null)
-            setCode(decompressFromEncodedURIComponent(codeParam));
+            setCode(codeParam);
 
         if (titleParam !== null)
             setTitle(decodeURIComponent(titleParam));
+
+        if (authorParam !== null)
+            setAuthor(authorParam);
+
+        fetchSketches();
     }, []);
 
     const clear = clearStream;
@@ -55,8 +86,8 @@ export default function EditorPage(): ReactNode {
         setTitle(defaultTitle);
         setCode(defaultCode);
     };
-    const open = (): void => undefined;
-    const save = (): void => undefined;
+    const open = (): void => setOpenOpen(true);
+    const save = (): void => setOpenSave(true);
     const share = (): void => setOpenShare(true);
     const copyCode = (): void => {
         void window.navigator.clipboard.writeText(code).then(() => {
@@ -72,6 +103,9 @@ export default function EditorPage(): ReactNode {
 
         if (title !== defaultTitle)
             codeURL.searchParams.set("title", encodeURIComponent(title));
+
+        if (author !== null)
+            codeURL.searchParams.set("author", author);
 
         void window.navigator.clipboard.writeText(codeURL.toString()).then(() => {
             setType("success");
@@ -135,8 +169,8 @@ export default function EditorPage(): ReactNode {
 
     return (
         <div className={`full-width ${styles.container}`}>
-            <Dialog open={openShare} onClose={() => setOpenShare(false)}>
-                <div className={styles.shareMenu}>
+            <Dialog open={openShare} onClose={() => setOpenShare(false)} ref={shareRef}>
+                <div className={styles.shareDialog}>
                     {shareOptions.map(({ action, icon, label }, i) => (
                         <div className={styles.shareOption} key={i}>
                             <IconButton onClick={action}>{icon}</IconButton>
@@ -144,6 +178,49 @@ export default function EditorPage(): ReactNode {
                         </div>
                     ))}
                 </div>
+            </Dialog>
+            <Dialog open={openOpen} onClose={() => setOpenOpen(false)} ref={openRef}>
+                {user !== null && <div className={styles.openSaveDialog}>
+                    {sketches === null || sketches.length === 0
+                        ? <Typography>You have no saved sketches.</Typography>
+                        : <>
+                            <Typography variant="h6">Your Sketches</Typography>
+                            {sketches.map((sketch, i) => (
+                                <div key={i}>
+                                    <a onClick={() => {
+                                        window.location.search = [
+                                            `code=${sketch.content}`,
+                                            `title=${sketch.name}`,
+                                            `author=${author}`,
+                                        ].join("&");
+                                    }}>{sketch.name}</a>
+                                </div>
+                            ))}
+                        </>}
+                </div>}
+            </Dialog>
+            <Dialog open={openSave} onClose={() => setOpenSave(false)} ref={saveRef}>
+                {user !== null && <div className={styles.openSaveDialog}>
+                    <FormControl
+                        action={(formData: FormData) => {
+                            saveSketch(formData).then(() => {
+                                setOpenSave(false);
+                                setType("success");
+                                setMessage("Sketch saved.");
+                                fetchSketches();
+                            }).catch((e: unknown) => {
+                                setType("error");
+                                setMessage(e instanceof Error ? e.message : "An error occurred.");
+                            });
+                        }}
+                        component="form">
+                        <TextField type="hidden" name="content" value={code} sx={{ opacity: 0 }} />
+                        <TextField type="hidden" name="authorId" value={user._id.toString()} sx={{ opacity: 0 }} />
+                        <TextField label="Name" name="name" />
+                        <br />
+                        <Button type="submit">Save</Button>
+                    </FormControl>
+                </div>}
             </Dialog>
             <Buttons
                 title={title}
@@ -154,10 +231,19 @@ export default function EditorPage(): ReactNode {
                 share={share}
                 stop={stop}
                 run={run}
+                loggedIn={user !== null}
+                author={author}
             />
             <SplitView vertical={isPortrait} id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
-                    <Editor code={code} updateCode={setCode} save={save} open={open} new={new_} run={run} />
+                    <Editor
+                        code={decompressFromEncodedURIComponent(code)}
+                        updateCode={(rawCode: string) => setCode(compressToEncodedURIComponent(rawCode))}
+                        save={save}
+                        open={open}
+                        new={new_}
+                        run={run}
+                    />
                     <Console content={consoleOutput} />
                 </SplitView>
                 <Canvas content={graphics} />

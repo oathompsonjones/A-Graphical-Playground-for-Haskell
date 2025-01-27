@@ -1,12 +1,12 @@
 "use client";
 
 import { Button, FormControl, Typography } from "@mui/material";
+import { deleteSketch, getSketches } from "database/index";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import type { Sketch } from "schemas/database";
 import { UserContext } from "contexts/user";
-import { getSketches } from "database/index";
 import { logout } from "actions/auth/logout";
 
 /**
@@ -17,13 +17,15 @@ export default function Account(): ReactNode {
     const { user } = useContext(UserContext);
     const [sketches, setSketches] = useState<Sketch[] | null>(null);
 
-    useEffect(() => {
+    const fetchSketches = (): void => {
         if (user && sketches === null) {
             getSketches(user._id.toString())
                 .then((json) => setSketches(JSON.parse(json) as Sketch[]))
                 .catch(() => undefined);
         }
-    }, [sketches, user]);
+    };
+
+    useEffect(fetchSketches, []);
 
     return user && (
         <div>
@@ -43,14 +45,24 @@ export default function Account(): ReactNode {
                 <ul>
                     {sketches?.map((sketch, i) => (
                         <li key={i}>
-                            <Typography>{sketch.name}</Typography>
-                            <Typography variant="caption">
-                                    Created At: {new Date(sketch.createdAt).toUTCString()}
-                            </Typography>
-                            <Typography variant="caption">
-                                    Modified At: {new Date(sketch.modifiedAt).toUTCString()}
-                            </Typography>
-                            <pre>{sketch.content}</pre>
+                            <div>
+                                <Typography>{sketch.name}</Typography>
+                                <Typography variant="caption">
+                                    Created At: {sketch.createdAt}
+                                </Typography>
+                                <Typography variant="caption">
+                                    Modified At: {sketch.modifiedAt}
+                                </Typography>
+                                <Button
+                                    color="error"
+                                    onClick={() => {
+                                        deleteSketch(sketch._id.toString())
+                                            .then(fetchSketches)
+                                            .catch(() => undefined);
+                                    }}>
+                                Delete
+                                </Button>
+                            </div>
                         </li>
                     ))}
                 </ul>

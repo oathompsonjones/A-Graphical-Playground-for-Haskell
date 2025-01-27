@@ -1,7 +1,7 @@
 "use client";
 
 import "styles/components/codeTheme.css";
-import type { Dispatch, FormEvent, KeyboardEvent, ReactNode, SetStateAction, UIEvent } from "react";
+import type { FormEvent, KeyboardEvent, ReactNode, UIEvent } from "react";
 import { useEffect, useState } from "react";
 import type { HLJSApi } from "highlight.js";
 import { PlainPaper } from "./plainPaper";
@@ -32,7 +32,7 @@ That's why we are storing the highlight.js instance in a state variable,
  */
 export function Editor({ code, updateCode, run, save, open, new: new_ }: {
     code: string;
-    updateCode: Dispatch<SetStateAction<string>>;
+    updateCode: (rawCode: string) => void;
     run: () => void;
     save: () => void;
     open: () => void;
