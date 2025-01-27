@@ -10,10 +10,7 @@ import type { ReactNode } from "react";
  * @param props.reset - The function to reset the application.
  * @returns An error element.
  */
-export default function ErrorPage({ error }: { error: unknown; reset: () => void; }): ReactNode {
-    if (!(error instanceof Error))
-        return <LogIn error={new Error("An unexpected error occured.")} />;
-
+export default function ErrorPage({ error }: { error: Error; reset: () => void; }): ReactNode {
     return (
         <LogIn error={
             error.message.startsWith("authenticate-") || error.message.startsWith("register-")
