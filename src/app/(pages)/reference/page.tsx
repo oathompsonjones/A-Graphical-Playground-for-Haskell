@@ -103,7 +103,7 @@ const docs: Record<string, Section> = {
         </div>
     ),
     Shapes: {
-        "2D Primatives": () => (
+        "2D Primitives": () => (
             <div>
                 To draw 2D shapes, you can use any of the following functions, which all return
                     the <code>Shape</code> data type:
