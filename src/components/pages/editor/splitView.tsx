@@ -65,11 +65,11 @@ export function SplitView({ children, id, vertical }: {
             className={`${styles.container} ${styles[orientation]}`}
             ref={container}
             onMouseMove={handleDrag}
-            onMouseLeave={setCanDrag.bind(null, false)}
-            onMouseUp={setCanDrag.bind(null, false)}
+            onMouseLeave={() => setCanDrag(false)}
+            onMouseUp={() => setCanDrag(false)}
         >
             {children[0]}
-            <div className={styles.splitter} onMouseDown={setCanDrag.bind(null, true)}>
+            <div className={styles.splitter} onMouseDown={() => setCanDrag(true)}>
                 <DragHandleRounded className={styles.dragIcon!} />
             </div>
             {children[1]}

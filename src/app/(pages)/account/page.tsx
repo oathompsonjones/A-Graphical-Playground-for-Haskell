@@ -25,6 +25,12 @@ export default function Account(): ReactNode {
         }
     };
 
+    const onDeleteClick = (sketch: Sketch): void => {
+        deleteSketch(sketch._id.toString())
+            .then(fetchSketches)
+            .catch(() => undefined);
+    };
+
     useEffect(fetchSketches, []);
 
     return user && (
@@ -53,14 +59,8 @@ export default function Account(): ReactNode {
                                 <Typography variant="caption">
                                     Modified At: {sketch.modifiedAt}
                                 </Typography>
-                                <Button
-                                    color="error"
-                                    onClick={() => {
-                                        deleteSketch(sketch._id.toString())
-                                            .then(fetchSketches)
-                                            .catch(() => undefined);
-                                    }}>
-                                Delete
+                                <Button color="error" onClick={() => onDeleteClick(sketch)}>
+                                    Delete
                                 </Button>
                             </div>
                         </li>

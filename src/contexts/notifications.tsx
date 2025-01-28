@@ -46,6 +46,8 @@ export function NotificationsContextProvider({ children }: { children: ReactNode
     const setTwoSecondTimeout = setStateTimeout.bind(null, 2, 1000);
     const setThreeSecondTimeout = setStateTimeout.bind(null, 3, 7000);
 
+    const onClick = (): void => setMessage(null);
+
     useEffect(() => {
         for (const timeout of timeouts)
             clearTimeout(timeout);
@@ -74,7 +76,7 @@ export function NotificationsContextProvider({ children }: { children: ReactNode
             {message !== null && (
                 <Alert className={styles.notifications!} severity={type}>
                     {message}
-                    <IconButton className={styles.close!} onClick={() => setMessage(null)}>
+                    <IconButton className={styles.close!} onClick={onClick}>
                         {closeIcon}
                     </IconButton>
                 </Alert>

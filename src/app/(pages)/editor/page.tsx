@@ -36,7 +36,6 @@ export default function EditorPage(): ReactNode {
     const openRef = useOutsideClick<HTMLDivElement>(() => setOpenOpen(false));
     const [openSave, setOpenSave] = useState(false);
     const saveRef = useOutsideClick<HTMLDivElement>(() => setOpenSave(false));
-    // Const [sketchID, setSketchID] = useState<string | null>(null);
     const defaultTitle = "untitled";
     const defaultCode = compressToEncodedURIComponent([
         "import Lib",
@@ -48,6 +47,7 @@ export default function EditorPage(): ReactNode {
     ].join("\n"));
     const [title, setTitle] = useLocalStorage("title", defaultTitle);
     const [code, setCode] = useLocalStorage("code", defaultCode);
+    const updateCode = (rawCode: string): void => setCode(compressToEncodedURIComponent(rawCode));
     const [author, setAuthor] = useState<string | null>(user === null
         ? null
         : user.username ?? user.email.split("@")[0]!);
@@ -60,6 +60,10 @@ export default function EditorPage(): ReactNode {
                 .then((json) => setSketches(JSON.parse(json) as Sketch[]))
                 .catch(() => undefined);
         }
+    };
+
+    const onSketchClick = (sketch: Sketch): void => {
+        window.location.search = `code=${sketch.content}&title=${sketch.name}&author=${author}`;
     };
 
     useEffect(() => {
@@ -167,6 +171,18 @@ export default function EditorPage(): ReactNode {
         { action: downloadImage, icon: <Download />, label: "Download Image" },
     ];
 
+    const saveSketchAction = (formData: FormData): void => {
+        saveSketch(formData).then(() => {
+            setOpenSave(false);
+            setType("success");
+            setMessage("Sketch saved.");
+            fetchSketches();
+        }).catch((e: unknown) => {
+            setType("error");
+            setMessage(e instanceof Error ? e.message : "An error occurred.");
+        });
+    };
+
     return (
         <div className={`full-width ${styles.container}`}>
             <Dialog open={openShare} onClose={() => setOpenShare(false)} ref={shareRef}>
@@ -187,13 +203,7 @@ export default function EditorPage(): ReactNode {
                             <Typography variant="h6">Your Sketches</Typography>
                             {sketches.map((sketch, i) => (
                                 <div key={i}>
-                                    <a onClick={() => {
-                                        window.location.search = [
-                                            `code=${sketch.content}`,
-                                            `title=${sketch.name}`,
-                                            `author=${author}`,
-                                        ].join("&");
-                                    }}>{sketch.name}</a>
+                                    <a onClick={() => onSketchClick(sketch)}>{sketch.name}</a>
                                 </div>
                             ))}
                         </>}
@@ -202,17 +212,7 @@ export default function EditorPage(): ReactNode {
             <Dialog open={openSave} onClose={() => setOpenSave(false)} ref={saveRef}>
                 {user !== null && <div className={styles.openSaveDialog}>
                     <FormControl
-                        action={(formData: FormData) => {
-                            saveSketch(formData).then(() => {
-                                setOpenSave(false);
-                                setType("success");
-                                setMessage("Sketch saved.");
-                                fetchSketches();
-                            }).catch((e: unknown) => {
-                                setType("error");
-                                setMessage(e instanceof Error ? e.message : "An error occurred.");
-                            });
-                        }}
+                        action={saveSketchAction}
                         component="form">
                         <TextField type="hidden" name="content" value={code} sx={{ opacity: 0 }} />
                         <TextField type="hidden" name="authorId" value={user._id.toString()} sx={{ opacity: 0 }} />
@@ -238,7 +238,7 @@ export default function EditorPage(): ReactNode {
                 <SplitView vertical id="editor-vertical">
                     <Editor
                         code={decompressFromEncodedURIComponent(code)}
-                        updateCode={(rawCode: string) => setCode(compressToEncodedURIComponent(rawCode))}
+                        updateCode={updateCode}
                         save={save}
                         open={open}
                         new={new_}

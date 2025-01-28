@@ -12,6 +12,7 @@ import { useState } from "react";
  */
 export function PasswordField({ label, name }: { label: string; name: string; }): ReactNode {
     const [showPassword, setShowPassword] = useState(false);
+    const onClick = (): void => setShowPassword((prevShowPassword) => !prevShowPassword);
 
     return (
         <TextField
@@ -20,8 +21,7 @@ export function PasswordField({ label, name }: { label: string; name: string; })
             type={showPassword ? "text" : "password"}
             slotProps={{
                 input: {
-                    endAdornment: <Button
-                        onClick={() => setShowPassword(!showPassword)} variant="text" sx={{ color: "inherit" }}>
+                    endAdornment: <Button onClick={onClick} variant="text" sx={{ color: "inherit" }}>
                         {showPassword ? <Visibility /> : <VisibilityOff />}
                     </Button>,
                 },
