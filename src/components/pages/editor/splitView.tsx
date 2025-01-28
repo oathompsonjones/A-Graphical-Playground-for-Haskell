@@ -3,7 +3,7 @@
 import type { MouseEvent, ReactElement, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { DragHandleRounded } from "@mui/icons-material";
-import styles from "styles/components/splitView.module.css";
+import styles from "styles/components/pages/editor/splitView.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { useWindowSize } from "hooks/useWindowSize";
 

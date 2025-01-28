@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
  * @param initialValue - The initial value to store for that variable.
  * @returns The value stored in localStorage, a function to update that value, and a function to remove that value.
  */
-export function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<SetStateAction<T>>] {
+export function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<SetStateAction<T>>, () => void] {
     const parse = (value: string): T => {
         if (value === "undefined")
             return undefined as unknown as T;
@@ -52,7 +52,14 @@ export function useLocalStorage<T>(key: string, initialValue: T): [T, Dispatch<S
         }
     };
 
+    const resetValue = (): void => {
+        if (typeof window !== "undefined") {
+            localStorage.removeItem(key);
+            setStoredValue(initialValue);
+        }
+    };
+
     useEffect(() => setStoredValue(readValue), [key]);
 
-    return [storedValue, setValue];
+    return [storedValue, setValue, resetValue];
 }

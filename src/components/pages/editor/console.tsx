@@ -1,6 +1,6 @@
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
-import styles from "styles/components/console.module.css";
+import styles from "styles/components/pages/editor/console.module.css";
 
 /**
  * This is the console to display code outputs.

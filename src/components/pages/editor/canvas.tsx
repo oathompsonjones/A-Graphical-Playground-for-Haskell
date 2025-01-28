@@ -4,7 +4,7 @@ import type { Frame } from "schemas/graphics";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import { frameSchema } from "schemas/graphics";
-import styles from "styles/components/canvas.module.css";
+import styles from "styles/components/pages/editor/canvas.module.css";
 import { useState } from "react";
 
 /**

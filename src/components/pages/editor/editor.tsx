@@ -1,11 +1,11 @@
 "use client";
 
-import "styles/components/codeTheme.css";
+import "styles/codeTheme.css";
 import type { FormEvent, KeyboardEvent, ReactNode, UIEvent } from "react";
 import { useEffect, useState } from "react";
 import type { HLJSApi } from "highlight.js";
 import { PlainPaper } from "./plainPaper";
-import styles from "styles/components/editor.module.css";
+import styles from "styles/components/pages/editor/editor.module.css";
 
 /*
 ! Some of this code looks cumbersome and unnecessary.

@@ -4,20 +4,3 @@
     flex-direction: column;
     overflow: clip;
 }
-
-.shareDialog {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.openSaveDialog {
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.shareOption {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}

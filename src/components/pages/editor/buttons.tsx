@@ -1,3 +1,4 @@
+// TODO: Fix font size on icons
 import { ButtonGroup, Divider, Icon, IconButton, Tooltip, Typography } from "@mui/material";
 import {
     Clear, FileOpen, InsertDriveFile, IosShare, KeyboardCommandKey,
@@ -6,7 +7,7 @@ import {
 import { useEffect, useState } from "react";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
-import styles from "styles/components/buttons.module.css";
+import styles from "styles/components/pages/editor/buttons.module.css";
 
 /**
  * Contains the buttons to interact with the editor.
