@@ -64,6 +64,7 @@ export default function EditorPage(): ReactNode {
         clearStream();
         resetTitle();
         resetCode();
+        setAuthor(user?.username ?? user?.email.split("@")[0] ?? null);
     };
     const open = (): void => setOpenOpen(true);
     const save = (): void => setOpenSave(true);
