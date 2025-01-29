@@ -38,7 +38,7 @@
     outline: none;
     padding-left: calc(var(--padding) + var(--line-num-width) + var(--space-from-line-num));
     word-break: break-all;
-    overscroll-behavior-y: none;
+    overscroll-behavior: none;
 }
 
 .editor pre {
