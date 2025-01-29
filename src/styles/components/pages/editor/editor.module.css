@@ -18,6 +18,7 @@
 
 .editor textarea,
 .editor pre {
+    overflow: auto;
     position: absolute;
     top: 0;
     left: 0;
@@ -30,7 +31,6 @@
 }
 
 .editor textarea {
-    overflow: auto;
     resize: none;
     color: transparent;
     background-color: transparent;
@@ -38,11 +38,11 @@
     outline: none;
     padding-left: calc(var(--padding) + var(--line-num-width) + var(--space-from-line-num));
     word-break: break-all;
+    overscroll-behavior-y: none;
 }
 
 .editor pre {
     color: #ddd;
-    overflow: hidden;
 }
 
 .editor pre code {
