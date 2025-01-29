@@ -87,8 +87,8 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
 
                         // Draw the rectangle.
                         context.rect(
-                            shape.position.x - shape.width / 2,
-                            shape.position.y - shape.height / 2,
+                            shape.position.x,
+                            shape.position.y,
                             shape.width,
                             shape.height,
                         );
