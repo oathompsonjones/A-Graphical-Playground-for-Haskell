@@ -46,20 +46,33 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
                     </IconButton>
                 </Tooltip>
             </ButtonGroup>
+
             <Divider orientation="vertical" className={styles.divider!} />
-            <ButtonGroup variant="text" disabled={!loggedIn}>
-                <Tooltip title={<>Open ({metaKey}<Icon fontSize="small">O</Icon>)</>} arrow>
-                    <IconButton onClick={open} disabled={!loggedIn}>
+
+            {loggedIn
+                ? (<ButtonGroup variant="text">
+                    <Tooltip title={<>Open ({metaKey}<Icon fontSize="small">O</Icon>)</>} arrow>
+                        <IconButton onClick={open}>
+                            <FileOpen />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={<>Save ({metaKey}<Icon fontSize="small">S</Icon>)</>} arrow>
+                        <IconButton onClick={save}>
+                            <Save />
+                        </IconButton>
+                    </Tooltip>
+                </ButtonGroup>)
+                : (<ButtonGroup variant="text" disabled>
+                    <IconButton disabled>
                         <FileOpen />
                     </IconButton>
-                </Tooltip>
-                <Tooltip title={<>Save ({metaKey}<Icon fontSize="small">S</Icon>)</>} arrow>
-                    <IconButton onClick={save} disabled={!loggedIn}>
+                    <IconButton disabled>
                         <Save />
                     </IconButton>
-                </Tooltip>
-            </ButtonGroup>
+                </ButtonGroup>)}
+
             <Divider orientation="vertical" className={styles.divider!} />
+
             <ButtonGroup variant="text">
                 <Tooltip title="Share" arrow>
                     <IconButton onClick={share}>
@@ -67,11 +80,15 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
                     </IconButton>
                 </Tooltip>
             </ButtonGroup>
+
             <Divider orientation="vertical" className={styles.divider!} />
+
             <Typography className={styles.heading!}>
                 {author === null ? title : `${author}/${title}`}
             </Typography>
+
             <Divider orientation="vertical" className={styles.divider!} />
+
             <ButtonGroup variant="text" className={styles.right!}>
                 <Tooltip title="Clear Output" arrow>
                     <IconButton color="warning" onClick={clear}>
@@ -83,8 +100,7 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
                         <Stop />
                     </IconButton>
                 </Tooltip>
-                <Tooltip
-                    title={<>Run ({metaKey}<KeyboardReturn fontSize="small" />)</>} arrow>
+                <Tooltip title={<>Run ({metaKey}<KeyboardReturn fontSize="small" />)</>} arrow>
                     <IconButton color="success" onClick={run}>
                         <PlayArrow />
                     </IconButton>
