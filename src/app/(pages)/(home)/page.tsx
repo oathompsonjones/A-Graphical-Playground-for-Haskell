@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import type { StaticImageData } from "next/image";
 import { Typography } from "@mui/material";
 import americanFlag from "assets/images/examples/americanFlag.png";
+import fractalTree from "assets/images/examples/fractalTree.png";
 import styles from "styles/pages/home.module.css";
 import unionFlag from "assets/images/examples/unionFlag.png";
 
@@ -19,6 +20,12 @@ const examples: Array<{ name: string; code: string; image: StaticImageData; }> =
         code: "JYWwDg9gTgLgBAGWAIwFCoLQbgEQKYBmwAdnnDABZkDGEANhAK5QDOcA7maXgCarJ1GZALxwAEngAecAEQAGOQCYAjABYA7DNRRecUROkzkyZQGZTeLewrAYI8VNkFnLrZmz4ipclTgsKAIZgeGycAOQ6cADmECRR5BBwjCx4qCwwUMDBbKIE9DxQcAAUAGQAlHB44DAAngDKgcFwANrpmU1FwHAAVHCKPcXKCnJwAPRwZmUVAD5wXQA82M1yAHQryooAupuocBxUOrt7fhlZZDV6cDrU8MoAnAqDw2MTphUAfJ9wRHR0V7qfd5wYgQOoZCAAazIgPIUACxBYdACdgAmnAauh0gFWJc8nQeH9ShVkPFWjBsXBpBdZtJFi1Vus5JsADTouB05ZrAAcLMqADc8MRilAmMQeJSKiUSvzBcLReKajNZhAeOKiiLGGKJXApXAVWqNVrFTs9tY8IdjnASZdrvB1AA2EZFIpDR7jSYDdQfL4-P4CIRwGEgsEiqFHPZYwpUy6RsKBr4ZeGI5FkIoANTwN2gxWkvXtAFY4ABqOD5uQVIoXXr5wslstTcMnbFx0SxuNB0HgqHxoG%2BuAAdRsdkbbcukDoNRiQuaGazhSKphGvSKtDY8KidDwU2Ki4GRRYJDg68328blvPF72s2PZDpRRAQSuAR4wCTxQfYGKddUFfvj6KvRqD%2B9JrHcmxTFMOzuHAACyASHoKGQXJAJDwBABA%2BGQYAilEcIgKgD6HqIOhiuacAACRwNQ8J8gEbDzAxJztCE7KMZGLBHGaFrHNRxC0TkVoBNQEK4fK%2By2Km1A6CmADCNF0RMDwjK65aoEAA",
         image: americanFlag,
         name: "American Flag",
+    },
+    {
+        // eslint-disable-next-line max-len
+        code: "JYWwDg9gTgLgBAGWAIwFCoCYEMZbgFSgFMi48BeRIrAMzLgB84A5CDUvACkJLIEo43YhwHsowAG7AAdgHNBAZQAWEAO59MOPEmmlKO0gDEANhBxwTZ%2BJfM3rp82Mkz5nZWo2oi0jJBnwALgDEGVIAWgA%2BOAA1IgBjGGgvHz9peE4DOAAPOABPMih5Y284VWAMGCUBSliE6EEcgGo4Yuk4ACo4OIgAZwLZAU585taOuB6Zfs844hwiACEoLGk4pSI%2BoIsHeEiQ3ThdjNCAGj2iDRnqGAWllbW%2B5dliwUyc-KxClpKyiqq4Sk4xRoMFO4lkShgGjgpTWxFQ0OhtUSUGyAHI8ujKN5fBB-C9Qtk8v0vm0fpUoQigfB-mc0RjBB95M1HsVBqNOgAmOAAejgAGZBmSlGMubyBfCEWCITTXujcujOIyDmQ5KzBOy4KL%2BYLypURTztehLnMeKRNgBJNIHKJ2a203ams6oY3XR3sMB6lmkYwEpjuvXkSgABhl1DoPt0EoR0ZjsbjjDgEEqRCgZR6pBprHYLQJVLgUpgEtUsKIUfVRGBBlBwHBMAM1S6s2ui2Wq3WKqe3tCZbzNJdREdnH9wrCcAAjAIvV9K93owW%2B02B8JBMPlROO88CwZ0BglqpMptMrtlFgwKXd1h9wSjvs3sTRkKGxHvd4y-H3x%2BYxFv3AYLcesYcyCEi9RvBSn4QZ%2B35RFASZAYyb6QUh0bQeMf4QAA1qQADqSjANciHIchqE9OhWHYUQNbSkKO57o6myOkeUQnmemB0cuGRhjmugCJ%2BlAXle%2BzPmxl6DlmXZCRW8AFg2AmZMJRFEQAZHAAmOnmhGKfGKlqcuBboCAWCTBaADyggaIZkyUMQPgpnAAAkXTLBIWB9AAPB5qnsbwf4kEWJZlnEzmuTSyBYHEGGyLBACuPiCAASgA4vMcAAKwAGxpZlGWDP2ADCwV9AAnEGIYlUG4G-su0KUP2jqZZwYDAAa6UCH%2BsUYWW7XSBhNW0gALKlZWlYIYRNQaHICHyI2pagQA",
+        image: fractalTree,
+        name: "Fractal Tree",
     },
 ];
 
