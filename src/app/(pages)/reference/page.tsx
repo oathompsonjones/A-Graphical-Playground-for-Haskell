@@ -115,7 +115,7 @@ const docs: Record<string, Section> = {
                     <><code>rect :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and returns a
                         rectangle.</>,
                     <><code>square :: Float -&gt; Shape</code> — Takes a side length and returns a square.</>,
-                    <><code>polygon :: [Point] -&gt; Shape</code> — Takes a list of points and returns a polygon.</>,
+                    <><code>polygon :: [Vector] -&gt; Shape</code> — Takes a list of points and returns a polygon.</>,
                 ])}
 
                 Shapes can be combined using the <code>(&amp;) :: Shape -&gt; Shape -&gt; Shape</code> operator.
