@@ -8,12 +8,25 @@ export const pointSchema = z.object({
 export type Point = z.infer<typeof pointSchema>;
 
 // Shapes
+export const lineSchema = z.object({
+    length: z.number(),
+    type: z.literal("line"),
+});
+export type Line = z.infer<typeof lineSchema>;
+
 export const ellipseSchema = z.object({
     horizontalAxis: z.number(),
     type: z.literal("ellipse"),
     verticalAxis: z.number(),
 });
 export type Ellipse = z.infer<typeof ellipseSchema>;
+
+export const rectSchema = z.object({
+    height: z.number(),
+    type: z.literal("rect"),
+    width: z.number(),
+});
+export type Rect = z.infer<typeof rectSchema>;
 
 export const polygonSchema = z.object({
     points: z.array(pointSchema),
@@ -27,7 +40,7 @@ const _shapeSchema = z.object({
     position: pointSchema,
     stroke: z.string(),
     strokeWeight: z.number(),
-}).and(z.union([ellipseSchema, polygonSchema]));
+}).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema]));
 
 export const shapeSchema = _shapeSchema.or(z.array(_shapeSchema));
 export type Shape = z.infer<typeof shapeSchema>;

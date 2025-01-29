@@ -33,20 +33,56 @@ import Maths (Vector (..), (^+^))
 
 -- Data structure to represent shapes
 data Shape
-    = Ellipse {hAx :: Float, vAx :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
-    | Polygon {pts :: [Vector], pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
+    = Empty
     | Group [Shape]
-    | Empty
+    | Line {len :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
+    | Ellipse {hAx :: Float, vAx :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
+    | Rect {w :: Float, h :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
+    | Polygon {pts :: [Vector], pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
 
 -- Convert a shape to a JSON string
 instance Show Shape where
     show :: Shape -> String
+    show Empty = "{}"
+    show (Group ss) = "[" ++ (intercalate ", " [show s | s <- ss]) ++ "]"
+    show (Line len pos ang fc sc sw) =
+        "{ "
+            ++ "\"type\": \"line\", \"length\": "
+            ++ show len
+            ++ ", \"position\": "
+            ++ show pos
+            ++ ", \"angle\": "
+            ++ show ang
+            ++ ", \"fill\": "
+            ++ show fc
+            ++ ", \"stroke\": "
+            ++ show sc
+            ++ ", \"strokeWeight\": "
+            ++ show sw
+            ++ " }"
     show (Ellipse hAx vAx pos ang fc sc sw) =
         "{ "
             ++ "\"type\": \"ellipse\", \"horizontalAxis\": "
             ++ show hAx
             ++ ", \"verticalAxis\": "
             ++ show vAx
+            ++ ", \"position\": "
+            ++ show pos
+            ++ ", \"angle\": "
+            ++ show ang
+            ++ ", \"fill\": "
+            ++ show fc
+            ++ ", \"stroke\": "
+            ++ show sc
+            ++ ", \"strokeWeight\": "
+            ++ show sw
+            ++ " }"
+    show (Rect w h pos ang fc sc sw) =
+        "{ "
+            ++ "\"type\": \"rect\", \"width\": "
+            ++ show w
+            ++ ", \"height\": "
+            ++ show h
             ++ ", \"position\": "
             ++ show pos
             ++ ", \"angle\": "
@@ -73,7 +109,6 @@ instance Show Shape where
             ++ ", \"strokeWeight\": "
             ++ show sw
             ++ " }"
-    show (Group ss) = "[" ++ (intercalate ", " [show s | s <- ss]) ++ "]"
 
 -- Default arguments for shapes
 defFC :: Color
@@ -105,20 +140,20 @@ emptyShape :: Shape
 emptyShape = Empty
 
 -- Functions to create shapes
-circle :: Float -> Shape
-circle r = Ellipse r r defPos defAng defFC defSC defSW
+line :: Float -> Shape
+line l = Line l defPos defAng defFC defSC defSW
 
 ellipse :: Float -> Float -> Shape
 ellipse hAx vAx = Ellipse hAx vAx defPos defAng defFC defSC defSW
 
-line :: Float -> Shape
-line l = Polygon [Vector 0 0, Vector l 0] defPos defAng defFC defSC defSW
+circle :: Float -> Shape
+circle r = Ellipse r r defPos defAng defFC defSC defSW
 
 rect :: Float -> Float -> Shape
-rect w h = Polygon [Vector 0 0, Vector w 0, Vector w h, Vector 0 h] defPos defAng defFC defSC defSW
+rect w h = Rect w h defPos defAng defFC defSC defSW
 
 square :: Float -> Shape
-square s = Polygon [Vector 0 0, Vector s 0, Vector s s, Vector 0 s] defPos defAng defFC defSC defSW
+square s = Rect s s defPos defAng defFC defSC defSW
 
 polygon :: [Vector] -> Shape
 polygon pts = Polygon pts defPos defAng defFC defSC defSW
@@ -165,7 +200,9 @@ rotate a s = s{ang = ang s + a}
 scale :: Float -> Shape -> Shape
 scale f Empty = Empty
 scale f (Group ss) = Group [scale f s | s <- ss]
+scale f (Line len pos ang fc sc sw) = Line (len * f) pos ang fc sc sw
 scale f (Ellipse hAx vAx pos ang fc sc sw) = Ellipse (hAx * f) (vAx * f) pos ang fc sc sw
+scale f (Rect w h pos ang fc sc sw) = Rect (w * f) (h * f) pos ang fc sc sw
 scale f (Polygon pts pos ang fc sc sw) = Polygon [Vector (x * f) (y * f) | Vector x y <- pts] pos ang fc sc sw
 
 -- TODO: This isn't actually a reflection

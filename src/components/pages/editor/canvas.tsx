@@ -61,6 +61,13 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                 context.lineWidth = shape.strokeWeight;
 
                 switch (shape.type) {
+                    case "line":
+                        context.moveTo(shape.position.x, shape.position.y);
+                        context.lineTo(
+                            shape.position.x + shape.length * Math.cos(shape.angle),
+                            shape.position.y + shape.length * Math.sin(shape.angle),
+                        );
+                        break;
                     case "ellipse":
                         context.ellipse(
                             shape.position.x,
@@ -71,6 +78,23 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                             0,
                             2 * Math.PI,
                         );
+                        break;
+                    case "rect":
+                        // Apply rotation about the position of the rectangle.
+                        context.translate(shape.position.x, shape.position.y);
+                        context.rotate(shape.angle);
+                        context.translate(-shape.position.x, -shape.position.y);
+
+                        // Draw the rectangle.
+                        context.rect(
+                            shape.position.x - shape.width / 2,
+                            shape.position.y - shape.height / 2,
+                            shape.width,
+                            shape.height,
+                        );
+
+                        // Reset the rotation.
+                        context.setTransform(1, 0, 0, 1, 0, 0);
                         break;
                     case "polygon":
                         if (shape.points.length === 0)
