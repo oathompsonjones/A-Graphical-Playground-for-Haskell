@@ -40,7 +40,7 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
             let frame: Frame;
 
             try {
-                frame = frameSchema.safeParse(JSON.parse(input[1])) as unknown as Frame;
+                frame = frameSchema.parse(JSON.parse(input[1])) as unknown as Frame;
             } catch (error) {
                 continue;
             }
