@@ -40,9 +40,9 @@ export function OpenMenu({ open, setOpen, author }: {
 
     useEffect(fetchSketches, []);
 
-    return (
+    return user !== null && (
         <Dialog open={open} onClose={() => setOpen(false)} ref={ref}>
-            {user !== null && <div className={styles.dialog}>
+            <div className={styles.dialog}>
                 {sketches === null || sketches.length === 0
                     ? <Typography>You have no saved sketches.</Typography>
                     : <>
@@ -53,7 +53,7 @@ export function OpenMenu({ open, setOpen, author }: {
                             </div>
                         ))}
                     </>}
-            </div>}
+            </div>
         </Dialog>
     );
 }

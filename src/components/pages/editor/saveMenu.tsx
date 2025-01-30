@@ -37,9 +37,9 @@ export function SaveMenu({ open, setOpen, code }: {
         });
     };
 
-    return (
+    return user !== null && (
         <Dialog open={open} onClose={() => setOpen(false)} ref={ref}>
-            {user !== null && <div className={styles.dialog}>
+            <div className={styles.dialog}>
                 <FormControl action={saveSketchAction} component="form">
                     <TextField type="hidden" name="content" value={code} sx={{ opacity: 0 }} />
                     <TextField type="hidden" name="authorId" value={user._id.toString()} sx={{ opacity: 0 }} />
@@ -47,7 +47,7 @@ export function SaveMenu({ open, setOpen, code }: {
                     <br />
                     <Button type="submit">Save</Button>
                 </FormControl>
-            </div>}
+            </div>
         </Dialog>
     );
 }
