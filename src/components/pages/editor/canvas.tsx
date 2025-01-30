@@ -1,6 +1,5 @@
 "use client";
 
-import type { Frame } from "schemas/graphics";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import { frameSchema } from "schemas/graphics";
@@ -37,13 +36,12 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                 continue;
 
             // Parse the input.
-            let frame: Frame;
+            const frameParse = frameSchema.safeParse(JSON.parse(input[1]));
 
-            try {
-                frame = frameSchema.parse(JSON.parse(input[1]));
-            } catch (err) {
+            if (!frameParse.success)
                 continue;
-            }
+
+            const frame = frameParse.data;
 
             // Set the canvas size.
             setWidth(frame.width);
@@ -92,9 +90,6 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                             shape.width,
                             shape.height,
                         );
-
-                        // Reset the rotation.
-                        context.setTransform(1, 0, 0, 1, 0, 0);
                         break;
                     case "polygon":
                         if (shape.points.length === 0)
@@ -113,15 +108,15 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                             context.lineTo(point.x + shape.position.x, point.y + shape.position.y);
 
                         context.closePath();
-
-                        // Reset the rotation.
-                        context.setTransform(1, 0, 0, 1, 0, 0);
                         break;
                 }
 
                 context.fill();
                 context.stroke();
                 context.closePath();
+
+                // Reset any transformations.
+                context.resetTransform();
             }
         }
     };
