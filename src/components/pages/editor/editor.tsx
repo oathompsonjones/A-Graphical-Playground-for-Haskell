@@ -162,6 +162,7 @@ export function Editor({ code, updateCode, run, save, open, new: new_ }: {
                 }
                 case "(": case "[": case "{": case "<": case "\"": case "'": case "`": {
                     if (start === end)
+                        // TODO: Check if there anything after. If not, add the closing character.
                         break;
 
                     event.preventDefault();
@@ -181,6 +182,7 @@ export function Editor({ code, updateCode, run, save, open, new: new_ }: {
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
+                // TODO: If the user types a closing character, and the next character is the same, move the cursor.
             }
         }
     };
