@@ -7,7 +7,10 @@ import type { ReactNode } from "react";
 import type { Variant } from "@mui/material/styles/createTypography";
 import styles from "styles/pages/reference.module.css";
 
-type Section = ((metaKey?: ReactNode) => ReactNode) | { [key: string]: Section; };
+type Section = ((metaKey?: ReactNode) => ReactNode) | {
+    [key: string]: Section;
+    root?: (metaKey?: ReactNode) => ReactNode;
+};
 
 const toId = (title: string): string => title.toLowerCase().replace(/\s/g, "-");
 const list = (items: ReactNode[]): Awaited<ReactNode> => <ul>{items.map((item, i) => <li key={i}>{item}</li>)}</ul>;
@@ -103,70 +106,177 @@ const docs: Record<string, Section> = {
         </div>
     ),
     Shapes: {
-        "2D Primitives": () => (
+        "2D Primitives": {
+            root: () => (
+                <div>
+                    To draw 2D shapes, you can use any of the functions in this section. They all return
+                        the <code>Shape</code> data type. By default, all shapes are drawn at the top left corner of the
+                        canvas, have a stroke color of black, a stroke weight of 1, and no fill color.
+                </div>
+            ),
+            line: () => (
+                <div>
+                    The <code>line :: Float -&gt; Shape</code> function takes a length and returns a line.
+                    <br />
+                    <br />
+                    The line extends in the positive x-direction.
+                </div>
+            ),
+            circle: () => (
+                <div>
+                    The <code>circle :: Float -&gt; Shape</code> function takes a radius and returns a circle.
+                    <br />
+                    <br />
+                    The circle's origin is at its center.
+                </div>
+            ),
+            ellipse: () => (
+                <div>
+                    The <code>ellipse :: Float -&gt; Float -&gt; Shape</code> function takes a width and height and
+                        returns an ellipse.
+                    <br />
+                    <br />
+                    Just like circles, the ellipse's origin is at its center.
+                </div>
+            ),
+            square: () => (
+                <div>
+                    The <code>square :: Float -&gt; Shape</code> function takes a side length and returns a square.
+                    <br />
+                    <br />
+                    The square's origin is at its top left corner.
+                </div>
+            ),
+            rect: () => (
+                <div>
+                    The <code>rect :: Float -&gt; Float -&gt; Shape</code> function takes a width and height and returns
+                        a rectangle.
+                    <br />
+                    <br />
+                    Just like squares, the rectangle's origin is at its top left corner.
+                </div>
+            ),
+            polygon: () => (
+                <div>
+                    The <code>polygon :: [Vector] -&gt; Shape</code> function takes a list of points and returns a
+                        polygon.
+                    <br />
+                    <br />
+                    The polygon's origin is at (0, 0).
+                </div>
+            ),
+            emptyShape: () => (
+                <div>
+                    The <code>emptyShape :: Shape</code> function represents the empty shape.
+                    <br />
+                    <br />
+                    This shape draws nothing.
+                </div>
+            ),
+        },
+        "Combining Shapes": () => (
             <div>
-                To draw 2D shapes, you can use any of the following functions, which all return
-                    the <code>Shape</code> data type:
-                {list([
-                    <><code>circle :: Float -&gt; Shape</code> — Takes a radius and returns a circle.</>,
-                    <><code>ellipse :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and returns an
-                        ellipse.</>,
-                    <><code>line :: Float -&gt; Shape</code> — Takes a length and returns a line.</>,
-                    <><code>rect :: Float -&gt; Float -&gt; Shape</code> — Takes a width and height and returns a
-                        rectangle.</>,
-                    <><code>square :: Float -&gt; Shape</code> — Takes a side length and returns a square.</>,
-                    <><code>polygon :: [Vector] -&gt; Shape</code> — Takes a list of points and returns a polygon.</>,
-                ])}
-
                 Shapes can be combined using the <code>(&amp;) :: Shape -&gt; Shape -&gt; Shape</code> operator.
-                The <code>emptyShape :: Shape</code> function represents the empty shape, and is the identity
-                    function for the <code>&amp;</code> operator.
+                The <code>emptyShape</code> is the identity function for the <code>&amp;</code> operator.
+                <br />
+                <br />
+                The resulting <code>Shape</code> is a list of <code>Shape</code>s that are drawn on top of each other,
+                    in the order they are combined.
+                Applying transformations to a group of shapes applies the transformation to each shape individually.
+                Given that the shapes may have different relative origin points, applying transformations such as
+                    a rotation or scaling may result in unexpected behavior.
             </div>
         ),
-        "Shape Transformations": () => (
+        Transformations: {
+            root: () => (
+                <div>
+                    To modify a shape, you can use any of the functions in this section. They all take some argument,
+                        the shape to be transformed, and return the transformed shape.
+                </div>
+            ),
+            fill: () => (
+                <div>
+                    The <code>fill :: Color -&gt; Shape -&gt; Shape</code> function sets the fill color of the shape.
+                    <br />
+                    <br />
+                    The <code>noFill :: Shape -&gt; Shape</code> function is a shorthand for <code>fill
+                        Transparent</code>.
+                </div>
+            ),
+            stroke: () => (
+                <div>
+                    The <code>stroke :: Color -&gt; Shape -&gt; Shape</code> function sets the stroke color of the
+                        shape.
+                    <br />
+                    <br />
+                    The <code>noStroke :: Shape -&gt; Shape</code> function is a shorthand for <code>stroke
+                        Transparent</code>.
+                </div>
+            ),
+            strokeWeight: () => (
+                <div>
+                    The <code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> function sets the stroke thickness of
+                        the shape.
+                </div>
+            ),
+            translate: () => (
+                <div>
+                    The <code>translate :: Vector -&gt; Shape -&gt; Shape</code> function translates the shape by the
+                        given offset.
+                    <br />
+                    <br />
+                    The <code>translateX :: Float -&gt; Shape -&gt; Shape</code> and <code>translateY :: Float -&gt;
+                        Shape -&gt; Shape</code> functions are shorthand for <code>translate
+                        (Vector x 0)</code> and <code>translate (Vector 0 y)</code>, respectively.
+                    <br />
+                    <br />
+                    This moves the shape's origin, so for circles and ellipses, it moves the center of the shape, for
+                        lines, it moves the starting point, and for squares and rectangles, it moves the top left
+                        corner. For polygons, each point moves with the origin, maintaining their same relative
+                        positions to each other.
+                </div>
+            ),
+            rotate: () => (
+                <div>
+                    The <code>rotate :: Float -&gt; Shape -&gt; Shape</code> function rotates the shape clockwise by the
+                        given angle, in radians, around its origin.
+                    <br />
+                    <br />
+                    As with translations, the rotation is applied about the shape's origin point.
+                </div>
+            ),
+            scale: () => (
+                <div>
+                    The <code>scale :: Float -&gt; Shape -&gt; Shape</code> function scales the shape by the given
+                        scale factor.
+                    <br />
+                    <br />
+                    Once again, the scale factor is applied about the shape's origin point.
+                </div>
+            ),
+            identityTransformation: () => (
+                <div>
+                    The <code>identityTransformation :: Shape -&gt; Shape</code> function represents the identity
+                        transformation. It makes no changes to the shape it is applied to.
+                </div>
+            ),
+        },
+        "Chaining Transformations": () => (
             <div>
-                You can modify a shape using the following functions:
-                {list([
-                    <><code>fill :: Color -&gt; Shape -&gt; Shape</code> — Set the fill color of the shape.</>,
-                    <><code>stroke :: Color -&gt; Shape -&gt; Shape</code> — Set the stroke color of the shape.</>,
-                    <><code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> — Set the stroke thickness of the
-                        shape.</>,
-                    <><code>translate :: Vector -&gt; Shape -&gt; Shape</code> — Translate the shape by the given
-                        offset. For circles and ellipses, this moves the center of the shape. For lines, this
-                        moves the starting point. For squares and rectangles, this moves the top left corner. For
-                        polygons, this translates each point individually, keeping them in the same position relative
-                        to one another.</>,
-                    <><code>rotate :: Float -&gt; Shape -&gt; Shape</code> — Rotate the shape by the given angle in
-                        radians. For circles and ellipses, this rotates the shape about its center. For lines, this
-                        roates about the starting point. For squares and rectangles, this rotates about the top left
-                        corner. For polygons, this rotates about the shape's relative origin point.</>,
-                    <><code>scale :: Float -&gt; Shape -&gt; Shape</code> — Scale the shape by the given factor.</>,
-                    <><code>reflect :: Float -&gt; Shape -&gt; Shape</code> — Reflect the shape over an axis at the
-                        given angle in radians.</>,
-                ])}
-
-                There are also a few shorthand functions for common transformations:
-                {list([
-                    <><code>noStroke :: Shape -&gt; Shape</code> = <code>stroke Transparent</code></>,
-                    <><code>noFill :: Shape -&gt; Shape</code> = <code>fill Transparent</code></>,
-                    <><code>translateX :: Float -&gt; Shape -&gt; Shape</code> = <code>translate (Vector x 0)</code></>,
-                    <><code>translateY :: Float -&gt; Shape -&gt; Shape</code> = <code>translate (Vector 0 y)</code></>,
-                ])}
-
-                Transformations can be applied in two ways. The first is to simply apply the transformation function to
-                    the shape directly (e.g. <code>fill Red (circle 50)</code>). <br />
+                Transformations can be applied in two ways. The first is to simply apply the transformation function
+                    to the shape directly (e.g. <code>fill Red (circle 50)</code>). <br />
                 The second is to use the <code>(&gt;&gt;&gt;) :: Shape -&gt; (Shape -&gt; Shape) -&gt;
                     Shape</code> operator to chain transformations together (e.g. <code>circle 50 &gt;&gt;&gt; fill
                     Red</code>).
-                The <code>identityTransformation :: Shape -&gt; Shape</code> function represents the identity
-                    transformation, and is the identity function for the <code>&gt;&gt;&gt;</code> operator.
+                The <code>identityTransformation</code> function is the identity function for
+                    the <code>&gt;&gt;&gt;</code> operator.
                 <br />
                 <br />
-                To apply multiple transformations, you can do any of the following to achieve the same result:
+                The following examples all produce the same result:
                 {list([
                     <><code>fill Red (translate (Vector 50 50) (rotate (radians 45) (circle 50)))</code></>,
-                    <><code>circle 50 &gt;&gt;&gt; fill Red &gt;&gt;&gt; translate (Vector 50 50) &gt;&gt;&gt; rotate
-                        (radians 45)</code></>,
+                    <><code>circle 50 &gt;&gt;&gt; fill Red &gt;&gt;&gt; translate (Vector 50 50) &gt;&gt;&gt;
+                        rotate (radians 45)</code></>,
                     <><code>circle 50 &gt;&gt;&gt; (fill Red . translate (Vector 50 50) . rotate (radians
                         45))</code></>,
                     <><code>circle 50 &gt;&gt;&gt; (foldr (.) identityTransformation [fill Red, translate (Vector 50
@@ -364,12 +474,27 @@ const docs: Record<string, Section> = {
                 ])}
             </div>
         ),
+        "Operator Precedence": () => (
+            <div>
+                Precedence for the <code>(&lt;&lt;&lt;)</code>, <code>(&amp;)</code>,
+                    and <code>(&gt;&gt;&gt;)</code> operators is defined as follows:
+                {list([
+                    <><code>infixl 7 &lt;&lt;&lt;</code></>,
+                    <><code>infixr 8 &amp;</code></>,
+                    <><code>infixl 9 &gt;&gt;&gt;</code></>,
+                ])}
+                This means that the expressions such as <code>
+                    render $ createCanvas 500 500 &lt;&lt;&lt;
+                    circle 100 &gt;&gt;&gt; translate (Vector 250 250) &amp;
+                    square 200 &gt;&gt;&gt; translate (Vector 250 250)</code> do not require parentheses.
+            </div>
+        ),
     },
     /* eslint-enable @typescript-eslint/naming-convention */
 };
 
 const contents = (section: Record<string, Section>): Awaited<ReactNode> => list(
-    Object.entries(section).map(([title, content], i) => (
+    Object.entries(section).filter(([title]) => title !== "root").map(([title, content], i) => (
         <span key={i}>
             <a href={`#${toId(title)}`}>{title}</a>
             {typeof content === "object" && contents(content)}
@@ -379,7 +504,12 @@ const contents = (section: Record<string, Section>): Awaited<ReactNode> => list(
 const section = (metaKey: ReactNode, title: string, content: Section, depth: number, i: number): Awaited<ReactNode> => (
     <div key={i} className={`${styles.wrapper} ${i % 2 === 0 && depth === 0 ? styles.colored : ""} edge wrapper`}>
         <br />
-        <Typography variant={`h${depth + 3}` as Variant} id={toId(title)} className={styles.title!}>{title}</Typography>
+        {title !== "root" &&
+            <Typography variant={`h${depth + 3}` as Variant} id={toId(title)} className={styles.title!}>
+                {title}
+                <hr />
+            </Typography>
+        }
         {content instanceof Function
             ? content(metaKey)
             : Object.entries(content)
