@@ -43,22 +43,6 @@ export default function EditorPage(): ReactNode {
         : user.username ?? user.email.split("@")[0]!);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
 
-    useEffect(() => {
-        const url = new URL(window.location.href);
-        const codeParam = url.searchParams.get("code");
-        const titleParam = url.searchParams.get("title");
-        const authorParam = url.searchParams.get("author");
-
-        if (codeParam !== null)
-            setCode(codeParam);
-
-        if (titleParam !== null)
-            setTitle(decodeURIComponent(titleParam));
-
-        if (authorParam !== null)
-            setAuthor(authorParam);
-    }, []);
-
     const clear = clearStream;
     const new_ = (): void => {
         clearStream();
@@ -75,6 +59,30 @@ export default function EditorPage(): ReactNode {
         executeStream(decompressFromEncodedURIComponent(code));
     };
 
+    const handleKey = (event: KeyboardEvent): void => {
+        if (!(navigator.platform.includes("Mac") ? event.metaKey : event.ctrlKey))
+            return;
+
+        switch (event.key) {
+            case "s":
+                event.preventDefault();
+                save();
+                break;
+            case "o":
+                event.preventDefault();
+                open();
+                break;
+            case "n":
+                event.preventDefault();
+                new_();
+                break;
+            case "Enter":
+                event.preventDefault();
+                run();
+                break;
+        }
+    };
+
     // Extract the graphics commands, and send them to the canvas.
     const graphicsRegEx = /drawToCanvas\((.*)\)/g;
     const graphics = codeOutput.join("").match(graphicsRegEx) ?? [];
@@ -85,6 +93,25 @@ export default function EditorPage(): ReactNode {
         .map((output) => (output.startsWith("drawToCanvas(") ? "Compiling..." : output))
         .join("\n")
         .replace(/\n+/g, "\n");
+
+    // Handle URL parameters and key presses.
+    useEffect(() => {
+        document.addEventListener("keydown", handleKey);
+
+        const url = new URL(window.location.href);
+        const codeParam = url.searchParams.get("code");
+        const titleParam = url.searchParams.get("title");
+        const authorParam = url.searchParams.get("author");
+
+        if (codeParam !== null)
+            setCode(codeParam);
+
+        if (titleParam !== null)
+            setTitle(decodeURIComponent(titleParam));
+
+        if (authorParam !== null)
+            setAuthor(authorParam);
+    }, []);
 
     return (
         <div className={`full-width ${styles.container}`}>
@@ -97,10 +124,7 @@ export default function EditorPage(): ReactNode {
             />
             <SplitView vertical={isPortrait} id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
-                    <Editor
-                        code={decompressFromEncodedURIComponent(code)}
-                        updateCode={updateCode} save={save} open={open} new={new_} run={run}
-                    />
+                    <Editor code={decompressFromEncodedURIComponent(code)} updateCode={updateCode} />
                     <Console content={consoleOutput} />
                 </SplitView>
                 <Canvas content={graphics} />

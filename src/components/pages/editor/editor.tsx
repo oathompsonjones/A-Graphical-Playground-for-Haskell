@@ -24,19 +24,11 @@ That's why we are storing the highlight.js instance in a state variable,
  * @param props - The properties of the editor.
  * @param props.code - The initial code to display.
  * @param props.updateCode - The function to call when the code changes.
- * @param props.run - The function to call to run the code.
- * @param props.save - The function to call to save a file.
- * @param props.open - The function to call to open a file.
- * @param props.new - The function to call to create a new file.
  * @returns The editor element.
  */
-export function Editor({ code, updateCode, run, save, open, new: new_ }: {
+export function Editor({ code, updateCode }: {
     code: string;
     updateCode: (rawCode: string) => void;
-    run: () => void;
-    save: () => void;
-    open: () => void;
-    new: () => void;
 }): ReactNode {
     // Setup state variables.
     const [hljs, setHljs] = useState<HLJSApi>(null!);
@@ -128,22 +120,6 @@ export function Editor({ code, updateCode, run, save, open, new: new_ }: {
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
-                case "s":
-                    event.preventDefault();
-                    save();
-                    break;
-                case "o":
-                    event.preventDefault();
-                    open();
-                    break;
-                case "n":
-                    event.preventDefault();
-                    new_();
-                    break;
-                case "Enter":
-                    event.preventDefault();
-                    run();
-                    break;
             }
         } else {
             switch (event.key) {
