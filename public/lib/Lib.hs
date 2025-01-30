@@ -50,3 +50,6 @@ background cl cv = cv{bg = cl}
 -- Individually modifies pixels in the canvas
 setPixel :: Canvas -> Vector -> Color -> Canvas
 setPixel cv pos cl = cv{ss = ss cv ++ [fill cl (stroke Transparent (translate pos (square 1)))]}
+
+-- Set operator precedence
+infixl 7 <<<

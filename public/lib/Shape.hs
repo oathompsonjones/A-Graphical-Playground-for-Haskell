@@ -16,7 +16,7 @@ module Shape (
     strokeWeight,
     scale,
     rotate,
-    reflect,
+    -- reflect,
     noStroke,
     noFill,
     translateX,
@@ -196,7 +196,6 @@ rotate a Empty = Empty
 rotate a (Group ss) = Group [rotate a s | s <- ss]
 rotate a s = s{ang = ang s + a}
 
--- TODO: This doesn't work
 scale :: Float -> Shape -> Shape
 scale f Empty = Empty
 scale f (Group ss) = Group [scale f s | s <- ss]
@@ -223,3 +222,7 @@ translateX x = translate (Vector x 0)
 
 translateY :: Float -> Shape -> Shape
 translateY y = translate (Vector 0 y)
+
+-- Set operator precedence
+infixr 8 &
+infixl 9 >>>
