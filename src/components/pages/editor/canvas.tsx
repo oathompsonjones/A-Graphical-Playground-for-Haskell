@@ -1,5 +1,6 @@
 "use client";
 
+import type { Frame } from "schemas/graphics";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import { frameSchema } from "schemas/graphics";
@@ -36,12 +37,13 @@ export function Canvas({ content }: { content: string[]; }): ReactNode {
                 continue;
 
             // Parse the input.
-            const frameParse = frameSchema.safeParse(JSON.parse(input[1]));
+            let frame: Frame;
 
-            if (!frameParse.success)
+            try {
+                frame = frameSchema.safeParse(JSON.parse(input[1])) as unknown as Frame;
+            } catch (error) {
                 continue;
-
-            const frame = frameParse.data;
+            }
 
             // Set the canvas size.
             setWidth(frame.width);
