@@ -30,6 +30,7 @@ That's why we are storing the highlight.js instance in a state variable,
  * @param props.run - The function to call when the user runs the code.
  * @returns The editor element.
  */
+// eslint-disable-next-line max-lines-per-function
 export function Editor({ code, updateCode, save, open, new: new_, run }: {
     code: string;
     updateCode: (rawCode: string) => void;
@@ -149,22 +150,16 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
             switch (event.key) {
                 case "Tab": {
                     // TODO: Indent multiple lines at once.
+                    // TODO: Align the cursor with the correct indent level.
                     event.preventDefault();
-                    const tabSize = 2;
-
-                    textarea.value = textarea.value.substring(0, start) +
-                        " ".repeat(tabSize) + textarea.value.substring(end);
-                    textarea.selectionStart = start + tabSize;
-                    textarea.selectionEnd = textarea.selectionStart;
+                    textarea.value = `${textarea.value.substring(0, start)}  ${textarea.value.substring(end)}`;
+                    textarea.selectionStart = start + 2;
+                    textarea.selectionEnd = start + 2;
 
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
-                case "(": case "[": case "{": case "<": case "\"": case "'": case "`": {
-                    if (start === end)
-                        // TODO: Check if there anything after. If not, add the closing character.
-                        break;
-
+                case "(": case "[": case "{": case "<": {
                     event.preventDefault();
 
                     textarea.value = [
@@ -172,7 +167,7 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
                         event.key,
                         textarea.value.slice(start, end),
                         // eslint-disable-next-line @typescript-eslint/naming-convention
-                        { "\"": "\"", "'": "'", "(": ")", "<": ">", "[": "]", "`": "`", "{": "}" }[event.key],
+                        { "(": ")", "<": ">", "[": "]", "{": "}" }[event.key],
                         textarea.value.substring(end),
                     ].join("");
 
@@ -182,7 +177,39 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
-                // TODO: If the user types a closing character, and the next character is the same, move the cursor.
+                case ")": case "]": case "}": case ">": {
+                    if (textarea.value[end] === event.key) {
+                        event.preventDefault();
+                        textarea.selectionStart = end + 1;
+                        textarea.selectionEnd = end + 1;
+
+                        handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    }
+
+                    break;
+                }
+                case "\"": case "'": case "`": {
+                    event.preventDefault();
+
+                    if (textarea.value[end] === event.key) {
+                        textarea.selectionStart = end + 1;
+                        textarea.selectionEnd = end + 1;
+                    } else {
+                        textarea.value = [
+                            textarea.value.substring(0, start),
+                            event.key,
+                            textarea.value.slice(start, end),
+                            event.key,
+                            textarea.value.substring(end),
+                        ].join("");
+
+                        textarea.selectionStart = start + 1;
+                        textarea.selectionEnd = end + 1;
+                    }
+
+                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    break;
+                }
             }
         }
     };
