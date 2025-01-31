@@ -143,13 +143,30 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
             }
         } else {
             switch (event.key) {
+                case "Enter": {
+                    event.preventDefault();
+                    const line = textarea.value.substring(0, start).split("\n").pop()!;
+                    const [indent] = (/^\s*/).exec(line)!;
+
+                    textarea.value = `${textarea.value.substring(0, start)}\n${indent}${textarea.value.substring(end)}`;
+                    textarea.selectionStart = start + 1 + indent.length;
+                    textarea.selectionEnd = start + 1 + indent.length;
+
+                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    break;
+                }
                 case "Tab": {
                     // TODO: Indent multiple lines at once.
-                    // TODO: Align the cursor with the correct indent level.
                     event.preventDefault();
-                    textarea.value = `${textarea.value.substring(0, start)}  ${textarea.value.substring(end)}`;
-                    textarea.selectionStart = start + 2;
-                    textarea.selectionEnd = start + 2;
+                    const cursorColumn = textarea.value.substring(0, start).split("\n").pop()!.length;
+                    const spaceCount = cursorColumn % 2 === 0 ? 2 : 1;
+
+                    textarea.value = textarea.value.substring(0, start) +
+                        " ".repeat(spaceCount) +
+                        textarea.value.substring(end);
+
+                    textarea.selectionStart = start + spaceCount;
+                    textarea.selectionEnd = start + spaceCount;
 
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
