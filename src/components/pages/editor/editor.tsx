@@ -160,6 +160,9 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
                     break;
                 }
                 case "(": case "[": case "{": case "<": {
+                    if (event.key === "<" && start === end)
+                        break;
+
                     event.preventDefault();
 
                     textarea.value = [
