@@ -1,10 +1,7 @@
-"use client";
-
 import "styles/codeTheme.css";
 import type { FormEvent, KeyboardEvent, ReactNode, UIEvent } from "react";
-import { useEffect, useState } from "react";
-import type { HLJSApi } from "highlight.js";
 import { PlainPaper } from "./plainPaper";
+import { renderToString } from "react-dom/server";
 import styles from "styles/components/pages/editor/editor.module.css";
 
 /*
@@ -39,19 +36,45 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
     new: () => void;
     run: () => void;
 }): ReactNode {
-    // Setup state variables.
-    const [hljs, setHljs] = useState<HLJSApi>(null!);
-    const [displayCode, setDisplayCode] = useState<ReactNode>(null);
+    /**
+     * Highlight the code and update the display.
+     * We use separate <code> elements for each line to render line numbers.
+     * This runs automatically on each render. As the code changes, it updates the parent component's state, triggering
+     * a rerender of this component too, thus updating the display.
+     * @param pre - The pre element to update.
+     */
+    const updateDisplayCode = (pre: HTMLPreElement | null): void => {
+        if (pre === null)
+            return;
 
-    const highlightCode = (_code: string, _hljs: HLJSApi = hljs): ReactNode => _code.split("\n").map((line, i) => (
-        <code
-            key={i}
-            className="language-haskell"
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            dangerouslySetInnerHTML={{ __html: _hljs.highlight(line, { language: "haskell" }).value }}
-        />
-    ));
+        import("highlight.js/lib/core").then(({ default: _hljs }) => {
+            const setDisplayCode = (): void => {
+                pre.innerHTML = code.split("\n").map((line) => renderToString(
+                    <code
+                        className="language-haskell"
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        dangerouslySetInnerHTML={{ __html: _hljs.highlight(line, { language: "haskell" }).value }}
+                    />,
+                )).join("");
+            };
 
+            // This only runs when the component is first rendered.
+            if (_hljs.getLanguage("haskell") === undefined) {
+                import("highlight.js/lib/languages/haskell").then(({ default: haskell }) => {
+                    _hljs.registerLanguage("haskell", haskell);
+
+                    setDisplayCode();
+                }).catch(() => undefined);
+            } else {
+                setDisplayCode();
+            }
+        }).catch(() => undefined);
+    };
+
+    /**
+     * Handle changes to the code.
+     * @param event - The form event.
+     */
     const handleChange = (event: FormEvent<HTMLTextAreaElement>): void => {
         // Ignore the event if the code hasn't changed.
         if (event.currentTarget.value === code)
@@ -71,18 +94,28 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
 
         // Update the code and display.
         updateCode(event.currentTarget.value);
-        setDisplayCode(highlightCode(event.currentTarget.value));
     };
 
-    const handleScroll = (event: UIEvent<HTMLTextAreaElement>): void => {
-        const pre = document.getElementById("code-editor-pre");
+    /**
+     * Synchronise scrolling between the textarea and pre elements.
+     * @param event - The UI scroll event.
+     * @param event.currentTarget - The textarea element.
+     * @param event.currentTarget.scrollLeft - The horizontal scroll position of the textarea.
+     * @param event.currentTarget.scrollTop - The vertical scroll position of the textarea.
+     */
+    const handleScroll = ({ currentTarget: { scrollLeft, scrollTop } }: UIEvent<HTMLTextAreaElement>): void => {
+        const pre = document.getElementById("pre");
 
         if (pre !== null) {
-            pre.scrollTop = event.currentTarget.scrollTop;
-            pre.scrollLeft = event.currentTarget.scrollLeft;
+            pre.scrollTop = scrollTop;
+            pre.scrollLeft = scrollLeft;
         }
     };
 
+    /**
+     * Handle keyboard shortcuts and special character behaviours.
+     * @param event - The keyboard event.
+     */
     // eslint-disable-next-line max-statements
     const handleKey = (event: KeyboardEvent<HTMLTextAreaElement>): void => {
         const isMacOS = navigator.platform.includes("Mac");
@@ -93,6 +126,7 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
 
         if (controlKey) {
             switch (event.key) {
+                // Comment out the selected lines/current line.
                 case "/": {
                     // TODO: Put the comment syntax at the correct indent level.
                     // TODO: Comment multiple lines at once.
@@ -124,18 +158,22 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
+                // Save the sketch.
                 case "s":
                     event.preventDefault();
                     save();
                     break;
+                // Open a sketch.
                 case "o":
                     event.preventDefault();
                     open();
                     break;
+                // Create a new sketch.
                 case "n":
                     event.preventDefault();
                     new_();
                     break;
+                // Run the sketch.
                 case "Enter":
                     event.preventDefault();
                     run();
@@ -143,6 +181,7 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
             }
         } else {
             switch (event.key) {
+                // Apply correct indentation to new lines.
                 case "Enter": {
                     event.preventDefault();
                     const line = textarea.value.substring(0, start).split("\n").pop()!;
@@ -155,6 +194,7 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
+                // Indent the selected lines/current line.
                 case "Tab": {
                     // TODO: Indent multiple lines at once.
                     event.preventDefault();
@@ -171,10 +211,12 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
-                case "(": case "[": case "{": case "<": {
-                    if (event.key === "<" && start === end)
+                // Automatically close angle brackets only when wrapping text.
+                case "<":
+                    if (start === end)
                         break;
-
+                // Automatically close brackets.
+                case "(": case "[": case "{": {
                     event.preventDefault();
 
                     textarea.value = [
@@ -192,6 +234,7 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
                     handleChange(event as FormEvent<HTMLTextAreaElement>);
                     break;
                 }
+                // Allow typing over closing brackets.
                 case ")": case "]": case "}": case ">": {
                     if (textarea.value[end] === event.key) {
                         event.preventDefault();
@@ -203,6 +246,7 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
 
                     break;
                 }
+                // Automatically close quotes and allow typing over closing quotes.
                 case "\"": case "'": case "`": {
                     event.preventDefault();
 
@@ -229,28 +273,19 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
         }
     };
 
-    const setValue = (textarea: HTMLTextAreaElement | null): void => {
+    /**
+     * Set the initial value of the textarea.
+     * @param textarea - The textarea element.
+     */
+    const setCode = (textarea: HTMLTextAreaElement | null): void => {
         if (textarea !== null)
             textarea.value = code;
     };
 
-    useEffect(() => {
-        // Load highlight.js and highlight the initial code.
-        import("highlight.js/lib/core").then(({ default: _hljs }) => {
-            import("highlight.js/lib/languages/haskell").then(({ default: haskell }) => {
-                if (_hljs.getLanguage("haskell") === undefined)
-                    _hljs.registerLanguage("haskell", haskell);
-
-                setHljs(_hljs);
-                setDisplayCode(highlightCode(code, _hljs));
-            }).catch(() => undefined);
-        }).catch(() => undefined);
-    }, [code]);
-
     return (
         <PlainPaper className={styles.editor!}>
-            <pre id="code-editor-pre">{displayCode}</pre>
-            <textarea onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} ref={setValue} />
+            <pre id="pre" ref={updateDisplayCode} />
+            <textarea onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} ref={setCode} />
         </PlainPaper>
     );
 }
