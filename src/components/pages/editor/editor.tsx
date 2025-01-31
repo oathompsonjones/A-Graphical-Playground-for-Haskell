@@ -57,11 +57,6 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
         if (event.currentTarget.value === code)
             return;
 
-        // Make sure the library is imported.
-        if (!code.startsWith("import HaskellGraphics\n")) {
-            // TODO: Automatically add the import statement.
-        }
-
         // Prevent macOS double space inserting a dot.
         if ("inputType" in event.nativeEvent && event.nativeEvent.inputType === "insertReplacementText" &&
             "data" in event.nativeEvent && typeof event.nativeEvent.data === "string" && event.nativeEvent.data === ". "
@@ -71,7 +66,7 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
 
             textarea.value = `${textarea.value.substring(0, start - 2)}  ${textarea.value.substring(end)}`;
             textarea.selectionStart = start;
-            textarea.selectionEnd = textarea.selectionStart;
+            textarea.selectionEnd = start;
         }
 
         // Update the code and display.
