@@ -42,6 +42,7 @@ export default function EditorPage(): ReactNode {
         ? null
         : user.username ?? user.email.split("@")[0]!);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
+    const [graphics, setGraphics] = useState<string[]>([]);
 
     const clear = clearStream;
     const new_ = (): void => {
@@ -59,16 +60,18 @@ export default function EditorPage(): ReactNode {
         executeStream(decompressFromEncodedURIComponent(code));
     };
 
-    // Extract the graphics commands, and send them to the canvas.
-    const graphicsRegEx = /drawToCanvas\((.*)\)/g;
-    const graphics = codeOutput.join("").match(graphicsRegEx) ?? [];
-
     // Remove the graphics commands from the console output.
     const consoleOutput = codeOutput.join("")
         .split("\n")
         .map((output) => (output.startsWith("drawToCanvas(") ? "Compiling..." : output))
         .join("\n")
         .replace(/\n+/g, "\n");
+
+    // Extract the graphics commands, and send them to the canvas.
+    const newGraphics = codeOutput.join("").match(/drawToCanvas\((.*)\)/g) ?? [];
+
+    if (JSON.stringify(graphics) !== JSON.stringify(newGraphics))
+        setGraphics(newGraphics);
 
     // Handle URL parameters and key presses.
     useEffect(() => {

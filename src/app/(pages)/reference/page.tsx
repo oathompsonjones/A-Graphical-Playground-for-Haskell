@@ -72,7 +72,9 @@ const docs: Record<string, Section> = {
                 canvas you created earlier.
             <br />
             Having created the canvas, you can draw shapes on it using the <code>(&lt;&lt;&lt;) :: Canvas -&gt; Shape
-                -&gt; Canvas</code> operator.
+                -&gt; Canvas</code> operator. This operator adds a new frame to your animation. Chaining multiple shapes
+                together will draw them in sequence, not on top of each other. You can append a list of frames by using
+                Haskell's <code>foldl</code> function, like this: <code>foldl (&lt;&lt;&lt;) canvas frames</code>.
             <br />
             Finally, to render the canvas in the editor, use the <code>render :: Canvas -&gt; IO ()</code> function.
         </div>
