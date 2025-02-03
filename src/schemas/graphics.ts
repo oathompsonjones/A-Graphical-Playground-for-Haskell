@@ -1,55 +1,51 @@
 import z from "zod";
 
 // Points
-export const pointSchema = z.object({
+const vectorSchema = z.object({
     x: z.number(),
     y: z.number(),
 });
-export type Point = z.infer<typeof pointSchema>;
 
 // Shapes
-export const lineSchema = z.object({
+const lineSchema = z.object({
     length: z.number(),
     type: z.literal("line"),
 });
-export type Line = z.infer<typeof lineSchema>;
 
-export const ellipseSchema = z.object({
+const ellipseSchema = z.object({
     horizontalAxis: z.number(),
     type: z.literal("ellipse"),
     verticalAxis: z.number(),
 });
-export type Ellipse = z.infer<typeof ellipseSchema>;
 
-export const rectSchema = z.object({
+const rectSchema = z.object({
     height: z.number(),
     type: z.literal("rect"),
     width: z.number(),
 });
-export type Rect = z.infer<typeof rectSchema>;
 
-export const polygonSchema = z.object({
-    points: z.array(pointSchema),
+const polygonSchema = z.object({
+    points: z.array(vectorSchema),
     type: z.literal("polygon"),
 });
-export type Polygon = z.infer<typeof polygonSchema>;
 
-const _shapeSchema = z.object({
+const baseShapeSchema = z.object({
     angle: z.number(),
     fill: z.string(),
-    position: pointSchema,
+    position: vectorSchema,
     stroke: z.string(),
     strokeWeight: z.number(),
 }).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema]));
 
-export const shapeSchema = _shapeSchema.or(z.array(_shapeSchema));
+const shapeSchema = baseShapeSchema.or(z.array(baseShapeSchema));
+
 export type Shape = z.infer<typeof shapeSchema>;
 
 // Canvas
-export const frameSchema = z.object({
+export const canvasSchema = z.object({
     backgroundColor: z.string(),
     height: z.number().int(),
     shapes: z.array(shapeSchema),
     width: z.number().int(),
 });
-export type Frame = z.infer<typeof frameSchema>;
+export type CanvasSchema = z.infer<typeof canvasSchema>;
