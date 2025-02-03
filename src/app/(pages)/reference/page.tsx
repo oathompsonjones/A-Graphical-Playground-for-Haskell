@@ -1,7 +1,7 @@
 "use client";
 
-import { Box, Grid2, Icon, Typography } from "@mui/material";
-import { KeyboardCommandKey, KeyboardControlKey, KeyboardReturn } from "@mui/icons-material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Grid2, Icon, Typography } from "@mui/material";
+import { ExpandMore, KeyboardCommandKey, KeyboardControlKey, KeyboardReturn } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import type { Variant } from "@mui/material/styles/createTypography";
@@ -17,49 +17,42 @@ const list = (items: ReactNode[]): Awaited<ReactNode> => <ul>{items.map((item, i
 
 const docs: Record<string, Section> = {
     /* eslint-disable @typescript-eslint/naming-convention, sort-keys */
-    Notation: () => (
-        <div>
-            Please note that the following documentation makes use of Haskell type signatures to describe functions.
-            <br />
-            Haskell type signatures look like this: <code>identifier :: Type1 -&gt; Type2 -&gt; ... -&gt; TypeN</code>.
-            <br />
-            The <code>::</code> symbol is read as "has type", and the <code>-&gt;</code> symbol is read as "to".
-            <br />
-            The <code>identifier</code> is the name of the function, and the <code>TypeX</code> values are the types of
-            the arguments and the return value. The last <code>TypeN</code> is always the return value.
-            <br />
-            If an argument's type looks like this: <code>(Type1 -&gt; Type2)</code>, it means that that argument is a
-            function that takes a <code>Type1</code> and returns a <code>Type2</code>.
-            <br />
-            Infix operators in Haskell are defined the same way as functions, but with the operator name in parentheses.
-            <br />
-            <br />
-            <Typography variant="h4">Examples</Typography>
-            <code>add :: Int -&gt; Int -&gt; Int</code> — A function that takes two integers and returns an integer (
-            <code>add 6 7</code> = <code>13</code>).
-            <br />
-            <code>(+) :: Int -&gt; Int -&gt; Int</code> — The addition operator, which takes two integers and returns an
-                integer (<code>6 + 7</code> = <code>13</code>).
-            <br />
-            <br />
-            <code>map :: (a -&gt; b) -&gt; [a] -&gt; [b]</code> — A function that takes another function, which
-                converts from type <code>a</code> to type <code>b</code>, and a list of <code>a</code>s and returns a
-                list of <code>b</code>s, by applying the given function to each element of the list (<code>
-                map (add 5) [1, 2, 3, 4, 5]</code> = <code>[6, 7, 8, 9, 10]</code>).
-        </div>
-    ),
-    "Editor Controls": (metaKey: ReactNode) => (
-        <div>
-            <Grid2 container alignItems="center">
-                <Grid2 size={2}><Typography variant="h4">{metaKey}<KeyboardReturn /></Typography></Grid2>
-                <Grid2 size={10}>Run the code.</Grid2>
-                <Grid2 size={2}><Typography variant="h4">{metaKey}<Icon>S</Icon></Typography></Grid2>
-                <Grid2 size={10}>Save the code.</Grid2>
-                <Grid2 size={2}><Typography variant="h4">{metaKey}<Icon>/</Icon></Typography></Grid2>
-                <Grid2 size={10}>Comment/uncomment the line.</Grid2>
-            </Grid2>
-        </div>
-    ),
+    Notation: {
+        root: () => (
+            <div>
+                Please note that the following documentation makes use of Haskell type signatures to describe functions.
+                <br />
+                Haskell type signatures look like this: <code>identifier :: Type1 -&gt; Type2 -&gt; ... -&gt;
+                    TypeN</code>.
+                <br />
+                The <code>::</code> symbol is read as "has type", and the <code>-&gt;</code> symbol is read as "to".
+                <br />
+                The <code>identifier</code> is the name of the function, and the <code>TypeX</code> values are the types
+                    of the arguments and the return value. The last <code>TypeN</code> is always the return value.
+                <br />
+                If an argument's type looks like this: <code>(Type1 -&gt; Type2)</code>, it means that that argument is
+                    a function that takes a <code>Type1</code> and returns a <code>Type2</code>.
+                <br />
+                Infix operators in Haskell are defined the same way as functions, but with the operator name in
+                    parentheses.
+            </div>
+        ),
+        Examples: () => (
+            <div>
+                <code>add :: Int -&gt; Int -&gt; Int</code> — A function that takes two integers and returns an integer
+                    (<code>add 6 7</code> = <code>13</code>).
+                <br />
+                <code>(+) :: Int -&gt; Int -&gt; Int</code> — The addition operator, which takes two integers and
+                    returns an integer (<code>6 + 7</code> = <code>13</code>).
+                <br />
+                <br />
+                <code>map :: (a -&gt; b) -&gt; [a] -&gt; [b]</code> — A function that takes another function, which
+                converts from type <code>a</code> to type <code>b</code>, and a list of <code>a</code>s and returns
+                a list of <code>b</code>s, by applying the given function to each element of the list (<code> map
+                    (add 5) [1, 2, 3, 4, 5]</code> = <code>[6, 7, 8, 9, 10]</code>).
+            </div>
+        ),
+    },
     Canvas: () => (
         <div>
             The <code>Canvas</code> is the main component of the editor. It is a 2D drawing surface using uses a
@@ -495,14 +488,43 @@ const docs: Record<string, Section> = {
     /* eslint-enable @typescript-eslint/naming-convention */
 };
 
+const editorControls: Array<[ReactNode, ReactNode]> = [
+    [<KeyboardReturn />, "Run your sketch."],
+    [<Icon>S</Icon>, "Save your sketch."],
+    [<Icon>O</Icon>, "Open one of your saved sketches."],
+    [<Icon>N</Icon>, "Create a new sketch."],
+    [<Icon>/</Icon>, "Comment/uncomment the current line."],
+];
+
 const contents = (section: Record<string, Section>): Awaited<ReactNode> => list(
     Object.entries(section).filter(([title]) => title !== "root").map(([title, content], i) => (
-        <span key={i}>
-            <a href={`#${toId(title)}`}>{title}</a>
-            {typeof content === "object" && contents(content)}
-        </span>
+        typeof content === "object"
+            ? (
+                <Accordion key={i} className={styles.accordion!}>
+                    <AccordionSummary className={styles.summary!} expandIcon={<ExpandMore />}>
+                        <a href={`#${toId(title)}`}>{title}</a>
+                    </AccordionSummary>
+                    <AccordionDetails className={styles.details!}>
+                        {contents(content)}
+                    </AccordionDetails>
+                </Accordion>
+            )
+            : <p><a href={`#${toId(title)}`}>{title}</a></p>
     )),
 );
+
+const controls = (metaKey: ReactNode): Awaited<ReactNode> => (
+    <Grid2 container alignItems="center">
+        <Grid2 size={12} component={Typography} variant="h4">Editor Controls</Grid2>
+        {editorControls.map(([icon, text]) => (
+            <>
+                <Grid2 size={2} component={Typography} variant="h4">{metaKey}{icon}</Grid2>
+                <Grid2 size={10}>{text}</Grid2>
+            </>
+        ))}
+    </Grid2>
+);
+
 const section = (metaKey: ReactNode, title: string, content: Section, depth: number, i: number): Awaited<ReactNode> => (
     <div key={i} className={`${styles.wrapper} ${i % 2 === 0 && depth === 0 ? styles.colored : ""} edge wrapper`}>
         <br />
@@ -534,7 +556,10 @@ export default function Reference(): ReactNode {
     return (
         <>
             <Typography variant="h2">Reference</Typography>
-            {contents(docs)}
+            <Grid2 container alignItems="center" gap={5}>
+                <Grid2 size={4}>{contents(docs)}</Grid2>
+                <Grid2 size={4}>{controls(metaKey)}</Grid2>
+            </Grid2>
             {Object.entries(docs).map(([title, content], i) => section(metaKey, title, content, 0, i))}
         </>
     );
