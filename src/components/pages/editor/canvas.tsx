@@ -6,6 +6,7 @@ import { memo } from "react";
 import styles from "styles/components/pages/editor/canvas.module.css";
 
 // TODO: Add ability to set FPS.
+// TODO: Clear current animation when a new one starts.
 
 /**
  * This is the canvas which renders the output from the editor.
