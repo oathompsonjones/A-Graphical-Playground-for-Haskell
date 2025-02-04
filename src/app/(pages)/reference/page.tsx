@@ -1,21 +1,18 @@
-"use client";
-
-import { Accordion, AccordionDetails, AccordionSummary, Box, Grid2, Icon, Typography } from "@mui/material";
-import { ExpandMore, KeyboardCommandKey, KeyboardControlKey, KeyboardReturn } from "@mui/icons-material";
-import { useEffect, useState } from "react";
+import { Box, Grid2, Icon, Typography } from "@mui/material";
+import { Contents } from "components/pages/reference/contents";
+import { Controls } from "components/pages/reference/controls";
+import { KeyboardReturn } from "@mui/icons-material";
 import type { ReactNode } from "react";
-import type { Variant } from "@mui/material/styles/createTypography";
-import styles from "styles/pages/reference.module.css";
+import { Section } from "components/pages/reference/section";
 
-type Section = ((metaKey?: ReactNode) => ReactNode) | {
-    [key: string]: Section;
-    root?: (metaKey?: ReactNode) => ReactNode;
+export type SectionType = (() => ReactNode) | {
+    [key: string]: SectionType;
+    root?: () => ReactNode;
 };
 
-const toId = (title: string): string => title.toLowerCase().replace(/\s/g, "-");
 const list = (items: ReactNode[]): Awaited<ReactNode> => <ul>{items.map((item, i) => <li key={i}>{item}</li>)}</ul>;
 
-const docs: Record<string, Section> = {
+const docs: Record<string, SectionType> = {
     /* eslint-disable @typescript-eslint/naming-convention, sort-keys */
     Notation: {
         root: () => (
@@ -488,79 +485,31 @@ const docs: Record<string, Section> = {
     /* eslint-enable @typescript-eslint/naming-convention */
 };
 
-const editorControls: Array<[ReactNode, ReactNode]> = [
-    [<KeyboardReturn />, "Run your sketch."],
-    [<Icon>S</Icon>, "Save your sketch."],
-    [<Icon>O</Icon>, "Open one of your saved sketches."],
-    [<Icon>N</Icon>, "Create a new sketch."],
-    [<Icon>/</Icon>, "Comment/uncomment the current line."],
-];
-
-const contents = (section: Record<string, Section>): Awaited<ReactNode> => list(
-    Object.entries(section).filter(([title]) => title !== "root").map(([title, content], i) => (
-        typeof content === "object"
-            ? (
-                <Accordion key={i} className={styles.accordion!}>
-                    <AccordionSummary className={styles.summary!} expandIcon={<ExpandMore />}>
-                        <a href={`#${toId(title)}`}>{title}</a>
-                    </AccordionSummary>
-                    <AccordionDetails className={styles.details!}>
-                        {contents(content)}
-                    </AccordionDetails>
-                </Accordion>
-            )
-            : <p><a href={`#${toId(title)}`}>{title}</a></p>
-    )),
-);
-
-const controls = (metaKey: ReactNode): Awaited<ReactNode> => (
-    <Grid2 container alignItems="center">
-        <Grid2 size={12} component={Typography} variant="h4">Editor Controls</Grid2>
-        {editorControls.map(([icon, text]) => (
-            <>
-                <Grid2 size={2} component={Typography} variant="h4">{metaKey}{icon}</Grid2>
-                <Grid2 size={10}>{text}</Grid2>
-            </>
-        ))}
-    </Grid2>
-);
-
-const section = (metaKey: ReactNode, title: string, content: Section, depth: number, i: number): Awaited<ReactNode> => (
-    <div key={i} className={`${styles.wrapper} ${i % 2 === 0 && depth === 0 ? styles.colored : ""} edge wrapper`}>
-        <br />
-        {title !== "root" &&
-            <Typography variant={`h${depth + 3}` as Variant} id={toId(title)} className={styles.title!}>
-                {title}
-                <hr />
-            </Typography>
-        }
-        {content instanceof Function
-            ? content(metaKey)
-            : Object.entries(content)
-                .map(([subtitle, subcontent], j) => section(metaKey, subtitle, subcontent, depth + 1, j))}
-    </div>
-);
-
 /**
  * This is the reference page.
- * @returns The home reference.
+ * @returns The reference page.
  */
 export default function Reference(): ReactNode {
-    const [metaKey, setMetaKey] = useState(<KeyboardControlKey />);
-
-    useEffect(() => {
-        if (navigator.platform.includes("Mac"))
-            setMetaKey(<KeyboardCommandKey />);
-    }, []);
-
     return (
         <>
             <Typography variant="h2">Reference</Typography>
             <Grid2 container alignItems="center" gap={5}>
-                <Grid2 size={4}>{contents(docs)}</Grid2>
-                <Grid2 size={4}>{controls(metaKey)}</Grid2>
+                <Grid2 size={4}>
+                    <Contents docs={docs} />
+                </Grid2>
+                <Grid2 size={4}>
+                    <Controls controls={[
+                        [<KeyboardReturn />, "Run your sketch."],
+                        [<Icon>S</Icon>, "Save your sketch."],
+                        [<Icon>O</Icon>, "Open one of your saved sketches."],
+                        [<Icon>N</Icon>, "Create a new sketch."],
+                        [<Icon>/</Icon>, "Comment/uncomment the current line."],
+                    ]} />
+                </Grid2>
             </Grid2>
-            {Object.entries(docs).map(([title, content], i) => section(metaKey, title, content, 0, i))}
+            {Object.entries(docs).map(([title, content], i) => (
+                <Section title={title} content={content} depth={0} i={i} />
+            ))}
         </>
     );
 }

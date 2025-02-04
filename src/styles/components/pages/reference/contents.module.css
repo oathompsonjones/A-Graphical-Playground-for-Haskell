@@ -1,0 +1,13 @@
+.accordion {
+    background: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.accordion .summary {
+    padding: 0;
+}
+
+.accordion .details {
+    padding: 0;
+}
