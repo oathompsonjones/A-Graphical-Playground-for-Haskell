@@ -9,6 +9,8 @@ import type { Sketch } from "schemas/database";
 import { UserContext } from "contexts/user";
 import { logout } from "actions/auth/logout";
 
+// TODO: Add ability to change username, avatar, password, etc.
+
 /**
  * This is the account page.
  * @returns The page element.

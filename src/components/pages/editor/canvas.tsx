@@ -1,11 +1,11 @@
-"use client";
-
 import type { CanvasSchema, Shape } from "schemas/graphics";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import { canvasSchema } from "schemas/graphics";
 import { memo } from "react";
 import styles from "styles/components/pages/editor/canvas.module.css";
+
+// TODO: Add ability to set FPS.
 
 /**
  * This is the canvas which renders the output from the editor.

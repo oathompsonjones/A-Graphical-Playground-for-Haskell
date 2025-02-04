@@ -9,6 +9,8 @@ import styles from "styles/components/pages/editor/saveMenu.module.css";
 import { useContext } from "react";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
+// TODO: Make this look better and add ability to update currently saved sketch.
+
 /**
  * This is the share menu.
  * @param props - The properties of the component.

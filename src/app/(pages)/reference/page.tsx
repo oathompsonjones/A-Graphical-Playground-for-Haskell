@@ -5,6 +5,8 @@ import { KeyboardReturn } from "@mui/icons-material";
 import type { ReactNode } from "react";
 import { Section } from "components/pages/reference/section";
 
+// TODO: Add image examples for shapes and transformations.
+
 export type SectionType = (() => ReactNode) | {
     [key: string]: SectionType;
     root?: () => ReactNode;

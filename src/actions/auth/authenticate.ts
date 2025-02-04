@@ -7,6 +7,9 @@ import { authenticationSchema } from "schemas/forms";
 import { cookies } from "next/headers";
 import { getUserFromEmail } from "database/index";
 
+// TODO: Try to fix issue with cookies not always loading correctly.
+// TODO: Add ability to login with Google/Apple/GitHub/StackOverflow/etc.
+
 /**
  * Authenticate the user with the server.
  * @param formData - The form data to send.

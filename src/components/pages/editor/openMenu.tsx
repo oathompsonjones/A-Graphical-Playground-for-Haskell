@@ -9,6 +9,8 @@ import { getSketches } from "database/index";
 import styles from "styles/components/pages/editor/openMenu.module.css";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
+// TODO: Make this look better.
+
 /**
  * This is the share menu.
  * @param props - The properties of the component.

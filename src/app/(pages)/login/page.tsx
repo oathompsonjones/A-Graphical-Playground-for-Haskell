@@ -10,6 +10,8 @@ import { register } from "actions/auth/register";
 import styles from "styles/pages/logIn.module.css";
 import { useState } from "react";
 
+// TODO: Add ability to reset password via email.
+
 /**
  * Displays the sign-in page.
  * @param props - The component properties.

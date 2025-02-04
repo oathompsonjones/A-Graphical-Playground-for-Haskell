@@ -1,6 +1,8 @@
 import type { WithId } from "mongodb";
 import z from "zod";
 
+// TODO: Remove public/private distinction.
+
 // Sketchs
 export const sketchSchema = z.object({
     authorId: z.string(),

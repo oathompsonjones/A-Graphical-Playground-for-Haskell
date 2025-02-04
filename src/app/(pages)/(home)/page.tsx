@@ -8,6 +8,9 @@ import fractalTree from "assets/images/examples/fractalTree.png";
 import styles from "styles/pages/home.module.css";
 import unionFlag from "assets/images/examples/unionFlag.png";
 
+// TODO: Add more examples.
+// TODO: Add more information to the home page.
+
 const examples: Array<{ name: string; code: string; image: StaticImageData; }> = [
     {
         // eslint-disable-next-line max-len
