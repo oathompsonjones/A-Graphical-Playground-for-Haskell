@@ -497,7 +497,7 @@ export default function Reference(): ReactNode {
                 <Grid2 size={4}>
                     <Contents docs={docs} />
                 </Grid2>
-                <Grid2 size={4}>
+                <Grid2 size={7}>
                     <Controls controls={[
                         [<KeyboardReturn />, "Run your sketch."],
                         [<Icon>S</Icon>, "Save your sketch."],

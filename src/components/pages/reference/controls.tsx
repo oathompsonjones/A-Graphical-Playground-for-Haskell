@@ -20,14 +20,14 @@ export function Controls({ controls }: { controls: Array<[ReactNode, ReactNode]>
     }, []);
 
     return (
-        <Grid2 container alignItems="center">
-            <Grid2 size={12} component={Typography} variant="h4">Editor Controls</Grid2>
-            {controls.map(([icon, text]) => (
-                <>
+        <>
+            <Typography variant="h3">Editor Controls</Typography>
+            {controls.map(([icon, text], i) => (
+                <Grid2 size={12} alignItems="center" container key={i}>
                     <Grid2 size={2} component={Typography} variant="h4">{metaKey}{icon}</Grid2>
                     <Grid2 size={10}>{text}</Grid2>
-                </>
+                </Grid2>
             ))}
-        </Grid2>
+        </>
     );
 }
