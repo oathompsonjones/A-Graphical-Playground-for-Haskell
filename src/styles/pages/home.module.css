@@ -1,16 +1,26 @@
-.examples {
-    display: flex;
-    gap: 1rem;
+.title {
+    max-width: max-content;
+    max-height: min-content;
+    margin-inline: auto;
 }
 
-.example {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+.title img {
+    height: 100%;
 }
 
-.example img {
-    width: auto;
-    height: auto;
-    max-height: 200px;
+.title h3 {
+    float: right;
+    color: var(--mui-palette-secondary-main);
+}
+
+.title hr {
+    border: 2px solid var(--mui-palette-primary-main);
+}
+
+.section {
+    padding-block: 2rem;
+}
+
+.big {
+    background-color: var(--mui-palette-primary-main);
 }
