@@ -11,7 +11,9 @@ export function Footer(): ReactNode {
     return (
         <footer className={styles.footer}>
             <Stack direction="row" spacing={2} divider={<Typography>•</Typography>} justifyContent="center">
-                <Typography component={Link} href="https://oathompsonjones.github.io/Honours-Project">
+                <Typography
+                    component={Link}
+                    href="https://oathompsonjones.github.io/A-Graphical-Playground-for-Haskell">
                     Dissertation
                 </Typography>
                 <Typography component={Link} href="/privacy">
