@@ -13,6 +13,7 @@ import { ShareMenu } from "components/pages/editor/shareMenu";
 import { SplitView } from "components/pages/editor/splitView";
 import { UserContext } from "contexts/user";
 import { execute } from "actions/code/execute";
+import { redirect } from "next/navigation";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import { useMediaQuery } from "@mui/material";
@@ -50,6 +51,7 @@ export default function EditorPage(): ReactNode {
         resetTitle();
         resetCode();
         setAuthor(user?.username ?? user?.email.split("@")[0] ?? null);
+        redirect("/editor");
     };
     const open = (): void => setOpenOpen(true);
     const save = (): void => setOpenSave(true);
