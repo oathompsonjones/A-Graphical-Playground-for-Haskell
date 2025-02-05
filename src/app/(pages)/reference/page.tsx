@@ -62,7 +62,8 @@ const docs: Record<string, SectionType> = {
                 width and a height. Once you've created the canvas, you can set a background color using
                 the <code>background :: Color -&gt; Canvas -&gt; Canvas</code> function, providing a color, and the
                 canvas you created earlier. You can use the <code>fps :: Int -&gt; Canvas -&gt; Canvas</code> function
-                to set the frames per second of the animation.
+                to set the frames per second of the animation. By default, the canvas has a transparent background and
+                an fps of 24.
             <br />
             Having created the canvas, you can draw shapes on it using the <code>(&lt;&lt;&lt;) :: Canvas -&gt; Shape
                 -&gt; Canvas</code> operator. This operator adds a new frame to your animation. Chaining multiple shapes
@@ -187,6 +188,9 @@ const docs: Record<string, SectionType> = {
                 <div>
                     To modify a shape, you can use any of the functions in this section. They all take some argument,
                         the shape to be transformed, and return the transformed shape.
+                    <br />
+                    By default, shapes are drawn at the top left corner of the canvas, with no rotation or scaling, have
+                        a stroke color of black, a stroke weight of 1, and no fill color.
                 </div>
             ),
             fill: () => (
