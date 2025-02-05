@@ -1,12 +1,9 @@
 import type { CanvasSchema, Shape } from "schemas/graphics";
+import { ShapeType, canvasSchema, colours } from "schemas/graphics";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
-import { canvasSchema } from "schemas/graphics";
 import { memo } from "react";
 import styles from "styles/components/pages/editor/canvas.module.css";
-
-// TODO: Add ability to set FPS.
-// TODO: Clear current animation when a new one starts.
 
 /**
  * This is the canvas which renders the output from the editor.
@@ -15,62 +12,55 @@ import styles from "styles/components/pages/editor/canvas.module.css";
  * @returns The canvas element.
  */
 function CanvasComponent({ content }: { content: string[]; }): ReactNode {
+    const timeouts: NodeJS.Timeout[] = [];
+
+    const parseColour = (colour: number | string): string => {
+        switch (typeof colour) {
+            case "number": return colours[colour]!;
+            default: return colour;
+        }
+    };
+
     const renderFrame = (frame: Shape[], context: CanvasRenderingContext2D): void => {
         // Draw each shape.
         for (const shape of frame.flat()) {
             context.beginPath();
-            context.fillStyle = shape.fill;
-            context.strokeStyle = shape.stroke;
-            context.lineWidth = shape.strokeWeight;
+            context.fillStyle = parseColour(shape.f);
+            context.strokeStyle = parseColour(shape.s);
+            context.lineWidth = shape.sw;
 
-            switch (shape.type) {
-                case "line":
-                    context.moveTo(shape.position.x, shape.position.y);
-                    context.lineTo(
-                        shape.position.x + shape.length * Math.cos(shape.angle),
-                        shape.position.y + shape.length * Math.sin(shape.angle),
-                    );
+            switch (shape.t) {
+                case ShapeType.Line:
+                    context.moveTo(shape.p[0], shape.p[1]);
+                    context.lineTo(shape.p[0] + shape.l * Math.cos(shape.a), shape.p[1] + shape.l * Math.sin(shape.a));
                     break;
-                case "ellipse":
-                    context.ellipse(
-                        shape.position.x,
-                        shape.position.y,
-                        shape.horizontalAxis,
-                        shape.verticalAxis,
-                        shape.angle,
-                        0,
-                        2 * Math.PI,
-                    );
+                case ShapeType.Ellipse:
+                    context.ellipse(shape.p[0], shape.p[1], shape.h, shape.v, shape.a, 0, 2 * Math.PI);
                     break;
-                case "rect":
+                case ShapeType.Rect:
                     // Apply rotation about the position of the rectangle.
-                    context.translate(shape.position.x, shape.position.y);
-                    context.rotate(shape.angle);
-                    context.translate(-shape.position.x, -shape.position.y);
+                    context.translate(shape.p[0], shape.p[1]);
+                    context.rotate(shape.a);
+                    context.translate(-shape.p[0], -shape.p[1]);
 
                     // Draw the rectangle.
-                    context.rect(
-                        shape.position.x,
-                        shape.position.y,
-                        shape.width,
-                        shape.height,
-                    );
+                    context.rect(shape.p[0], shape.p[1], shape.w, shape.h);
                     break;
-                case "polygon":
-                    if (shape.points.length === 0)
+                case ShapeType.Polygon:
+                    if (shape.v.length === 0)
                         break;
 
                     // Apply rotation about the position of the polygon.
-                    context.translate(shape.position.x, shape.position.y);
-                    context.rotate(shape.angle);
-                    context.translate(-shape.position.x, -shape.position.y);
+                    context.translate(shape.p[0], shape.p[1]);
+                    context.rotate(shape.a);
+                    context.translate(-shape.p[0], -shape.p[1]);
 
                     // Draw the polygon.
                     context.beginPath();
-                    context.moveTo(shape.points[0]!.x + shape.position.x, shape.points[0]!.y + shape.position.y);
+                    context.moveTo(shape.v[0]![0] + shape.p[0], shape.v[0]![1] + shape.p[1]);
 
-                    for (const point of shape.points.slice(1))
-                        context.lineTo(point.x + shape.position.x, point.y + shape.position.y);
+                    for (const point of shape.v.slice(1))
+                        context.lineTo(point[0] + shape.p[0], point[0] + shape.p[1]);
 
                     context.closePath();
                     break;
@@ -85,7 +75,27 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
         }
     };
 
+    const renderAnimation = (animation: CanvasSchema, context: CanvasRenderingContext2D): void => {
+        for (let i = 0; i < animation.s.length; i++) {
+            timeouts.push(setTimeout(() => {
+                const frame = animation.s[i]!;
+
+                // Reset the background.
+                context.fillStyle = parseColour(animation.b);
+                context.fillRect(0, 0, animation.w, animation.h);
+
+                // Render the shapes.
+                renderFrame(frame instanceof Array ? frame : [frame], context);
+            }, i * 1000 / animation.f));
+        }
+
+        // Render another loop of the animaiton once it finishes.
+        timeouts.push(setTimeout(() => renderAnimation(animation, context), 1000 / animation.f * animation.s.length));
+    };
+
     const render = (canvas: HTMLCanvasElement | null): void => {
+        timeouts.forEach(clearTimeout);
+
         if (canvas === null)
             return;
 
@@ -112,28 +122,15 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
             }
 
             // Update the canvas size.
-            canvas.width = animation.width;
-            canvas.height = animation.height;
+            canvas.width = animation.w;
+            canvas.height = animation.h;
 
             // Set the background.
-            context.fillStyle = animation.backgroundColor;
-            context.fillRect(0, 0, animation.width, animation.height);
+            context.fillStyle = parseColour(animation.b);
+            context.fillRect(0, 0, animation.w, animation.h);
 
-            // Render the frame.
-            const fps = 2;
-
-            for (let j = 0; j < animation.shapes.length; j++) {
-                const shape = animation.shapes[j]!;
-
-                setTimeout(() => {
-                    // Reset the background.
-                    context.fillStyle = animation.backgroundColor;
-                    context.fillRect(0, 0, animation.width, animation.height);
-
-                    // Render the shapes.
-                    renderFrame(shape instanceof Array ? shape : [shape], context);
-                }, j * 1000 / fps);
-            }
+            // Render the animation.
+            renderAnimation(animation, context);
         }
     };
 

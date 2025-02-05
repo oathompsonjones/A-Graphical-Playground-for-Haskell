@@ -28,7 +28,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
         ].join(" && ");
 
         const timeout = 3_600_000;
-        const updateDelay = 10;
+        const updateDelay = 1;
         const stopDelay = 2_500;
 
         const stream = exec(`${dockerCmd} bash -c "${bashCmd}"`, { timeout });
@@ -47,12 +47,23 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
                 const updateQueue: string[] = [];
                 let timeOfLastNewData = Date.now();
 
-                limitTimer = setTimeout(() => {
-                    controller.enqueue(`INFO: Execution took longer than ${timeout}ms, listener killed.`);
-                    handleStreamEnd();
-                }, timeout);
+                limitTimer = setTimeout(timeoutStream, timeout);
 
-                updateInterval = setInterval(() => {
+                updateStream();
+                updateInterval = setInterval(updateStream, updateDelay);
+
+                if (stream.stdout === null || stream.stderr === null)
+                    throw new Error("Stream stdout or stderr is null");
+
+                stream.stdout.on("data", (data) => updateQueue.push(String(data)));
+                stream.stderr.on("data", (data) => updateQueue.push(String(data)));
+                stream.on("error", (error) => {
+                    controller.enqueue(error.message);
+                    handleStreamEnd();
+                });
+
+                /** Updates the stream with new data. */
+                function updateStream(): void {
                     const newData: string | undefined = updateQueue.shift();
 
                     if (newData === undefined) {
@@ -66,20 +77,13 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
 
                     timeOfLastNewData = Date.now();
                     controller.enqueue(newData);
+                }
 
-                    /* If (updateQueue.length === 0)
-                        handleStreamEnd(); */
-                }, updateDelay);
-
-                if (stream.stdout === null || stream.stderr === null)
-                    throw new Error("Stream stdout or stderr is null");
-
-                stream.stdout.on("data", (data) => updateQueue.push(String(data)));
-                stream.stderr.on("data", (data) => updateQueue.push(String(data)));
-                stream.on("error", (error) => {
-                    controller.enqueue(error.message);
+                /** Handles the timeout of the stream. */
+                function timeoutStream(): void {
+                    controller.enqueue(`INFO: Execution took longer than ${timeout}ms, listener killed.`);
                     handleStreamEnd();
-                });
+                }
 
                 /** Handles the end of the stream. */
                 function handleStreamEnd(): void {

@@ -1,5 +1,7 @@
 module Maths where
 
+import Internal (removeFloat)
+
 ----------------
 ---- Angles ----
 ----------------
@@ -20,7 +22,7 @@ data Vector = Vector Float Float deriving (Eq)
 -- Convert a vector to a JSON string
 instance Show Vector where
     show :: Vector -> String
-    show (Vector x y) = "{ \"x\": " ++ show x ++ ", \"y\": " ++ show y ++ " }"
+    show (Vector x y) = "[" ++ removeFloat x ++ "," ++ removeFloat y ++ "]"
 
 -- Vector maths
 (^+^) :: Vector -> Vector -> Vector

@@ -25,6 +25,7 @@ module Shape (
 
 import Color (Color (Black, Transparent))
 import Data.List (intercalate)
+import Internal (removeFloat)
 import Maths (Vector (..), (^+^))
 
 ----------------
@@ -43,72 +44,42 @@ data Shape
 -- Convert a shape to a JSON string
 instance Show Shape where
     show :: Shape -> String
-    show Empty = "{}"
-    show (Group ss) = "[" ++ (intercalate ", " [show s | s <- ss]) ++ "]"
-    show (Line len pos ang fc sc sw) =
-        "{ "
-            ++ "\"type\": \"line\", \"length\": "
-            ++ show len
-            ++ ", \"position\": "
-            ++ show pos
-            ++ ", \"angle\": "
-            ++ show ang
-            ++ ", \"fill\": "
-            ++ show fc
-            ++ ", \"stroke\": "
-            ++ show sc
-            ++ ", \"strokeWeight\": "
-            ++ show sw
-            ++ " }"
-    show (Ellipse hAx vAx pos ang fc sc sw) =
-        "{ "
-            ++ "\"type\": \"ellipse\", \"horizontalAxis\": "
-            ++ show hAx
-            ++ ", \"verticalAxis\": "
-            ++ show vAx
-            ++ ", \"position\": "
-            ++ show pos
-            ++ ", \"angle\": "
-            ++ show ang
-            ++ ", \"fill\": "
-            ++ show fc
-            ++ ", \"stroke\": "
-            ++ show sc
-            ++ ", \"strokeWeight\": "
-            ++ show sw
-            ++ " }"
-    show (Rect w h pos ang fc sc sw) =
-        "{ "
-            ++ "\"type\": \"rect\", \"width\": "
-            ++ show w
-            ++ ", \"height\": "
-            ++ show h
-            ++ ", \"position\": "
-            ++ show pos
-            ++ ", \"angle\": "
-            ++ show ang
-            ++ ", \"fill\": "
-            ++ show fc
-            ++ ", \"stroke\": "
-            ++ show sc
-            ++ ", \"strokeWeight\": "
-            ++ show sw
-            ++ " }"
-    show (Polygon pts pos ang fc sc sw) =
-        "{ "
-            ++ "\"type\": \"polygon\", \"points\": "
-            ++ show pts
-            ++ ", \"position\": "
-            ++ show pos
-            ++ ", \"angle\": "
-            ++ show ang
-            ++ ", \"fill\": "
-            ++ show fc
-            ++ ", \"stroke\": "
-            ++ show sc
-            ++ ", \"strokeWeight\": "
-            ++ show sw
-            ++ " }"
+    show Empty = ""
+    show (Group ss) = "[" ++ (intercalate "," [show s | s <- ss, not (isEmpty s)]) ++ "]"
+    show (Line len pos ang fc sc sw) = "{\"t\":0,\"l\":" ++ removeFloat len ++ jsonPos pos ++ jsonAng ang ++ jsonS sc ++ jsonSW sw ++ "}"
+    show (Ellipse hAx vAx pos ang fc sc sw) = "{\"t\":1,\"h\":" ++ removeFloat hAx ++ ",\"v\":" ++ removeFloat vAx ++ jsonPos pos ++ jsonAng ang ++ jsonFC fc ++ jsonS sc ++ jsonSW sw ++ "}"
+    show (Rect w h pos ang fc sc sw) = "{\"t\":2,\"w\":" ++ removeFloat w ++ ",\"h\":" ++ removeFloat h ++ jsonPos pos ++ jsonAng ang ++ jsonFC fc ++ jsonS sc ++ jsonSW sw ++ "}"
+    show (Polygon pts pos ang fc sc sw) = "{\"t\":3,\"v\":" ++ show pts ++ jsonPos pos ++ jsonAng ang ++ jsonFC fc ++ jsonS sc ++ jsonSW sw ++ "}"
+
+-- Helper functions for converting shapes to JSON
+isEmpty :: Shape -> Bool
+isEmpty Empty = True
+isEmpty _ = False
+
+jsonPos :: Vector -> String
+jsonPos (Vector x y)
+    | x == 0 && y == 0 = ""
+    | otherwise = ",\"p\":" ++ show (Vector x y)
+
+jsonAng :: Float -> String
+jsonAng a
+    | a == defAng = ""
+    | otherwise = ",\"a\":" ++ removeFloat a
+
+jsonFC :: Color -> String
+jsonFC c
+    | c == defFC = ""
+    | otherwise = ",\"f\":" ++ show c
+
+jsonS :: Color -> String
+jsonS c
+    | c == defSC = ""
+    | otherwise = ",\"s\":" ++ show c
+
+jsonSW :: Float -> String
+jsonSW w
+    | w == defSW = ""
+    | otherwise = ",\"sw\":" ++ removeFloat w
 
 -- Default arguments for shapes
 defFC :: Color
