@@ -84,7 +84,8 @@ export default function Home(): ReactNode {
                 <Typography variant="h6">
                     Check out the <Link href="/reference">reference page</Link> for more documentation.
                     If you have any other questions, or would like to report a bug, please visit
-                        the <Link href="https://github.com/oathompsonjones/Honours-Project">GitHub issue tracker</Link>.
+                        the <Link href="https://github.com/oathompsonjones/A-Graphical-Playground-for-Haskell/issues">
+                        GitHub issue tracker</Link>.
                 </Typography>
             </div>
         </>
