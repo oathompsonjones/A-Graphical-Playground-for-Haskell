@@ -1,10 +1,13 @@
 // @ts-check
+import { next } from "@million/lint";
+
 /** @type {import('next').NextConfig} */
-export default {
+export default next({ rsc: true })({
     compiler: {
         emotion: true,
         styledComponents: true,
     },
+    experimental: { reactCompiler: true },
     images: { remotePatterns: ["www.gravatar.com", "www.gchq.gov.uk"].map((hostname) => ({ hostname })) },
     // eslint-disable-next-line require-await
     async redirects() {
@@ -25,4 +28,4 @@ export default {
 
         return config;
     },
-};
+});

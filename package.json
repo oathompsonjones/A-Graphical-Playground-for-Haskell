@@ -16,28 +16,30 @@
     "devDependencies": {
         "@oathompsonjones/eslint-config": "^1.5.5",
         "@oathompsonjones/ts-config": "^0.0.35",
-        "@types/node": "^22.10.5",
-        "@types/react": "19.0.2",
-        "@types/react-dom": "19.0.2",
-        "typescript": "^5.7.2"
+        "@types/node": "^22.13.1",
+        "@types/react": "19.0.8",
+        "@types/react-dom": "19.0.3",
+        "typescript": "^5.7.3"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
-        "@mui/icons-material": "^6.3.1",
-        "@mui/lab": "6.0.0-beta.22",
-        "@mui/material": "^6.3.1",
+        "@million/lint": "^1.0.14",
+        "@mui/icons-material": "^6.4.3",
+        "@mui/lab": "6.0.0-beta.26",
+        "@mui/material": "^6.4.3",
         "@svgr/webpack": "^8.1.0",
         "@types/bcrypt": "^5.0.2",
+        "babel-plugin-react-compiler": "19.0.0-beta-714736e-20250131",
         "bcrypt": "^5.1.1",
         "highlight.js": "^11.11.1",
         "lz-string": "^1.5.0",
-        "mongodb": "^6.12.0",
-        "next": "15.1.3",
+        "mongodb": "^6.13.0",
+        "next": "15.1.6",
         "react": "19.0.0",
         "react-dom": "19.0.0",
         "sharp": "^0.33.5",
         "zod": "^3.24.1"
     },
-    "packageManager": "pnpm@9.9.0+sha512.60c18acd138bff695d339be6ad13f7e936eea6745660d4cc4a776d5247c540d0edee1a563695c183a66eb917ef88f2b4feb1fc25f32a7adcadc7aaf3438e99c1"
+    "packageManager": "pnpm@10.2.0+sha256.72f1630812107c8723eb5be4517725f3e13f09cfd8f71571cf29f23ce318bdb7"
 }
