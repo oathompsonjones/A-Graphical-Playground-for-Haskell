@@ -60,7 +60,7 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
                     context.moveTo(shape.v[0]![0] + shape.p[0], shape.v[0]![1] + shape.p[1]);
 
                     for (const point of shape.v.slice(1))
-                        context.lineTo(point[0] + shape.p[0], point[0] + shape.p[1]);
+                        context.lineTo(point[0] + shape.p[0], point[1] + shape.p[1]);
 
                     context.closePath();
                     break;
@@ -86,11 +86,15 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
 
                 // Render the shapes.
                 renderFrame(frame instanceof Array ? frame : [frame], context);
-            }, i * 1000 / animation.f));
+            }, animation.f === 0 ? 0 : i * 1000 / animation.f));
         }
 
         // Render another loop of the animaiton once it finishes.
-        timeouts.push(setTimeout(() => renderAnimation(animation, context), 1000 / animation.f * animation.s.length));
+        if (animation.s.length > 1) {
+            timeouts.push(setTimeout(() => {
+                renderAnimation(animation, context);
+            }, 1000 / animation.f * animation.s.length));
+        }
     };
 
     const render = (canvas: HTMLCanvasElement | null): void => {
