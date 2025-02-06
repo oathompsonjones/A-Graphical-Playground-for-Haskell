@@ -515,7 +515,7 @@ export default function Reference(): ReactNode {
                 </Grid2>
             </Grid2>
             {Object.entries(docs).map(([title, content], i) => (
-                <Section title={title} content={content} depth={0} i={i} />
+                <Section title={title} content={content} depth={0} colored={i % 2 === 0} key={i} />
             ))}
         </>
     );

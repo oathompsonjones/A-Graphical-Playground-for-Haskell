@@ -10,17 +10,17 @@ import styles from "styles/components/pages/reference/section.module.css";
  * @param props.title - The heading of the section.
  * @param props.content - The documentation of the section.
  * @param props.depth - The recursion depth of the section.
- * @param props.i - The index of the section.
+ * @param props.colored - Whether the section should be colored.
  * @returns A section of the reference page.
  */
-export function Section({ title, content, depth, i }: {
+export function Section({ title, content, depth, colored }: {
     title: string;
     content: SectionType;
     depth: number;
-    i: number;
+    colored: boolean;
 }): ReactNode {
     return (
-        <div key={i} className={`${styles.wrapper} ${i % 2 === 0 && depth === 0 ? styles.colored : ""} edge wrapper`}>
+        <div className={`${styles.wrapper} ${colored && depth === 0 ? styles.colored : ""} edge wrapper`}>
             <br />
             {title !== "root" &&
                 <Typography
@@ -32,8 +32,8 @@ export function Section({ title, content, depth, i }: {
             {content instanceof Function
                 ? content()
                 : Object.entries(content)
-                    .map(([subtitle, subcontent], j) => (
-                        <Section title={subtitle} content={subcontent} depth={depth + 1} i={j} />
+                    .map(([subtitle, subcontent], i) => (
+                        <Section title={subtitle} content={subcontent} depth={depth + 1} colored={colored} key={i} />
                     ))}
         </div>
     );
