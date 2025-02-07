@@ -94,9 +94,15 @@ export default function EditorPage(): ReactNode {
     // This can't be done as an early return because React complains about rendering different numbers of hooks.
     if (useMediaQuery("(orientation: portrait)")) {
         return (
-            <Typography variant="h4" className={styles.unavailable!}>
-                The editor is not available in portrait.
-            </Typography>
+            <div className={styles.unavailable}>
+                <Typography component="div" variant="h4">
+                    The editor is not available in portrait.
+                </Typography>
+                <Typography>
+                    Please put your device in landscape.
+                    It's recommended to use a desktop or laptop for the best experience.
+                </Typography>
+            </div>
         );
     }
 

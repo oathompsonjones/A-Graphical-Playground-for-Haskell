@@ -14,6 +14,7 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
     const theme = responsiveFontSizes(
         createTheme({
             components: {
+                MuiAccordion: { styleOverrides: { root: { background: "none", boxShadow: "none" } } },
                 MuiButton: { styleOverrides: { root: { borderRadius: "999px", textTransform: "none" } } },
                 MuiContainer: { styleOverrides: { root: { padding: "0" } } },
                 MuiDivider: { styleOverrides: { root: { margin: "1.25% 0" } } },
