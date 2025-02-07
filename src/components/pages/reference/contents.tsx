@@ -1,5 +1,6 @@
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
+import Link from "next/link";
 import type { ReactNode } from "react";
 import type { SectionType } from "app/(pages)/reference/page";
 import styles from "styles/components/pages/reference/contents.module.css";
@@ -16,22 +17,20 @@ export function Contents({ docs }: { docs: SectionType; }): ReactNode {
             {(Object.entries(docs) as Array<[string, SectionType]>).filter(([title]) => title !== "root")
                 .map(([title, content], i) => (
                     <li key={i}>
-                        {typeof content === "object"
-                            ? (
-                                <Accordion className={styles.accordion!}>
-                                    <AccordionSummary className={styles.summary!} expandIcon={<ExpandMore />}>
-                                        <a href={`#${title.toLowerCase().replace(/\s/g, "-")}`}>{title}</a>
-                                    </AccordionSummary>
-                                    <AccordionDetails className={styles.details!}>
-                                        <Contents docs={content} />
-                                    </AccordionDetails>
-                                </Accordion>
-                            )
-                            : (
-                                <p>
-                                    <a href={`#${title.toLowerCase().replace(/\s/g, "-")}`}>{title}</a>
-                                </p>
+                        <Accordion className={styles.accordion!} disableGutters>
+                            <AccordionSummary
+                                className={styles.summary!}
+                                expandIcon={typeof content === "object" && <ExpandMore />}>
+                                <Typography>
+                                    <Link href={`#${title.toLowerCase().replace(/\s/g, "-")}`}>{title}</Link>
+                                </Typography>
+                            </AccordionSummary>
+                            {typeof content === "object" && (
+                                <AccordionDetails className={styles.details!}>
+                                    <Contents docs={content} />
+                                </AccordionDetails>
                             )}
+                        </Accordion>
                     </li>
                 ))}
         </ul>

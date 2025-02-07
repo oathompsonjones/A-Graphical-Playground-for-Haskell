@@ -1,4 +1,4 @@
-import { Box, Grid2, Icon, Typography } from "@mui/material";
+import { Box, Icon, Stack, Typography } from "@mui/material";
 import { Contents } from "components/pages/reference/contents";
 import { Controls } from "components/pages/reference/controls";
 import { KeyboardReturn } from "@mui/icons-material";
@@ -483,8 +483,7 @@ const docs: Record<string, SectionType> = {
                     <><code>infixl 9 &gt;&gt;&gt;</code></>,
                 ])}
                 This means that the expressions such as <code>
-                    render $ createCanvas 500 500 &lt;&lt;&lt;
-                    circle 100 &gt;&gt;&gt; translate (Vector 250 250) &amp;
+                    render $ createCanvas 500 500 &lt;&lt;&lt; circle 100 &gt;&gt;&gt; translate (Vector 250 250) &amp;
                     square 200 &gt;&gt;&gt; translate (Vector 250 250)</code> do not require parentheses.
             </div>
         ),
@@ -500,20 +499,16 @@ export default function Reference(): ReactNode {
     return (
         <>
             <Typography variant="h2">Reference</Typography>
-            <Grid2 container alignItems="center" gap={5}>
-                <Grid2 size={4}>
-                    <Contents docs={docs} />
-                </Grid2>
-                <Grid2 size={7}>
-                    <Controls controls={[
-                        [<KeyboardReturn />, "Run your sketch."],
-                        [<Icon>S</Icon>, "Save your sketch."],
-                        [<Icon>O</Icon>, "Open one of your saved sketches."],
-                        [<Icon>N</Icon>, "Create a new sketch."],
-                        [<Icon>/</Icon>, "Comment/uncomment the current line."],
-                    ]} />
-                </Grid2>
-            </Grid2>
+            <Stack direction={{ md: "row" }} alignItems="top" gap={5}>
+                <Contents docs={docs} />
+                <Controls controls={[
+                    [<KeyboardReturn />, "Run your sketch."],
+                    [<Icon>S</Icon>, "Save your sketch."],
+                    [<Icon>O</Icon>, "Open one of your saved sketches."],
+                    [<Icon>N</Icon>, "Create a new sketch."],
+                    [<Icon>/</Icon>, "Comment/uncomment the current line."],
+                ]} />
+            </Stack>
             {Object.entries(docs).map(([title, content], i) => (
                 <Section title={title} content={content} depth={0} colored={i % 2 === 0} key={i} />
             ))}

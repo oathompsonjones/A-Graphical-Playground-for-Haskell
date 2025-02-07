@@ -1,5 +1,6 @@
 "use client";
 
+import { Typography, useMediaQuery } from "@mui/material";
 import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
 import { useContext, useEffect, useState } from "react";
 import { Buttons } from "components/pages/editor/buttons";
@@ -16,7 +17,6 @@ import { execute } from "actions/code/execute";
 import { redirect } from "next/navigation";
 import styles from "styles/pages/editor.module.css";
 import { useLocalStorage } from "hooks/useLocalStorage";
-import { useMediaQuery } from "@mui/material";
 import { useStreamAction } from "hooks/useStreamAction";
 
 /**
@@ -25,7 +25,6 @@ import { useStreamAction } from "hooks/useStreamAction";
  */
 export default function EditorPage(): ReactNode {
     const { user } = useContext(UserContext);
-    const isPortrait = useMediaQuery("(orientation: portrait)");
     const [openShare, setOpenShare] = useState(false);
     const [openOpen, setOpenOpen] = useState(false);
     const [openSave, setOpenSave] = useState(false);
@@ -39,7 +38,7 @@ export default function EditorPage(): ReactNode {
         "",
     ].join("\n")));
     const updateCode = (rawCode: string): void => setCode(compressToEncodedURIComponent(rawCode));
-    const [author, setAuthor] = useState<string | null>(user === null
+    const [author, setAuthor] = useLocalStorage<string | null>("author", user === null
         ? null
         : user.username ?? user.email.split("@")[0]!);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
@@ -92,6 +91,15 @@ export default function EditorPage(): ReactNode {
             setAuthor(authorParam);
     }, []);
 
+    // This can't be done as an early return because React complains about rendering different numbers of hooks.
+    if (useMediaQuery("(orientation: portrait)")) {
+        return (
+            <Typography variant="h4" className={styles.unavailable!}>
+                The editor is not available in portrait.
+            </Typography>
+        );
+    }
+
     return (
         <div className={`full-width ${styles.container}`}>
             <ShareMenu open={openShare} setOpen={setOpenShare} code={code} title={title} author={author} />
@@ -101,7 +109,7 @@ export default function EditorPage(): ReactNode {
                 new={new_} clear={clear} open={open} save={save} share={share} stop={stop} run={run}
                 loggedIn={user !== null} author={author} title={title}
             />
-            <SplitView vertical={isPortrait} id="editor-horizontal">
+            <SplitView id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
                     <Editor
                         code={decompressFromEncodedURIComponent(code)} updateCode={updateCode}

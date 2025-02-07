@@ -20,7 +20,7 @@ export function Controls({ controls }: { controls: Array<[ReactNode, ReactNode]>
     }, []);
 
     return (
-        <>
+        <div>
             <Typography variant="h3">Editor Controls</Typography>
             {controls.map(([icon, text], i) => (
                 <Grid2 size={12} alignItems="center" container key={i}>
@@ -28,6 +28,6 @@ export function Controls({ controls }: { controls: Array<[ReactNode, ReactNode]>
                     <Grid2 size={10}>{text}</Grid2>
                 </Grid2>
             ))}
-        </>
+        </div>
     );
 }

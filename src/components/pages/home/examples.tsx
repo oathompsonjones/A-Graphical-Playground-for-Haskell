@@ -1,4 +1,4 @@
-import { Card, CardActionArea, CardMedia } from "@mui/material";
+import { Card, CardActionArea, CardMedia, Typography } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -25,7 +25,7 @@ export function Examples({ examples }: {
                             <CardMedia>
                                 <Image src={image} alt={name} width={1000} height={600} />
                             </CardMedia>
-                            {name}
+                            <Typography component="p">{name}</Typography>
                         </CardActionArea>
                     </Card>
                 ))}

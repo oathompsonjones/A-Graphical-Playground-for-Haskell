@@ -1,6 +1,6 @@
 "use client";
 
-import { AppBar, Avatar, MenuItem, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, MenuItem, Toolbar, Typography, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -15,23 +15,27 @@ import { useContext } from "react";
  */
 export function Header(): ReactNode {
     const { user } = useContext(UserContext);
+    const edge = useMediaQuery((theme) => theme.breakpoints.down("md"));
+
+    let signInText = user?.username ?? user?.email.split("@")[0] ?? "Sign In";
+
+    if (edge && signInText.length > 10)
+        signInText = `${signInText.slice(0, 8)}...`;
 
     return (
         <AppBar component="header" className={styles.header!}>
-            <Toolbar component="nav" className={`${styles.nav!} full-width`}>
-                <Image src={logo} alt="Haskell Logo" style={{ height: "3rem", width: "auto" }} />
-                <Typography variant="h5" sx={{ display: { md: "block", xs: "none" } }}>
-                    A Graphical Playground for Haskell
-                </Typography>
-                <MenuItem component={Link} href="/">Home</MenuItem>
-                <MenuItem component={Link} href="/editor">Editor</MenuItem>
-                <MenuItem component={Link} href="/reference">Reference</MenuItem>
-                <div style={{ flexGrow: 1 }} />
-                <MenuItem component={Link} href="/account" sx={{ gap: "1rem" }}>
-                    <Typography>
-                        {user?.username ?? user?.email.split("@")[0] ?? "Sign In"}
-                    </Typography>
-                    <Avatar src={user?.avatar ?? ""} />
+            <Toolbar component="nav" className={`${styles.nav} ${edge ? "edge" : "full-width"}`}>
+                <div className={styles.title}>
+                    <Image src={logo} alt="Haskell Logo" />
+                    <Typography variant="h5" component="h5">A Graphical Playground for Haskell</Typography>
+                </div>
+                <MenuItem className={styles.menuItem!} component={Link} href="/">Home</MenuItem>
+                <MenuItem className={styles.menuItem!} component={Link} href="/editor">Editor</MenuItem>
+                <MenuItem className={styles.menuItem!} component={Link} href="/reference">Reference</MenuItem>
+                <div className={styles.spacer} />
+                <MenuItem className={styles.account!} component={Link} href="/account">
+                    {signInText}
+                    <Avatar src={user?.avatar ?? ""} className={styles.avatar!} />
                 </MenuItem>
             </Toolbar>
         </AppBar>

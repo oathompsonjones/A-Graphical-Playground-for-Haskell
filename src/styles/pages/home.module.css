@@ -2,6 +2,8 @@
     max-width: max-content;
     max-height: min-content;
     margin-inline: auto;
+    align-items: center;
+    text-align: center;
 }
 
 .title img {
@@ -23,4 +25,28 @@
 
 .big {
     background-color: var(--mui-palette-primary-main);
+}
+
+@media (max-width: 600px) {
+    .title {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .title h3 {
+        float: none;
+        color: var(--mui-palette-secondary-main);
+    }
+
+    .title hr {
+        border: 2px solid var(--mui-palette-primary-main);
+    }
+
+    .section {
+        padding-block: 1rem;
+    }
+
+    .big {
+        background-color: var(--mui-palette-primary-main);
+    }
 }

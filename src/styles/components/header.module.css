@@ -8,5 +8,48 @@
 
 .nav {
     align-items: center;
+    justify-content: center;
     gap: 2rem;
+}
+
+.title {
+    display: flex;
+    gap: 1rem;
+    align-items: inherit;
+    min-width: max-content;
+}
+
+.title img {
+    height: 3rem;
+    width: auto;
+}
+
+.spacer {
+    flex-grow: 1;
+}
+
+.account {
+    gap: 1rem;
+}
+
+@media (max-width: 1200px) {
+    .title {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav {
+        gap: 0;
+    }
+
+    .menuItem,
+    .account {
+        padding: 0.5rem;
+    }
+
+    .avatar,
+    .spacer {
+        display: none;
+    }
 }

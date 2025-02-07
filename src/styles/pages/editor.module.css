@@ -4,3 +4,8 @@
     flex-direction: column;
     overflow: clip;
 }
+
+.unavailable {
+    text-align: center;
+    margin: auto;
+}

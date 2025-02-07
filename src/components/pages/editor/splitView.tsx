@@ -1,6 +1,6 @@
 "use client";
 
-import type { MouseEvent, ReactElement, ReactNode } from "react";
+import type { MouseEvent, ReactElement, ReactNode, TouchEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { DragHandleRounded } from "@mui/icons-material";
 import styles from "styles/components/pages/editor/splitView.module.css";
@@ -42,18 +42,23 @@ export function SplitView({ children, id, vertical }: {
         }
     };
 
-    const handleDrag = (event: MouseEvent<HTMLDivElement>): void => {
+    const enableDrag = (): void => setCanDrag(true);
+    const disableDrag = (): void => setCanDrag(false);
+
+    const handleDrag = (event: MouseEvent<HTMLDivElement> | TouchEvent<HTMLDivElement>): void => {
         if (!canDrag)
             return;
 
         const rect = container.current.getBoundingClientRect();
+        const clientX = "touches" in event ? event.touches[0]!.clientX : event.clientX;
+        const clientY = "touches" in event ? event.touches[0]!.clientY : event.clientY;
 
         switch (orientation) {
             case "horizontal":
-                setSize((event.clientX - rect.left) / rect.width);
+                setSize((clientX - rect.left) / rect.width);
                 break;
             case "vertical":
-                setSize((event.clientY - rect.top) / rect.height);
+                setSize((clientY - rect.top) / rect.height);
                 break;
         }
     };
@@ -65,11 +70,17 @@ export function SplitView({ children, id, vertical }: {
             className={`${styles.container} ${styles[orientation]}`}
             ref={container}
             onMouseMove={handleDrag}
-            onMouseLeave={() => setCanDrag(false)}
-            onMouseUp={() => setCanDrag(false)}
+            onMouseLeave={disableDrag}
+            onMouseUp={disableDrag}
         >
             {children[0]}
-            <div className={styles.splitter} onMouseDown={() => setCanDrag(true)}>
+            <div
+                className={styles.splitter}
+                onMouseDown={enableDrag}
+                onTouchStart={enableDrag}
+                onTouchEnd={disableDrag}
+                onTouchMove={handleDrag}
+            >
                 <DragHandleRounded className={styles.dragIcon!} />
             </div>
             {children[1]}

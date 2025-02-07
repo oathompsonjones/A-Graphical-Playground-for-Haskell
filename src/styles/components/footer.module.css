@@ -2,3 +2,9 @@
     text-align: center;
     padding-block: 0.5rem;
 }
+
+@media (max-width: 600px) {
+    .divider {
+        display: none;
+    }
+}
