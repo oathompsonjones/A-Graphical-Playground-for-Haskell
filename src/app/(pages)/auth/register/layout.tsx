@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
-export const metadata: Metadata = { title: "A Graphical Playground for Haskell | Login" };
+export const metadata: Metadata = { title: "A Graphical Playground for Haskell | Register" };
 
 /**
  * Sets the title of the page.

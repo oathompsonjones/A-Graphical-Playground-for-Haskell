@@ -11,9 +11,8 @@ export function middleware(request: NextRequest): NextResponse {
 
     switch (true) {
         case user === undefined && request.nextUrl.pathname.startsWith("/account"):
-            return NextResponse.redirect(new URL("/login", request.nextUrl));
-        case user !== undefined && request.nextUrl.pathname.startsWith("/login"):
-        case user !== undefined && request.nextUrl.pathname.startsWith("/register"):
+            return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
+        case user !== undefined && request.nextUrl.pathname.startsWith("/auth"):
             return NextResponse.redirect(new URL("/account", request.nextUrl));
         default:
             return NextResponse.next();

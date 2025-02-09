@@ -1,6 +1,6 @@
 "use server";
 
-import { RedirectType, redirect } from "next/navigation";
+import type { AuthResponse } from "./authenticate";
 import type { User } from "schemas/database";
 import { cookies } from "next/headers";
 import { createUser } from "database/index";
@@ -9,26 +9,31 @@ import { registrationSchema } from "schemas/forms";
 
 /**
  * Register the user with the server.
+ * @param _state - The previous state.
  * @param formData - The form data to send.
+ * @returns Whether the user was registered.
  */
-export async function register(formData: FormData): Promise<void> {
+export async function register(_state: AuthResponse, formData: FormData): Promise<AuthResponse> {
     try {
-        const parsedData = registrationSchema.parse({
+        const { email, password, confirmPassword } = registrationSchema.parse({
             confirmPassword: formData.get("confirmPassword"),
             email: formData.get("email"),
             password: formData.get("password"),
         });
 
-        if (parsedData.password !== parsedData.confirmPassword)
+        if (password !== confirmPassword)
             throw new Error("Passwords do not match.");
 
-        const passwordHash = await hash(parsedData.password, 11);
-        const user = JSON.parse(await createUser(parsedData.email, passwordHash)) as User;
+        const passwordHash = await hash(password, 11);
+        const user = JSON.parse(await createUser(email, passwordHash)) as User;
 
         (await cookies()).set("user", user._id.toString());
     } catch (err) {
-        throw new Error(`register-${err instanceof Error ? err.message : String(err)}`);
-    } finally {
-        redirect("/account", RedirectType.replace);
+        return {
+            error: err instanceof Error ? err.message : String(err),
+            success: false,
+        };
     }
+
+    return { success: true };
 }

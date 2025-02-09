@@ -2,7 +2,8 @@
 
 import { Button, FormControl, Typography } from "@mui/material";
 import { deleteSketch, getSketches } from "database/index";
-import { useContext, useEffect, useState } from "react";
+import { useActionState, useContext, useEffect, useState } from "react";
+import type { AuthResponse } from "actions/auth/authenticate";
 import Image from "next/image";
 import type { ReactNode } from "react";
 import type { Sketch } from "schemas/database";
@@ -16,6 +17,10 @@ import { logout } from "actions/auth/logout";
  * @returns The page element.
  */
 export default function Account(): ReactNode {
+    const [state, action, isPending] = useActionState<AuthResponse, FormData>(logout, {
+        error: null,
+        success: false,
+    });
     const { user } = useContext(UserContext);
     const [sketches, setSketches] = useState<Sketch[] | null>(null);
 
@@ -34,6 +39,11 @@ export default function Account(): ReactNode {
     };
 
     useEffect(fetchSketches, []);
+
+    useEffect(() => {
+        if (state.success)
+            window.location.href = `${window.location.origin}/auth/login`;
+    }, [state.success]);
 
     return user && (
         <div>
@@ -69,8 +79,8 @@ export default function Account(): ReactNode {
                     ))}
                 </ul>
             </div>
-            <FormControl component="form" action={logout}>
-                <Button type="submit">Sign Out</Button>
+            <FormControl component="form" action={action}>
+                <Button type="submit" disabled={isPending}>Sign Out</Button>
             </FormControl>
         </div>
     );
