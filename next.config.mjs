@@ -7,7 +7,6 @@ export default next({ rsc: true })({
         emotion: true,
         styledComponents: true,
     },
-    experimental: { reactCompiler: true },
     images: { remotePatterns: ["www.gravatar.com", "www.gchq.gov.uk"].map((hostname) => ({ hostname })) },
     // eslint-disable-next-line require-await
     async redirects() {
