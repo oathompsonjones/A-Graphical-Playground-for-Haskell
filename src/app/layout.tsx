@@ -59,7 +59,7 @@ export const viewport: Viewport = {
  */
 export default function Layout({ children }: { children: ReactNode; }): ReactNode {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body>
                 <noscript>You need to enable JavaScript to run this app.</noscript>
                 <Providers>
