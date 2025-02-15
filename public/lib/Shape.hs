@@ -8,6 +8,8 @@ module Shape (
     rect,
     square,
     polygon,
+    bezier2,
+    bezier3,
     (>>>),
     identityTransformation,
     translate,
@@ -32,24 +34,50 @@ import Maths (Vector (..), (^+^))
 ---- Shapes ----
 ----------------
 
--- Data structure to represent shapes
+-- Data structures to represent shapes
+data ShapeOptions = ShapeOptions
+    { _position :: Vector
+    , _angle :: Float
+    , _fill :: Color
+    , _stroke :: Color
+    , _strokeWeight :: Float
+    }
 data Shape
     = Empty
     | Group [Shape]
-    | Line {len :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
-    | Ellipse {hAx :: Float, vAx :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
-    | Rect {w :: Float, h :: Float, pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
-    | Polygon {pts :: [Vector], pos :: Vector, ang :: Float, fc :: Color, sc :: Color, sw :: Float}
+    | Line
+        { _length :: Float
+        , _options :: ShapeOptions
+        }
+    | Ellipse
+        { _horizontalAxis :: Float
+        , _verticalAxis :: Float
+        , _options :: ShapeOptions
+        }
+    | Rect
+        { _width :: Float
+        , _height :: Float
+        , _options :: ShapeOptions
+        }
+    | Polygon
+        { _points :: [Vector]
+        , _options :: ShapeOptions
+        }
+    | Curve
+        { _points :: [Vector]
+        , _options :: ShapeOptions
+        }
 
 -- Convert a shape to a JSON string
 instance Show Shape where
     show :: Shape -> String
     show Empty = ""
-    show (Group ss) = "[" ++ (intercalate "," [show s | s <- ss, not (isEmpty s)]) ++ "]"
-    show (Line len pos ang fc sc sw) = "{\"t\":0,\"l\":" ++ removeFloat len ++ jsonPos pos ++ jsonAng ang ++ jsonS sc ++ jsonSW sw ++ "}"
-    show (Ellipse hAx vAx pos ang fc sc sw) = "{\"t\":1,\"h\":" ++ removeFloat hAx ++ ",\"v\":" ++ removeFloat vAx ++ jsonPos pos ++ jsonAng ang ++ jsonFC fc ++ jsonS sc ++ jsonSW sw ++ "}"
-    show (Rect w h pos ang fc sc sw) = "{\"t\":2,\"w\":" ++ removeFloat w ++ ",\"h\":" ++ removeFloat h ++ jsonPos pos ++ jsonAng ang ++ jsonFC fc ++ jsonS sc ++ jsonSW sw ++ "}"
-    show (Polygon pts pos ang fc sc sw) = "{\"t\":3,\"v\":" ++ show pts ++ jsonPos pos ++ jsonAng ang ++ jsonFC fc ++ jsonS sc ++ jsonSW sw ++ "}"
+    show (Group shapes) = "[" ++ (intercalate "," [show shape | shape <- shapes, not (isEmpty shape)]) ++ "]"
+    show (Line length options) = "{\"t\":0,\"l\":" ++ removeFloat length ++ jsonOptionsNoFill options ++ "}"
+    show (Ellipse horizontalAxis verticalAxis options) = "{\"t\":1,\"h\":" ++ removeFloat horizontalAxis ++ ",\"v\":" ++ removeFloat verticalAxis ++ jsonOptions options ++ "}"
+    show (Rect width height options) = "{\"t\":2,\"w\":" ++ removeFloat width ++ ",\"h\":" ++ removeFloat height ++ jsonOptions options ++ "}"
+    show (Polygon points options) = "{\"t\":3,\"v\":" ++ show points ++ jsonOptions options ++ "}"
+    show (Curve points options) = "{\"t\":4,\"v\":" ++ show points ++ jsonOptions options ++ "}"
 
 -- Helper functions for converting shapes to JSON
 isEmpty :: Shape -> Bool
@@ -63,48 +91,57 @@ jsonPos (Vector x y)
 
 jsonAng :: Float -> String
 jsonAng a
-    | a == defAng = ""
+    | a == defaultAngle = ""
     | otherwise = ",\"a\":" ++ removeFloat a
 
 jsonFC :: Color -> String
 jsonFC c
-    | c == defFC = ""
+    | c == defaultFill = ""
     | otherwise = ",\"f\":" ++ show c
 
 jsonS :: Color -> String
 jsonS c
-    | c == defSC = ""
+    | c == defaultStroke = ""
     | otherwise = ",\"s\":" ++ show c
 
 jsonSW :: Float -> String
 jsonSW w
-    | w == defSW = ""
+    | w == defaultStrokeWeight = ""
     | otherwise = ",\"sw\":" ++ removeFloat w
 
+jsonOptionsNoFill :: ShapeOptions -> String
+jsonOptionsNoFill (ShapeOptions pos ang fc sc sw) = jsonPos pos ++ jsonAng ang ++ jsonS sc ++ jsonSW sw
+
+jsonOptions :: ShapeOptions -> String
+jsonOptions (ShapeOptions pos ang fc sc sw) = jsonPos pos ++ jsonAng ang ++ jsonFC fc ++ jsonS sc ++ jsonSW sw
+
 -- Default arguments for shapes
-defFC :: Color
-defFC = Transparent
+defaultFill :: Color
+defaultFill = Transparent
 
-defSC :: Color
-defSC = Black
+defaultStroke :: Color
+defaultStroke = Black
 
-defSW :: Float
-defSW = 1
+defaultStrokeWeight :: Float
+defaultStrokeWeight = 1
 
-defPos :: Vector
-defPos = Vector 0 0
+defaultPosition :: Vector
+defaultPosition = Vector 0 0
 
-defAng :: Float
-defAng = 0
+defaultAngle :: Float
+defaultAngle = 0
+
+defaultOptions :: ShapeOptions
+defaultOptions = ShapeOptions defaultPosition defaultAngle defaultFill defaultStroke defaultStrokeWeight
 
 -- Combine two shapes into a group
 (&) :: Shape -> Shape -> Shape
-(&) Empty r = r
-(&) l Empty = l
-(&) (Group l) (Group r) = Group (l ++ r)
-(&) (Group l) r = Group (l ++ [r])
-(&) l (Group r) = Group (l : r)
-(&) l r = Group [l, r]
+(&) Empty right = right
+(&) left Empty = left
+(&) (Group left) (Group right) = Group (left ++ right)
+(&) (Group left) right = Group (left ++ [right])
+(&) left (Group right) = Group (left : right)
+(&) left right = Group [left, right]
 
 -- Identity shape
 emptyShape :: Shape
@@ -112,22 +149,28 @@ emptyShape = Empty
 
 -- Functions to create shapes
 line :: Float -> Shape
-line l = Line l defPos defAng defFC defSC defSW
+line length = Line length defaultOptions
 
 ellipse :: Float -> Float -> Shape
-ellipse hAx vAx = Ellipse hAx vAx defPos defAng defFC defSC defSW
+ellipse horizontalAxis verticalAxis = Ellipse horizontalAxis verticalAxis defaultOptions
 
 circle :: Float -> Shape
-circle r = Ellipse r r defPos defAng defFC defSC defSW
+circle radius = Ellipse radius radius defaultOptions
 
 rect :: Float -> Float -> Shape
-rect w h = Rect w h defPos defAng defFC defSC defSW
+rect width height = Rect width height defaultOptions
 
 square :: Float -> Shape
-square s = Rect s s defPos defAng defFC defSC defSW
+square size = Rect size size defaultOptions
 
 polygon :: [Vector] -> Shape
-polygon pts = Polygon pts defPos defAng defFC defSC defSW
+polygon points = Polygon points defaultOptions
+
+bezier2 :: Vector -> Vector -> Shape
+bezier2 controlPoint endPoint = Curve [controlPoint, endPoint] defaultOptions
+
+bezier3 :: Vector -> Vector -> Vector -> Shape
+bezier3 controlPoint1 controlPoint2 endPoint = Curve [controlPoint1, controlPoint2, endPoint] defaultOptions
 
 -------------------------
 ---- Transformations ----
@@ -135,51 +178,56 @@ polygon pts = Polygon pts defPos defAng defFC defSC defSW
 
 -- Chain transformations
 (>>>) :: Shape -> (Shape -> Shape) -> Shape
-(>>>) s f = f s
+(>>>) shape transform = transform shape
 
 -- Identity transformation
 identityTransformation :: Shape -> Shape
-identityTransformation s = s
+identityTransformation shape = shape
+
+-- Apply a transformation to a group of shapes
+group :: [Shape] -> (Shape -> Shape) -> Shape
+group shapes transform = Group [transform shape | shape <- shapes]
 
 -- Functions to manipulate shapes
 fill :: Color -> Shape -> Shape
-fill c Empty = Empty
-fill c (Group ss) = Group [fill c s | s <- ss]
-fill c s = s{fc = c}
+fill _ Empty = Empty
+fill color (Group shapes) = group shapes (fill color)
+fill color shape = shape{_options = (_options shape){_fill = color}}
 
 stroke :: Color -> Shape -> Shape
-stroke c Empty = Empty
-stroke c (Group ss) = Group [stroke c s | s <- ss]
-stroke c s = s{sc = c}
+stroke _ Empty = Empty
+stroke color (Group shapes) = group shapes (stroke color)
+stroke color shape = shape{_options = (_options shape){_stroke = color}}
 
 strokeWeight :: Float -> Shape -> Shape
-strokeWeight w Empty = Empty
-strokeWeight w (Group ss) = Group [strokeWeight w s | s <- ss]
-strokeWeight w s = s{sw = w}
+strokeWeight _ Empty = Empty
+strokeWeight weight (Group shapes) = group shapes (strokeWeight weight)
+strokeWeight weight shape = shape{_options = (_options shape){_strokeWeight = weight}}
 
 translate :: Vector -> Shape -> Shape
-translate v Empty = Empty
-translate v (Group ss) = Group [translate v s | s <- ss]
-translate v s = s{pos = pos s ^+^ v}
+translate _ Empty = Empty
+translate vector (Group shapes) = group shapes (translate vector)
+translate vector shape = shape{_options = (_options shape){_position = _position (_options shape) ^+^ vector}}
 
 rotate :: Float -> Shape -> Shape
-rotate a Empty = Empty
-rotate a (Group ss) = Group [rotate a s | s <- ss]
-rotate a s = s{ang = ang s + a}
+rotate _ Empty = Empty
+rotate angle (Group shapes) = group shapes (rotate angle)
+rotate angle shape = shape{_options = (_options shape){_angle = angle}}
 
 scale :: Float -> Shape -> Shape
-scale f Empty = Empty
-scale f (Group ss) = Group [scale f s | s <- ss]
-scale f (Line len pos ang fc sc sw) = Line (len * f) pos ang fc sc sw
-scale f (Ellipse hAx vAx pos ang fc sc sw) = Ellipse (hAx * f) (vAx * f) pos ang fc sc sw
-scale f (Rect w h pos ang fc sc sw) = Rect (w * f) (h * f) pos ang fc sc sw
-scale f (Polygon pts pos ang fc sc sw) = Polygon [Vector (x * f) (y * f) | Vector x y <- pts] pos ang fc sc sw
+scale _ Empty = Empty
+scale scaleFactor (Group shapes) = group shapes (scale scaleFactor)
+scale scaleFactor (Line length options) = Line (length * scaleFactor) options
+scale scaleFactor (Ellipse horizontalAxis verticalAxis options) = Ellipse (horizontalAxis * scaleFactor) (verticalAxis * scaleFactor) options
+scale scaleFactor (Rect width height options) = Rect (width * scaleFactor) (height * scaleFactor) options
+scale scaleFactor (Polygon points options) = Polygon [Vector (x * scaleFactor) (y * scaleFactor) | Vector x y <- points] options
+scale scaleFactor (Curve points options) = Curve [Vector (x * scaleFactor) (y * scaleFactor) | Vector x y <- points] options
 
 -- TODO: This isn't actually a reflection
 reflect :: Float -> Shape -> Shape
-reflect a Empty = Empty
-reflect a (Group ss) = Group [reflect a s | s <- ss]
-reflect a s = s{ang = a + 180}
+reflect _ Empty = Empty
+reflect angle (Group shapes) = group shapes (reflect angle)
+reflect angle shape = shape{_options = (_options shape){_angle = angle + 180}}
 
 -- Shorthand transformations
 noStroke :: Shape -> Shape

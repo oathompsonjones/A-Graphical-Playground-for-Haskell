@@ -64,6 +64,36 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
 
                     context.closePath();
                     break;
+                case ShapeType.Curve:
+                    if (shape.v.length !== 2 && shape.v.length !== 3)
+                        break;
+
+                    // Apply rotation about the position of the polygon.
+                    context.translate(shape.p[0], shape.p[1]);
+                    context.rotate(shape.a);
+                    context.translate(-shape.p[0], -shape.p[1]);
+
+                    // Move to the start of the curve.
+                    context.moveTo(shape.p[0], shape.p[1]);
+
+                    // Draw the curve.
+                    switch (shape.v.length) {
+                        case 2:
+                            context.quadraticCurveTo(shape.v[0]![0], shape.v[0]![1], shape.v[1]![0], shape.v[1]![1]);
+                            break;
+                        case 3:
+                            context.bezierCurveTo(
+                                shape.v[0]![0],
+                                shape.v[0]![1],
+                                shape.v[1]![0],
+                                shape.v[1]![1],
+                                shape.v[2]![0],
+                                shape.v[2]![1],
+                            );
+                            break;
+                    }
+
+                    break;
             }
 
             context.fill();

@@ -161,6 +161,26 @@ const docs: Record<string, SectionType> = {
                     The polygon's origin is at (0, 0).
                 </div>
             ),
+            bezier2: () => (
+                <div>
+                    The <code>bezier2 :: Vector -&gt; Vector -&gt; Shape</code> function takes two points and returns a
+                        quadratic Bezier curve.
+                    <br />
+                    <br />
+                    The curve starts at the shape's origin and ends at the second point. The first point is the control
+                        point.
+                </div>
+            ),
+            bezier3: () => (
+                <div>
+                    The <code>bezier3 :: Vector -&gt; Vector -&gt; Vector -&gt; Shape</code> function takes three points
+                        and returns a cubic Bezier curve.
+                    <br />
+                    <br />
+                    The curve starts at the shape's origin and ends at the third point. The first two points are the
+                        control points.
+                </div>
+            ),
             emptyShape: () => (
                 <div>
                     The <code>emptyShape :: Shape</code> function represents the empty shape.

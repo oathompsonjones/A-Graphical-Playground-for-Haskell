@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { StaticImageData } from "next/image";
 import americanFlag from "assets/images/examples/americanFlag.png";
+import flower from "assets/images/examples/flower.png";
 import fractalTree from "assets/images/examples/fractalTree.png";
 import styles from "styles/pages/home.module.css";
 import unionFlag from "assets/images/examples/unionFlag.png";
@@ -32,6 +33,11 @@ export default function Home(): ReactNode {
             code: "JYWwDg9gTgLgBAGWAIwFCoLQbgEQKYDGANgIZR5wlwAmJMVAzjFAK4EwvlwwRzljkGeAHbwqyYMLIBPbuTypa9OABV5lOAF5EeEgDMNAHzgA5CNQpUAFGryWAlHBvqSji1GAA3SQHMnAZQALCAB3e0U6KiRhCm1oigAxIgg6OCSU%2BHTUrMzk1PcvXwDgsPQsXEJSLhgQ3j0WYXZgCGEGOBDA4AJAyiJkkLgWNp44ZBZgImoNCSkoWWY7VAJyOjwAISgSRsC8NoAuPbS8%2BAwAPkRJCjOneIAaC5jw5d0Ydc3t3cphHyIKK3i4AAPOCyMh%2BX7CdrAagwQKObRWX56GD3Dw%2BQIwcJwdo7ciobHYgBqhB4UCBAHIQZTtMT2NAnMCANRwCFwABUcAIEDaYMcVlkzNZHIYkkoUB8WIJSPgWgeFEBlOklKsYLgzK2PzwfKFcAATHAAPRwADMfJC0Nh7L1hpNkuxaIxsoBCqpTlV2A1v21Iit%2BqNpqc5phPQ5ftt6Geq1sFAOcAAkqI4NccknzgDrtG5UsVq9MxYwJbPRQiJc4MZ85bNNoAAxO3QGEsxfEEluttvt7HGCCwvBQc1CbHaMwWFml6V8YDomDNjq9hQtxF4ZF3CdT%2BLwzk5t5bbqfIujpst8eyyO59RWCs9bAARkc%2B%2Bl8Wb9snju0p7wmYveALV7gt6%2Bmqrhij6YNg%2BDEGQFA1HUDRNC0bQdF0PQkH0oRtEM3C8NQmwDOIkgyHIizYSQIQArG6bnEEJBgAoxGkaW-ylsCoLiiyPpBrCG6NsWIhPh2-ECW2pzCXIWwMKQrxOLSpJAiCdqCQpAnCecUDdqsYo%2BHxinaa2ylwEwqkANYUAA6p0rxaTpVl6QZEDGSZeAvvAHGBOgdGZrGmYUXAVE0YoOGfgg9YHlqCnaHRALcf5JGfsOxZjku8AOpisoRWOlyWVZAkAGQ0AF6jjplWUdrl7nqMlZTYCoOxwCAJCiiIzCyJAkjwBABg9nAAgQD4mwgKgdWirGcYAPJOOEg2Qto5DCO4cAACSclsngkG0AA8G15TF6gLPOOJznxBDLatsrICQBCGb1EANFMVgAEoAOJrHAACsABsr0fe9fLvgAwsdbQAJzVrWwPVvJu0Em%2BW6Zh9VhgMANpvY4zANIZfGo8IhmDnKcAACwvaDINOBgCM2rqjjGsTL2oEAA",
             image: fractalTree,
             name: "Fractal Tree",
+        },
+        {
+            code: "JYWwDg9gTgLgBAGWAIwFCoLQbgYSgUwEMZ84YALUgY0IDsA3QgZ1QHc4BeOARgAZ-U5Tj3690WOABEohdkSpCwhWHAgAzMpThqANhFb4oqJiRDDk%2BAF7BDAJjgAKAGr4qMaI94A6ACwBWOAAqOFYASjhycOdXdyhPLwB2AOCwiPCAPkyyGVomHWJSaLcPB3YAejhbKKEKqoyskygIAGt8AHV8YABzcng%2BOEz0uEaW0gBxAnxaVDB8GEIdJmEHC2tDAGZHF2K49l4o7di4XjStmI92SIGstWAdHTgAE2Vm1Dh3j-eAMjhVmyhNkUjicrkCLscDuddqdBto7g8dN1em9Ph8fn8NmcdscIVijpdIdi9vUhjAcnkCgBNCLXIa3e5PF4o1FwdFWf6Aw7g0FcuInfZ48EC2FkugUkjUoSw%2BkIpEwElwWgQADKZNGKNYlAIzLgiJ68C4AAVgLRXp9nlBmu8jToAK4gGbAEx3YRUYBQKg6UjcPwnEXk-IkQVxUpwWrVMOVUIKpWqpqtWlwhmU-D3fTibCq5TwVhQYAwE1dOAATwgtriVAgj1IWvwXlQIEIJrgAC4W3AAJIAeUcoQbTdowgItGrcQAJHAaAxmHAADzz4amVlwWbzRbLsBOgs6DW1nVTxhLLhUAgFHB0Q%2BOJq2kchKLX2%2BRIA",
+            image: flower,
+            name: "4 Petal Flower",
         },
     ];
 

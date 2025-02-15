@@ -5,6 +5,7 @@ export const enum ShapeType {
     Ellipse = 1,
     Rect = 2,
     Polygon = 3,
+    Curve = 4,
 }
 
 export const colours = [
@@ -192,13 +193,18 @@ const polygonSchema = z.object({
     v: z.array(vectorSchema),
 });
 
+const curveSchema = z.object({
+    t: z.literal(ShapeType.Curve),
+    v: z.array(vectorSchema),
+});
+
 const baseShapeSchema = z.object({
     a: z.number().optional().default(defaults.angle),
     f: z.union([z.string(), z.number()]).optional().default(defaults.fill),
     p: vectorSchema.optional().default(defaults.position),
     s: z.union([z.string(), z.number()]).optional().default(defaults.stroke),
     sw: z.number().optional().default(defaults.strokeWeight),
-}).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema]));
+}).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema, curveSchema]));
 
 const shapeSchema = baseShapeSchema.or(z.array(baseShapeSchema));
 

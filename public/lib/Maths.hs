@@ -7,10 +7,10 @@ import Internal (removeFloat)
 ----------------
 
 radians :: Float -> Float
-radians d = d * pi / 180
+radians degrees = degrees * pi / 180
 
 degrees :: Float -> Float
-degrees r = r * 180 / pi
+degrees radians = radians * 180 / pi
 
 -----------------
 ---- Vectors ----
