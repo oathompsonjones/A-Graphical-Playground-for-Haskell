@@ -79,16 +79,21 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
                     // Draw the curve.
                     switch (shape.v.length) {
                         case 2:
-                            context.quadraticCurveTo(shape.v[0]![0], shape.v[0]![1], shape.v[1]![0], shape.v[1]![1]);
+                            context.quadraticCurveTo(
+                                shape.v[0]![0] + shape.p[0],
+                                shape.v[0]![1] + shape.p[1],
+                                shape.v[1]![0] + shape.p[0],
+                                shape.v[1]![1] + shape.p[1],
+                            );
                             break;
                         case 3:
                             context.bezierCurveTo(
-                                shape.v[0]![0],
-                                shape.v[0]![1],
-                                shape.v[1]![0],
-                                shape.v[1]![1],
-                                shape.v[2]![0],
-                                shape.v[2]![1],
+                                shape.v[0]![0] + shape.p[0],
+                                shape.v[0]![1] + shape.p[1],
+                                shape.v[1]![0] + shape.p[0],
+                                shape.v[1]![1] + shape.p[1],
+                                shape.v[2]![0] + shape.p[0],
+                                shape.v[2]![1] + shape.p[1],
                             );
                             break;
                     }
