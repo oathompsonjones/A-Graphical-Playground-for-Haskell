@@ -119,6 +119,9 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
             }, animation.f === 0 ? 0 : i * 1000 / animation.f));
         }
 
+        // Clear the canvas.
+        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+
         // Render another loop of the animaiton once it finishes.
         if (animation.s.length > 1) {
             timeouts.push(setTimeout(() => {
