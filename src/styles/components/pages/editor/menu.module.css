@@ -1,0 +1,10 @@
+.dialog {
+    padding: 1rem;
+    gap: 1rem;
+    text-align: center;
+}
+
+.options {
+    display: flex;
+    justify-content: space-evenly;
+}

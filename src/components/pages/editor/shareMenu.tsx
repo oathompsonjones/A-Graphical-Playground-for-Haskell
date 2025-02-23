@@ -5,7 +5,7 @@ import { Dialog, IconButton, Typography } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { NotificationsContext } from "contexts/notifications";
 import { decompressFromEncodedURIComponent } from "lz-string";
-import styles from "styles/components/pages/editor/shareMenu.module.css";
+import styles from "styles/components/pages/editor/menu.module.css";
 import { useContext } from "react";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
@@ -92,9 +92,9 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
 
     return (
         <Dialog open={open} onClose={() => setOpen(false)} ref={ref}>
-            <div className={styles.dialog}>
+            <div className={`${styles.dialog} ${styles.options}`}>
                 {shareOptions.map(({ action, icon, label }, i) => (
-                    <div className={styles.option} key={i}>
+                    <div key={i}>
                         <IconButton onClick={action}>{icon}</IconButton>
                         <Typography>{label}</Typography>
                     </div>

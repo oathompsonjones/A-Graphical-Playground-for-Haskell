@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import type { Sketch } from "schemas/database";
 import { UserContext } from "contexts/user";
 import { getSketches } from "database/index";
-import styles from "styles/components/pages/editor/openMenu.module.css";
+import styles from "styles/components/pages/editor/menu.module.css";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
 // TODO: Make this look better.

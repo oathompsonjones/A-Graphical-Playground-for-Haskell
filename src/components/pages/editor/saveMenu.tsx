@@ -5,7 +5,7 @@ import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { NotificationsContext } from "contexts/notifications";
 import { UserContext } from "contexts/user";
 import { saveSketch } from "actions/code/saveSketch";
-import styles from "styles/components/pages/editor/saveMenu.module.css";
+import styles from "styles/components/pages/editor/menu.module.css";
 import { useContext } from "react";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
