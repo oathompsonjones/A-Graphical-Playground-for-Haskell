@@ -1,6 +1,6 @@
 body,
 .wrapper {
-    --padding: 3rem;
+    --padding: 1rem;
     --gutter: minmax(0, 1fr);
     --content-max: 70rem;
     --content: min(100% - 2 * var(--padding), var(--content-max));
@@ -8,6 +8,15 @@ body,
     --breakout: minmax(0, calc((var(--breakout-max) - var(--content-max)) / 2));
     display: grid;
     grid-template-columns: [edge-start] var(--padding) [full-width-start] var(--gutter) [breakout-start breakout-left-start] var(--breakout) [content-start breakout-right-start] var(--content) [content-end breakout-left-end] var(--breakout) [breakout-end breakout-right-end] var(--gutter) [full-width-end] var(--padding) [edge-end];
+}
+
+@media (orientation: landscape) {
+
+    body,
+    .wrapper {
+        --padding: 3rem;
+    }
+
 }
 
 * {
