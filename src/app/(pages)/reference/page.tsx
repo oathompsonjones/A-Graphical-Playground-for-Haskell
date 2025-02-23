@@ -128,8 +128,8 @@ const docs: Record<string, SectionType> = {
             ),
             ellipse: () => (
                 <div>
-                    The <code>ellipse :: Float -&gt; Float -&gt; Shape</code> function takes a width and height and
-                        returns an ellipse.
+                    The <code>ellipse :: Float -&gt; Float -&gt; Shape</code> function takes a horizontal axis and a
+                        vertical axis and returns an ellipse.
                     <br />
                     <br />
                     Just like circles, the ellipse's origin is at its center.
@@ -179,6 +179,26 @@ const docs: Record<string, SectionType> = {
                     <br />
                     The curve starts at the shape's origin and ends at the third point. The first two points are the
                         control points.
+                </div>
+            ),
+            arc: () => (
+                <div>
+                    The <code>arc :: Float -&gt; Float -&gt; Float -&gt; Float -&gt; Shape</code> function takes a
+                        horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
+                        arc with a straight line connecting the start and end points.
+                    <br />
+                    <br />
+                    As with ellipses, the arc's origin is at its center.
+                </div>
+            ),
+            pie: () => (
+                <div>
+                    The <code>pie :: Float -&gt; Float -&gt; Float -&gt; Float -&gt; Shape</code> function takes a
+                        horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
+                        arc with two straight lines connecting the center to the start and end points.
+                    <br />
+                    <br />
+                    The pie's origin is at its center.
                 </div>
             ),
             emptyShape: () => (

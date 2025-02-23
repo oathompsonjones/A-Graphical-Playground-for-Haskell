@@ -99,11 +99,17 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
                     }
 
                     break;
+                case ShapeType.Arc:
+                    if (!shape.o)
+                        context.moveTo(shape.p[0], shape.p[1]);
+
+                    context.ellipse(shape.p[0], shape.p[1], shape.h, shape.v, shape.a, shape.b, shape.e);
+                    break;
             }
 
+            context.closePath();
             context.fill();
             context.stroke();
-            context.closePath();
 
             // Reset any transformations.
             context.resetTransform();

@@ -6,6 +6,7 @@ export const enum ShapeType {
     Rect = 2,
     Polygon = 3,
     Curve = 4,
+    Arc = 5,
 }
 
 export const colours = [
@@ -198,13 +199,22 @@ const curveSchema = z.object({
     v: z.array(vectorSchema),
 });
 
+const arcSchema = z.object({
+    b: z.number(),
+    e: z.number(),
+    h: z.number(),
+    o: z.number(),
+    t: z.literal(ShapeType.Arc),
+    v: z.number(),
+});
+
 const baseShapeSchema = z.object({
     a: z.number().optional().default(defaults.angle),
     f: z.union([z.string(), z.number()]).optional().default(defaults.fill),
     p: vectorSchema.optional().default(defaults.position),
     s: z.union([z.string(), z.number()]).optional().default(defaults.stroke),
     sw: z.number().optional().default(defaults.strokeWeight),
-}).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema, curveSchema]));
+}).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema, curveSchema, arcSchema]));
 
 const shapeSchema = baseShapeSchema.or(z.array(baseShapeSchema));
 
