@@ -290,7 +290,9 @@ export function Editor({ code, updateCode, save, open, new: new_, run, setSaved 
     return (
         <PlainPaper className={styles.editor!}>
             <pre id="pre" ref={updateDisplayCode} />
-            <textarea onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} ref={setCode} />
+            <textarea
+                spellCheck={false}
+                onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} ref={setCode} />
         </PlainPaper>
     );
 }
