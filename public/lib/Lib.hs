@@ -8,7 +8,6 @@ module Lib (
     background,
     fps,
     (<<<),
-    setPixel,
 ) where
 
 import Color
@@ -48,10 +47,6 @@ fps fps canvas = canvas{_fps = fps}
 -- Add a shape to the canvas
 (<<<) :: Canvas -> Shape -> Canvas
 (<<<) canvas shape = canvas{_frames = _frames canvas ++ [shape]}
-
--- Individually modifies pixels in the canvas
-setPixel :: Canvas -> Vector -> Color -> Canvas
-setPixel canvas vector color = canvas{_frames = _frames canvas ++ [square 1 >>> fill color >>> stroke Transparent >>> translate vector]}
 
 -- Set operator precedence
 infixl 7 <<<
