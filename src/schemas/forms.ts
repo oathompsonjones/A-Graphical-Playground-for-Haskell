@@ -23,6 +23,11 @@ export const updateProfileSchema = z.object({
 
 // Save
 export const saveSketchSchema = z.object({
+    content: z.string(),
+    id: z.string(),
+});
+
+export const saveAsSketchSchema = z.object({
     authorId: z.string(),
     content: z.string(),
     name: z.string(),

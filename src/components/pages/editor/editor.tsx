@@ -1,5 +1,5 @@
 import "styles/codeTheme.css";
-import type { FormEvent, KeyboardEvent, ReactNode, UIEvent } from "react";
+import type { Dispatch, FormEvent, KeyboardEvent, ReactNode, SetStateAction, UIEvent } from "react";
 import { PlainPaper } from "./plainPaper";
 import { renderToString } from "react-dom/server";
 import styles from "styles/components/pages/editor/editor.module.css";
@@ -25,16 +25,18 @@ That's why we are storing the highlight.js instance in a state variable,
  * @param props.open - The function to call when the user opens a file.
  * @param props.new - The function to call when the user creates a new file.
  * @param props.run - The function to call when the user runs the code.
+ * @param props.setSaved - The function to whether the code has been saved.
  * @returns The editor element.
  */
 // eslint-disable-next-line max-lines-per-function
-export function Editor({ code, updateCode, save, open, new: new_, run }: {
+export function Editor({ code, updateCode, save, open, new: new_, run, setSaved }: {
     code: string;
     updateCode: (rawCode: string) => void;
     save: () => void;
     open: () => void;
     new: () => void;
     run: () => void;
+    setSaved: Dispatch<SetStateAction<boolean>>;
 }): ReactNode {
     /**
      * Highlight the code and update the display.
@@ -94,6 +96,9 @@ export function Editor({ code, updateCode, save, open, new: new_, run }: {
 
         // Update the code and display.
         updateCode(event.currentTarget.value);
+
+        // The code has changed, so it's no longer saved.
+        setSaved(false);
     };
 
     /**

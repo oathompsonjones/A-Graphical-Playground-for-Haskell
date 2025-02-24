@@ -9,28 +9,32 @@ import styles from "styles/components/pages/editor/menu.module.css";
 import { useContext } from "react";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
-// TODO: Make this look better and add ability to update currently saved sketch.
-
 /**
- * This is the share menu.
+ * This is the save menu.
  * @param props - The properties of the component.
- * @param props.open - Whether the share menu is open.
- * @param props.setOpen - The function to set the share menu state.
- * @param props.code - The code to share.
- * @returns The share menu element.
+ * @param props.open - Whether the menu is open.
+ * @param props.setOpen - The function to set the menu state.
+ * @param props.code - The code to save.
+ * @param props.setSaved - The function to set the saved state.
+ * @param props.setId - The function to set the ID of the sketch.
+ * @returns The save menu element.
  */
-export function SaveMenu({ open, setOpen, code }: {
+export function SaveMenu({ open, setOpen, code, setSaved, setId }: {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
     code: string;
+    setSaved: Dispatch<SetStateAction<boolean>>;
+    setId: Dispatch<SetStateAction<string | null>>;
 }): ReactNode {
     const { user } = useContext(UserContext);
     const { setType, setMessage } = useContext(NotificationsContext);
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
 
     const saveSketchAction = (formData: FormData): void => {
-        saveSketch(formData).then(() => {
+        saveSketch(formData).then((id: string) => {
             setOpen(false);
+            setSaved(true);
+            setId(id);
             setType("success");
             setMessage("Sketch saved.");
         }).catch((e: unknown) => {

@@ -23,13 +23,15 @@ import styles from "styles/components/pages/editor/buttons.module.css";
  * @param props.stop - The function to stop the code.
  * @param props.loggedIn - Whether the user is logged in.
  * @param props.author - The author of the sketch.
+ * @param props.saved - Whether the sketch has been saved.
  * @returns The buttons element.
  */
-export function Buttons({ title, clear, new: new_, open, run, save, share, stop, loggedIn, author }:
+export function Buttons({ title, clear, new: new_, open, run, save, share, stop, loggedIn, author, saved }:
 Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void> & {
     title: string;
     loggedIn: boolean;
     author: string | null;
+    saved: boolean;
 }): ReactNode {
     const [metaKey, setMetaKey] = useState(<KeyboardControlKey fontSize="small" />);
 
@@ -85,7 +87,7 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
             <Divider orientation="vertical" className={styles.divider!} />
 
             <Typography className={styles.heading!}>
-                {author === null ? title : `${author}/${title}`}
+                {author === null ? title : `${author}/${title} — ${saved ? "Saved" : "Unsaved"}`}
             </Typography>
 
             <Divider orientation="vertical" className={styles.divider!} />

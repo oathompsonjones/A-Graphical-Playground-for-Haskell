@@ -151,10 +151,7 @@ export default function Account(): ReactNode {
                         <Card key={i}>
                             <CardContent className={styles.sketchMain!}>
                                 <Typography variant="h5">
-                                    {/* <Link href={`/editor?id=${encodeURIComponent(sketch._id.toString())}`}>
-                                        {sketch.name}
-                                    </Link> */}
-                                    <Link href={`/editor?code=${encodeURIComponent(sketch.contnet)}$author=${encodeURIComponent(sketch.author)}$title=${encodeURIComponent(sketch.name)}`}>
+                                    <Link href={`/editor?id=${encodeURIComponent(sketch._id.toString())}`}>
                                         {sketch.name}
                                     </Link>
                                 </Typography>
