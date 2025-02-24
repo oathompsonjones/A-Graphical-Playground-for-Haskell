@@ -171,7 +171,10 @@ export async function createSketch(authorId: string, name: string, content: stri
 export async function updateSketch(id: string, sketch: Partial<Sketch>): Promise<string> {
     const db = (await client).db("database");
     const sketches: Collection<Sketch> = db.collection("sketches");
-    const result = await sketches.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: sketch });
+    const result = await sketches.findOneAndUpdate(
+        { _id: new ObjectId(id) },
+        { $set: { ...sketch, modifiedAt: Date.now().toString() } },
+    );
 
     if (result === null)
         throw new Error("Sketch not found.");
