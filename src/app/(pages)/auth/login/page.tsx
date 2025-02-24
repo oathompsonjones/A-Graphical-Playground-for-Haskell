@@ -54,6 +54,9 @@ export default function LogIn(): ReactNode {
                     <Typography variant="caption" textAlign="center">
                         Don't have an account? <Link href="/auth/register">Register</Link>
                     </Typography>
+                    {/* <Typography variant="caption" textAlign="center">
+                        <Link href="">Forgot Password?</Link>
+                    </Typography> */}
                 </FormControl>
             </Paper>
         </div>

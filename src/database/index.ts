@@ -98,14 +98,13 @@ export async function deleteUser(id: string): Promise<void> {
 
 /**
  * Gets the sketch with the specified name for the specified user.
- * @param authorId - The email of the user who owns the sketch.
- * @param name - The name of the sketch to get.
+ * @param id - The id of the sketch to get.
  * @returns A JSON string representing the sketch with the given name and author.
  */
-export async function getSketch(authorId: string, name: string): Promise<string> {
+export async function getSketch(id: string): Promise<string> {
     const db = (await client).db("database");
     const sketches: Collection<Sketch> = db.collection("sketches");
-    const sketch = await sketches.findOne({ author: authorId, name });
+    const sketch = await sketches.findOne({ _id: new ObjectId(id) });
 
     if (sketch === null)
         throw new Error("Sketch not found.");
@@ -165,15 +164,14 @@ export async function createSketch(authorId: string, name: string, content: stri
 
 /**
  * Updates the sketch with the specified name for the specified user.
- * @param authorId - The id of the user who owns the sketch.
- * @param name - The name of the sketch to update.
+ * @param id - The id of the sketch to update.
  * @param sketch - The new sketch data.
  * @returns A JSON string representing the updated sketch.
  */
-export async function updateSketch(authorId: string, name: string, sketch: Partial<Sketch>): Promise<string> {
+export async function updateSketch(id: string, sketch: Partial<Sketch>): Promise<string> {
     const db = (await client).db("database");
     const sketches: Collection<Sketch> = db.collection("sketches");
-    const result = await sketches.findOneAndUpdate({ author: authorId, name }, { $set: sketch });
+    const result = await sketches.findOneAndUpdate({ _id: new ObjectId(id) }, { $set: sketch });
 
     if (result === null)
         throw new Error("Sketch not found.");

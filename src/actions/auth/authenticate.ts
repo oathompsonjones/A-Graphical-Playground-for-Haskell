@@ -6,7 +6,7 @@ import { compare } from "bcrypt";
 import { cookies } from "next/headers";
 import { getUserFromEmail } from "database/index";
 
-export type AuthResponse = { success: false; error: string | null; } | { success: true; };
+export type AuthResponse = { success: false; error: string | null; } | { success: true; data: string | null; };
 
 // TODO: Try to fix issue with cookies not always loading correctly.
 // TODO: Add ability to login with Google/Apple/GitHub/StackOverflow/etc.
@@ -18,6 +18,8 @@ export type AuthResponse = { success: false; error: string | null; } | { success
  * @returns Whether the user was authenticated.
  */
 export async function authenticate(_state: AuthResponse, formData: FormData): Promise<AuthResponse> {
+    let id: string | null = null;
+
     try {
         const { email, password } = authenticationSchema.parse({
             email: formData.get("email"),
@@ -30,7 +32,8 @@ export async function authenticate(_state: AuthResponse, formData: FormData): Pr
         if (!isCorrectPassword)
             throw new Error("Invalid credentials.");
 
-        (await cookies()).set("user", user._id.toString());
+        id = user._id.toString();
+        (await cookies()).set("user", id);
     } catch (err) {
         return {
             error: err instanceof Error ? err.message : String(err),
@@ -38,5 +41,5 @@ export async function authenticate(_state: AuthResponse, formData: FormData): Pr
         };
     }
 
-    return { success: true };
+    return { data: id, success: true };
 }

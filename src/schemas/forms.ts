@@ -13,6 +13,14 @@ export const authenticationSchema = z.object({
     password: z.string(),
 });
 
+// Update Profile
+export const updateProfileSchema = z.object({
+    avatar: z.string().optional(),
+    email: z.string(),
+    password: z.string(),
+    username: z.string(),
+});
+
 // Save
 export const saveSketchSchema = z.object({
     authorId: z.string(),

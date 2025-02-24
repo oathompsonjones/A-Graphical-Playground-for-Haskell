@@ -18,5 +18,5 @@ export async function logout(_state: AuthResponse): Promise<AuthResponse> {
         };
     }
 
-    return { success: true };
+    return { data: null, success: true };
 }

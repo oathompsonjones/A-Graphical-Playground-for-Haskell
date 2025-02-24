@@ -14,6 +14,8 @@ import { registrationSchema } from "schemas/forms";
  * @returns Whether the user was registered.
  */
 export async function register(_state: AuthResponse, formData: FormData): Promise<AuthResponse> {
+    let id: string | null = null;
+
     try {
         const { email, password, confirmPassword } = registrationSchema.parse({
             confirmPassword: formData.get("confirmPassword"),
@@ -27,7 +29,8 @@ export async function register(_state: AuthResponse, formData: FormData): Promis
         const passwordHash = await hash(password, 11);
         const user = JSON.parse(await createUser(email, passwordHash)) as User;
 
-        (await cookies()).set("user", user._id.toString());
+        id = user._id.toString();
+        (await cookies()).set("user", id);
     } catch (err) {
         return {
             error: err instanceof Error ? err.message : String(err),
@@ -35,5 +38,5 @@ export async function register(_state: AuthResponse, formData: FormData): Promis
         };
     }
 
-    return { success: true };
+    return { data: id, success: true };
 }
