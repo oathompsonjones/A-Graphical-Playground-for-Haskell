@@ -8,7 +8,6 @@ import { getUserFromEmail } from "database/index";
 
 export type AuthResponse = { success: false; error: string | null; } | { success: true; data: string | null; };
 
-// TODO: Try to fix issue with cookies not always loading correctly.
 // TODO: Add ability to login with Google/Apple/GitHub/StackOverflow/etc.
 
 /**

@@ -1,10 +1,10 @@
 "use server";
 
+import { getUserFromId, updateUser } from "database/index";
 import type { AuthResponse } from "./authenticate";
 import type { User } from "schemas/database";
-import { authenticate } from "./authenticate";
+import { compare } from "bcrypt";
 import { updateProfileSchema } from "schemas/forms";
-import { updateUser } from "database/index";
 
 /**
  * Update the user's profile in the database.
@@ -14,17 +14,19 @@ import { updateUser } from "database/index";
  */
 export async function updateProfile(_state: AuthResponse, formData: FormData): Promise<AuthResponse> {
     try {
-        const { avatar, email, username } = updateProfileSchema.parse({
+        const { avatar, email, id, username, password } = updateProfileSchema.parse({
             avatar: formData.get("avatar"),
             email: formData.get("email"),
+            id: formData.get("id"),
             password: formData.get("password"),
             username: formData.get("username"),
         });
 
-        const authenticated = await authenticate(_state, formData);
+        const user = JSON.parse(await getUserFromId(id)) as User;
+        const isCorrectPassword = await compare(password, user.passwordHash);
 
-        if (!authenticated.success)
-            return { error: "Invalid credentials.", success: false };
+        if (!isCorrectPassword)
+            throw new Error("Invalid credentials.");
 
         const updated: Partial<User> = {};
 
@@ -37,7 +39,7 @@ export async function updateProfile(_state: AuthResponse, formData: FormData): P
         if (username !== "")
             updated.username = username;
 
-        await updateUser(authenticated.data!, updated);
+        await updateUser(id, updated);
     } catch (err) {
         return {
             error: err instanceof Error ? err.message : String(err),

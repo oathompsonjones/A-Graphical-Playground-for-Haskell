@@ -17,6 +17,7 @@ export const authenticationSchema = z.object({
 export const updateProfileSchema = z.object({
     avatar: z.string().optional(),
     email: z.string(),
+    id: z.string(),
     password: z.string(),
     username: z.string(),
 });

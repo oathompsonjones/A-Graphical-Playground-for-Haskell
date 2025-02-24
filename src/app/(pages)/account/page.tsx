@@ -121,6 +121,7 @@ export default function Account(): ReactNode {
                         </div>
                     </div>
                     <div className={styles.fields}>
+                        <input type="hidden" name="id" value={user._id.toString()} />
                         <TextField
                             label="Email" name="email" type="email" autoComplete="username"
                             defaultValue={user.email} />
