@@ -126,18 +126,19 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
                 context.fillRect(0, 0, animation.w, animation.h);
 
                 // Render the shapes.
-                renderFrame(frame instanceof Array ? frame : [frame], context);
+                requestAnimationFrame(() => renderFrame(frame instanceof Array ? frame : [frame], context));
             }, animation.r === 0 ? 0 : i * 1000 / animation.r));
         }
 
-        // Clear the canvas.
-        context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-
         // Render another loop of the animaiton once it finishes.
-            timeouts.push(setTimeout(() => {
-                renderAnimation(animation, context);
         if (animation.f.length > 1) {
+            // Clear the canvas before the next loop.
+            context.clearRect(0, 0, animation.w, animation.h);
+
+            timeouts.push(setTimeout(
+                () => renderAnimation(animation, context),
                 1000 / animation.r * animation.f.length,
+            ));
         }
     };
 
@@ -150,7 +151,7 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
         const context = canvas.getContext("2d")!;
 
         // Reset the canvas.
-        context.fillStyle = "white";
+        context.fillStyle = "LightGrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
 
         for (const item of content) {
@@ -184,7 +185,7 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
 
     return (
         <PlainPaper className={styles.wrapper!}>
-            <canvas id="canvas" width={500} height={500} ref={render} />
+            <canvas id="canvas" width={800} height={600} ref={render} />
         </PlainPaper>
     );
 }
