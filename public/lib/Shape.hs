@@ -11,6 +11,7 @@ module Shape (
     bezier2,
     bezier3,
     arc,
+    segment,
     pie,
     (>>>),
     identityTransformation,
@@ -37,6 +38,7 @@ import Maths (Vector (..), (^+^))
 ----------------
 
 -- Data structures to represent shapes
+data Connection = Open | Chord | Pie
 data ShapeOptions = ShapeOptions
     { _position :: Vector
     , _angle :: Float
@@ -74,7 +76,7 @@ data Shape
         , _verticalAxis :: Float
         , _startAngle :: Float
         , _endAngle :: Float
-        , _open :: Bool
+        , _connect :: Connection
         , _options :: ShapeOptions
         }
 
@@ -88,7 +90,7 @@ instance Show Shape where
     show (Rect width height options) = "{\"t\":2,\"w\":" ++ removeFloat width ++ ",\"h\":" ++ removeFloat height ++ jsonOptions options ++ "}"
     show (Polygon points options) = "{\"t\":3,\"v\":" ++ show points ++ jsonOptions options ++ "}"
     show (Curve points options) = "{\"t\":4,\"v\":" ++ show points ++ jsonOptions options ++ "}"
-    show (Arc horizontalAxis verticalAxis startAngle endAngle open options) = "{\"t\":5,\"h\":" ++ removeFloat horizontalAxis ++ ",\"v\":" ++ removeFloat verticalAxis ++ ",\"b\":" ++ removeFloat startAngle ++ ",\"e\":" ++ removeFloat endAngle ++ ",\"o\":" ++ jsonBool open ++ jsonOptions options ++ "}"
+    show (Arc horizontalAxis verticalAxis startAngle endAngle connect options) = "{\"t\":5,\"h\":" ++ removeFloat horizontalAxis ++ ",\"v\":" ++ removeFloat verticalAxis ++ ",\"b\":" ++ removeFloat startAngle ++ ",\"e\":" ++ removeFloat endAngle ++ ",\"c\":" ++ jsonConnection connect ++ jsonOptions options ++ "}"
 
 -- Helper functions for converting shapes to JSON
 isEmpty :: Shape -> Bool
@@ -120,9 +122,10 @@ jsonSW w
     | w == defaultStrokeWeight = ""
     | otherwise = ",\"sw\":" ++ removeFloat w
 
-jsonBool :: Bool -> String
-jsonBool True = "1"
-jsonBool False = "0"
+jsonConnection :: Connection -> String
+jsonConnection Open = "0"
+jsonConnection Chord = "1"
+jsonConnection Pie = "2"
 
 jsonOptionsNoFill :: ShapeOptions -> String
 jsonOptionsNoFill (ShapeOptions pos ang fc sc sw) = jsonPos pos ++ jsonAng ang ++ jsonS sc ++ jsonSW sw
@@ -188,10 +191,13 @@ bezier3 :: Vector -> Vector -> Vector -> Shape
 bezier3 controlPoint1 controlPoint2 endPoint = Curve [controlPoint1, controlPoint2, endPoint] defaultOptions
 
 arc :: Float -> Float -> Float -> Float -> Shape
-arc horizontalAxis verticalAxis startAngle endAngle = Arc horizontalAxis verticalAxis startAngle endAngle True defaultOptions
+arc horizontalAxis verticalAxis startAngle endAngle = Arc horizontalAxis verticalAxis startAngle endAngle Open defaultOptions
+
+segment :: Float -> Float -> Float -> Float -> Shape
+segment horizontalAxis verticalAxis startAngle endAngle = Arc horizontalAxis verticalAxis startAngle endAngle Chord defaultOptions
 
 pie :: Float -> Float -> Float -> Float -> Shape
-pie horizontalAxis verticalAxis startAngle endAngle = Arc horizontalAxis verticalAxis startAngle endAngle False defaultOptions
+pie horizontalAxis verticalAxis startAngle endAngle = Arc horizontalAxis verticalAxis startAngle endAngle Pie defaultOptions
 
 -------------------------
 ---- Transformations ----

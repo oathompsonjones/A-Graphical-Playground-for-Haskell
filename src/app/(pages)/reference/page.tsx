@@ -185,7 +185,7 @@ const docs: Record<string, SectionType> = {
                 <div>
                     The <code>arc :: Float -&gt; Float -&gt; Float -&gt; Float -&gt; Shape</code> function takes a
                         horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
-                        arc with a straight line connecting the start and end points.
+                        arc.
                     <br />
                     <br />
                     As with ellipses, the arc's origin is at its center.
@@ -199,6 +199,16 @@ const docs: Record<string, SectionType> = {
                     <br />
                     <br />
                     The pie's origin is at its center.
+                </div>
+            ),
+            segment: () => (
+                <div>
+                    The <code>arc :: Float -&gt; Float -&gt; Float -&gt; Float -&gt; Shape</code> function takes a
+                        horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
+                        arc with a straight line connecting the start and end points.
+                    <br />
+                    <br />
+                    As with ellipses, the arc's origin is at its center.
                 </div>
             ),
             emptyShape: () => (

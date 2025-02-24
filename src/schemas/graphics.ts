@@ -9,6 +9,12 @@ export const enum ShapeType {
     Arc = 5,
 }
 
+export const enum Connection {
+    Open = 0,
+    Chord = 1,
+    Pie = 2,
+}
+
 export const colours = [
     "transparent",
     "aliceblue",
@@ -201,9 +207,9 @@ const curveSchema = z.object({
 
 const arcSchema = z.object({
     b: z.number(),
+    c: z.union([z.literal(Connection.Open), z.literal(Connection.Chord), z.literal(Connection.Pie)]),
     e: z.number(),
     h: z.number(),
-    o: z.number(),
     t: z.literal(ShapeType.Arc),
     v: z.number(),
 });

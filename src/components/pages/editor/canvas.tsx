@@ -1,5 +1,5 @@
 import type { CanvasSchema, Shape } from "schemas/graphics";
-import { ShapeType, canvasSchema, colours } from "schemas/graphics";
+import { Connection, ShapeType, canvasSchema, colours } from "schemas/graphics";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
 import { memo } from "react";
@@ -100,10 +100,14 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
 
                     break;
                 case ShapeType.Arc:
-                    if (!shape.o)
+                    if (shape.c === Connection.Pie)
                         context.moveTo(shape.p[0], shape.p[1]);
 
                     context.ellipse(shape.p[0], shape.p[1], shape.h, shape.v, shape.a, shape.b, shape.e);
+
+                    if (shape.c === Connection.Open)
+                        context.moveTo(shape.p[0], shape.p[1]);
+
                     break;
             }
 
