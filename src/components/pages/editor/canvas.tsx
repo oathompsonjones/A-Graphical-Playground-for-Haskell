@@ -85,6 +85,7 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
                                 shape.v[1]![0] + shape.p[0],
                                 shape.v[1]![1] + shape.p[1],
                             );
+                            context.moveTo(shape.p[0], shape.p[1]);
                             break;
                         case 3:
                             context.bezierCurveTo(
@@ -95,6 +96,7 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
                                 shape.v[2]![0] + shape.p[0],
                                 shape.v[2]![1] + shape.p[1],
                             );
+                            context.moveTo(shape.p[0], shape.p[1]);
                             break;
                     }
 
