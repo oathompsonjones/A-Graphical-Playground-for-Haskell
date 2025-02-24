@@ -35,7 +35,12 @@ export function Header(): ReactNode {
                 <div className={styles.spacer} />
                 <MenuItem className={styles.account!} component={Link} href="/account">
                     {signInText}
-                    <Avatar src={user?.avatar ?? ""} className={styles.avatar!} />
+                    <Avatar src={user?.avatar ?? ""} className={styles.avatar!}>
+                        {user?.avatar === null && signInText.split(" ")
+                            .map((word) => word[0])
+                            .join("")
+                            .slice(0, 3)}
+                    </Avatar>
                 </MenuItem>
             </Toolbar>
         </AppBar>
