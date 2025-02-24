@@ -121,7 +121,9 @@ export default function Account(): ReactNode {
                         </div>
                     </div>
                     <div className={styles.fields}>
-                        <TextField label="Email" name="email" type="email" defaultValue={user.email} />
+                        <TextField
+                            label="Email" name="email" type="email" autoComplete="username"
+                            defaultValue={user.email} />
                         <TextField
                             label="Username" name="username"
                             defaultValue={user.username ?? user.email.split("@")[0]} />
