@@ -223,9 +223,9 @@ export type Shape = z.infer<typeof shapeSchema>;
 // Canvas
 export const canvasSchema = z.object({
     b: z.string().or(z.number()),
-    f: z.number(),
+    f: z.array(shapeSchema),
     h: z.number().int(),
-    s: z.array(shapeSchema),
+    r: z.number(),
     w: z.number().int(),
 });
 export type CanvasSchema = z.infer<typeof canvasSchema>;

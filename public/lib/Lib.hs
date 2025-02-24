@@ -21,13 +21,13 @@ data Canvas = Canvas
     , _height :: Int
     , _fps :: Int
     , _backgroundColor :: Color
-    , _shapes :: [Shape]
+    , _frames :: [Shape]
     }
 
 -- Convert a canvas to a JSON string
 instance Show Canvas where
     show :: Canvas -> String
-    show (Canvas w h f bg ss) = "{\"w\":" ++ show w ++ ",\"h\":" ++ show h ++ ",\"f\":" ++ show f ++ ",\"b\":" ++ show bg ++ ",\"s\":" ++ show ss ++ "}"
+    show (Canvas w h r b f) = "{\"w\":" ++ show w ++ ",\"h\":" ++ show h ++ ",\"r\":" ++ show r ++ ",\"b\":" ++ show b ++ ",\"f\":" ++ show f ++ "}"
 
 -- Outputs the canvas in JSON format, wrapped in a function call
 render :: Canvas -> IO ()
@@ -47,11 +47,11 @@ fps fps canvas = canvas{_fps = fps}
 
 -- Add a shape to the canvas
 (<<<) :: Canvas -> Shape -> Canvas
-(<<<) canvas shape = canvas{_shapes = _shapes canvas ++ [shape]}
+(<<<) canvas shape = canvas{_frames = _frames canvas ++ [shape]}
 
 -- Individually modifies pixels in the canvas
 setPixel :: Canvas -> Vector -> Color -> Canvas
-setPixel canvas vector color = canvas{_shapes = _shapes canvas ++ [square 1 >>> fill color >>> stroke Transparent >>> translate vector]}
+setPixel canvas vector color = canvas{_frames = _frames canvas ++ [square 1 >>> fill color >>> stroke Transparent >>> translate vector]}
 
 -- Set operator precedence
 infixl 7 <<<

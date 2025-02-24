@@ -117,9 +117,9 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
     };
 
     const renderAnimation = (animation: CanvasSchema, context: CanvasRenderingContext2D): void => {
-        for (let i = 0; i < animation.s.length; i++) {
+        for (let i = 0; i < animation.f.length; i++) {
             timeouts.push(setTimeout(() => {
-                const frame = animation.s[i]!;
+                const frame = animation.f[i]!;
 
                 // Reset the background.
                 context.fillStyle = parseColour(animation.b);
@@ -127,17 +127,17 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
 
                 // Render the shapes.
                 renderFrame(frame instanceof Array ? frame : [frame], context);
-            }, animation.f === 0 ? 0 : i * 1000 / animation.f));
+            }, animation.r === 0 ? 0 : i * 1000 / animation.r));
         }
 
         // Clear the canvas.
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
 
         // Render another loop of the animaiton once it finishes.
-        if (animation.s.length > 1) {
             timeouts.push(setTimeout(() => {
                 renderAnimation(animation, context);
-            }, 1000 / animation.f * animation.s.length));
+        if (animation.f.length > 1) {
+                1000 / animation.r * animation.f.length,
         }
     };
 
