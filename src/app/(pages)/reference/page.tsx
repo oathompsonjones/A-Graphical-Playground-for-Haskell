@@ -510,6 +510,8 @@ const docs: Record<string, SectionType> = {
                 {list([
                     <span key={0}><code>degrees :: Float -&gt; Float</code> — Converts radians to degrees.</span>,
                     <span key={1}><code>radians :: Float -&gt; Float</code> — Converts degrees to radians.</span>,
+                    <span key={2}><code>setPixel :: Canvas -&gt; Vector -&gt; Color -&gt; Canvas</code> — Changes the
+                        colour of an individual pixel on the canvas.</span>,
                 ])}
             </div>
         ),
