@@ -150,6 +150,8 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
 
         const context = canvas.getContext("2d")!;
 
+        context.imageSmoothingEnabled = false;
+
         // Reset the canvas.
         context.fillStyle = "LightGrey";
         context.fillRect(0, 0, canvas.width, canvas.height);
