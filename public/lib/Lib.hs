@@ -11,8 +11,35 @@ module Lib (
 ) where
 
 import Color
+import Internal ()
 import Maths
-import Shape
+import Shape (
+    Shape,
+    arc,
+    bezier2,
+    bezier3,
+    circle,
+    ellipse,
+    empty,
+    fill,
+    line,
+    noFill,
+    noStroke,
+    pie,
+    polygon,
+    rect,
+    rotate,
+    scale,
+    segment,
+    square,
+    stroke,
+    strokeWeight,
+    translate,
+    translateX,
+    translateY,
+    (&),
+    (>>>),
+ )
 
 -- Data structure to represent a canvas
 data Canvas = Canvas

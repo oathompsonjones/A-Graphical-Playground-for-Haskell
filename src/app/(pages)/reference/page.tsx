@@ -47,7 +47,7 @@ const docs: Record<string, SectionType> = {
                 <br />
                 <code>map :: (a -&gt; b) -&gt; [a] -&gt; [b]</code> — A function that takes another function, which
                 converts from type <code>a</code> to type <code>b</code>, and a list of <code>a</code>s and returns
-                a list of <code>b</code>s, by applying the given function to each element of the list (<code> map
+                a list of <code>b</code>s, by applying the given function to each element of the list (<code>map
                     (add 5) [1, 2, 3, 4, 5]</code> = <code>[6, 7, 8, 9, 10]</code>).
             </div>
         ),
@@ -56,7 +56,10 @@ const docs: Record<string, SectionType> = {
         <div>
             The <code>Canvas</code> is the main component of the editor. It is a 2D drawing surface using uses a
                 cartesian coordinate system, with the origin at the top-left corner. The x-axis increases to the right,
-                while the y-axis increases downwards.
+                while the y-axis increases downwards. All lengths are measured in pixels, while all angles are measured
+                clockwise in radians. These are denoted by the <code>Length</code> and <code>Radians</code> types,
+                respectively, which are both aliases for <code>Float</code>.
+            <br />
             <br />
             To set up the canvas, use the <code>createCanvas :: Int -&gt; Int -&gt; Canvas</code> function, providing a
                 width and a height. Once you've created the canvas, you can set a background color using
@@ -65,10 +68,12 @@ const docs: Record<string, SectionType> = {
                 to set the frames per second of the animation. By default, the canvas has a transparent background and
                 an fps of 24.
             <br />
+            <br />
             Having created the canvas, you can draw shapes on it using the <code>(&lt;&lt;&lt;) :: Canvas -&gt; Shape
                 -&gt; Canvas</code> operator. This operator adds a new frame to your animation. Chaining multiple shapes
                 together will draw them in sequence, not on top of each other. You can append a list of frames by using
                 Haskell's <code>foldl</code> function, like this: <code>foldl (&lt;&lt;&lt;) canvas frames</code>.
+            <br />
             <br />
             Finally, to render the canvas in the editor, use the <code>render :: Canvas -&gt; IO ()</code> function.
         </div>
@@ -112,7 +117,7 @@ const docs: Record<string, SectionType> = {
             ),
             line: () => (
                 <div>
-                    The <code>line :: Float -&gt; Shape</code> function takes a length and returns a line.
+                    The <code>line :: Length -&gt; Shape</code> function takes a length and returns a line.
                     <br />
                     <br />
                     The line extends in the positive x-direction.
@@ -120,7 +125,7 @@ const docs: Record<string, SectionType> = {
             ),
             circle: () => (
                 <div>
-                    The <code>circle :: Float -&gt; Shape</code> function takes a radius and returns a circle.
+                    The <code>circle :: Length -&gt; Shape</code> function takes a radius and returns a circle.
                     <br />
                     <br />
                     The circle's origin is at its center.
@@ -128,7 +133,7 @@ const docs: Record<string, SectionType> = {
             ),
             ellipse: () => (
                 <div>
-                    The <code>ellipse :: Float -&gt; Float -&gt; Shape</code> function takes a horizontal axis and a
+                    The <code>ellipse :: Length -&gt; Length -&gt; Shape</code> function takes a horizontal axis and a
                         vertical axis and returns an ellipse.
                     <br />
                     <br />
@@ -137,7 +142,7 @@ const docs: Record<string, SectionType> = {
             ),
             square: () => (
                 <div>
-                    The <code>square :: Float -&gt; Shape</code> function takes a side length and returns a square.
+                    The <code>square :: Length -&gt; Shape</code> function takes a side length and returns a square.
                     <br />
                     <br />
                     The square's origin is at its top left corner.
@@ -145,8 +150,8 @@ const docs: Record<string, SectionType> = {
             ),
             rect: () => (
                 <div>
-                    The <code>rect :: Float -&gt; Float -&gt; Shape</code> function takes a width and height and returns
-                        a rectangle.
+                    The <code>rect :: Length -&gt; Length -&gt; Shape</code> function takes a width and height and
+                        returns a rectangle.
                     <br />
                     <br />
                     Just like squares, the rectangle's origin is at its top left corner.
@@ -183,7 +188,7 @@ const docs: Record<string, SectionType> = {
             ),
             arc: () => (
                 <div>
-                    The <code>arc :: Float -&gt; Float -&gt; Float -&gt; Float -&gt; Shape</code> function takes a
+                    The <code>arc :: Length -&gt; Length -&gt; Radians -&gt; Radians -&gt; Shape</code> function takes a
                         horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
                         arc.
                     <br />
@@ -193,7 +198,7 @@ const docs: Record<string, SectionType> = {
             ),
             pie: () => (
                 <div>
-                    The <code>pie :: Float -&gt; Float -&gt; Float -&gt; Float -&gt; Shape</code> function takes a
+                    The <code>pie :: Length -&gt; Length -&gt; Radians -&gt; Radians -&gt; Shape</code> function takes a
                         horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
                         arc with two straight lines connecting the center to the start and end points.
                     <br />
@@ -203,7 +208,7 @@ const docs: Record<string, SectionType> = {
             ),
             segment: () => (
                 <div>
-                    The <code>arc :: Float -&gt; Float -&gt; Float -&gt; Float -&gt; Shape</code> function takes a
+                    The <code>arc :: Length -&gt; Length -&gt; Radians -&gt; Radians -&gt; Shape</code> function takes a
                         horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
                         arc with a straight line connecting the start and end points.
                     <br />
@@ -211,9 +216,9 @@ const docs: Record<string, SectionType> = {
                     As with ellipses, the arc's origin is at its center.
                 </div>
             ),
-            emptyShape: () => (
+            empty: () => (
                 <div>
-                    The <code>emptyShape :: Shape</code> function represents the empty shape.
+                    The <code>empty :: Shape</code> function represents the empty shape.
                     <br />
                     <br />
                     This shape draws nothing.
@@ -223,7 +228,7 @@ const docs: Record<string, SectionType> = {
         "Combining Shapes": () => (
             <div>
                 Shapes can be combined using the <code>(&amp;) :: Shape -&gt; Shape -&gt; Shape</code> operator.
-                The <code>emptyShape</code> is the identity function for the <code>&amp;</code> operator.
+                The <code>empty</code> is the identity function for the <code>&amp;</code> operator.
                 <br />
                 <br />
                 The resulting <code>Shape</code> is a list of <code>Shape</code>s that are drawn on top of each other,
@@ -276,7 +281,7 @@ const docs: Record<string, SectionType> = {
                     <br />
                     The <code>translateX :: Float -&gt; Shape -&gt; Shape</code> and <code>translateY :: Float -&gt;
                         Shape -&gt; Shape</code> functions are shorthand for <code>translate
-                        (Vector x 0)</code> and <code>translate (Vector 0 y)</code>, respectively.
+                            (Vector x 0)</code> and <code>translate (Vector 0 y)</code>, respectively.
                     <br />
                     <br />
                     This moves the shape's origin, so for circles and ellipses, it moves the center of the shape, for
@@ -287,8 +292,8 @@ const docs: Record<string, SectionType> = {
             ),
             rotate: () => (
                 <div>
-                    The <code>rotate :: Float -&gt; Shape -&gt; Shape</code> function rotates the shape clockwise by the
-                        given angle, in radians, around its origin.
+                    The <code>rotate :: Radians -&gt; Shape -&gt; Shape</code> function rotates the shape clockwise by
+                        the given angle, in radians, around its origin.
                     <br />
                     <br />
                     As with translations, the rotation is applied about the shape's origin point.
@@ -303,12 +308,6 @@ const docs: Record<string, SectionType> = {
                     Once again, the scale factor is applied about the shape's origin point.
                 </div>
             ),
-            identityTransformation: () => (
-                <div>
-                    The <code>identityTransformation :: Shape -&gt; Shape</code> function represents the identity
-                        transformation. It makes no changes to the shape it is applied to.
-                </div>
-            ),
         },
         "Chaining Transformations": () => (
             <div>
@@ -317,8 +316,7 @@ const docs: Record<string, SectionType> = {
                 The second is to use the <code>(&gt;&gt;&gt;) :: Shape -&gt; (Shape -&gt; Shape) -&gt;
                     Shape</code> operator to chain transformations together (e.g. <code>circle 50 &gt;&gt;&gt; fill
                     Red</code>).
-                The <code>identityTransformation</code> function is the identity function for
-                    the <code>&gt;&gt;&gt;</code> operator.
+                The <code>id</code> function is the identity function for the <code>&gt;&gt;&gt;</code> operator.
                 <br />
                 <br />
                 The following examples all produce the same result:
@@ -328,8 +326,8 @@ const docs: Record<string, SectionType> = {
                         rotate (radians 45)</code></>,
                     <><code>circle 50 &gt;&gt;&gt; (fill Red . translate (Vector 50 50) . rotate (radians
                         45))</code></>,
-                    <><code>circle 50 &gt;&gt;&gt; (foldr (.) identityTransformation [fill Red, translate (Vector 50
-                        50), rotate (radians 45)])</code></>,
+                    <><code>circle 50 &gt;&gt;&gt; (foldr (.) id [fill Red, translate (Vector 50 50), rotate
+                        (radians 45)])</code></>,
                     <><code>foldl (&gt;&gt;&gt;) (circle 50) [fill Red, translate (Vector 50 50), rotate (radians
                         45)]</code></>,
                 ])}
@@ -516,10 +514,11 @@ const docs: Record<string, SectionType> = {
     Other: {
         "Utility Functions": () => (
             <div>
-                The following functions convert beetween degrees and radians:
+                The following functions convert beetween degrees and radians (<code>Degrees</code> and <code>Radians
+                </code> are aliases for <code>Float</code>):
                 {list([
-                    <span key={0}><code>degrees :: Float -&gt; Float</code> — Converts radians to degrees.</span>,
-                    <span key={1}><code>radians :: Float -&gt; Float</code> — Converts degrees to radians.</span>,
+                    <span key={0}><code>degrees :: Radians -&gt; Degrees</code> — Converts radians to degrees.</span>,
+                    <span key={1}><code>radians :: Degrees -&gt; Radians</code> — Converts degrees to radians.</span>,
                 ])}
             </div>
         ),

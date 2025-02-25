@@ -1,15 +1,18 @@
 module Maths where
 
-import Internal (removeFloat)
+type Length = Float
 
 ----------------
 ---- Angles ----
 ----------------
 
-radians :: Float -> Float
+type Radians = Float
+type Degrees = Float
+
+radians :: Degrees -> Radians
 radians degrees = degrees * pi / 180
 
-degrees :: Float -> Float
+degrees :: Radians -> Degrees
 degrees radians = radians * 180 / pi
 
 -----------------
@@ -18,11 +21,6 @@ degrees radians = radians * 180 / pi
 
 -- Data structure to represent vectors
 data Vector = Vector Float Float deriving (Eq)
-
--- Convert a vector to a JSON string
-instance Show Vector where
-    show :: Vector -> String
-    show (Vector x y) = "[" ++ removeFloat x ++ "," ++ removeFloat y ++ "]"
 
 -- Vector maths
 (^+^) :: Vector -> Vector -> Vector
