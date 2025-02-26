@@ -2,7 +2,7 @@ module Shape where
 
 import Color (Color (Black, Transparent))
 import Data.List (intercalate)
-import Maths (Length, Radians, Vector (..), (^+^))
+import Maths (Length, Radians, Vector (..), (^*^), (^+^))
 
 ----------------
 ---- Shapes ----
@@ -101,6 +101,13 @@ square size = Rect size size defaultOptions
 
 polygon :: [Vector] -> Shape
 polygon points = Polygon points defaultOptions
+
+regular :: Int -> Length -> Shape
+regular s r = polygon [Vector (x i) (y i) ^*^ r | i <- [1 .. s]]
+  where
+    angle = 2 * pi / fromIntegral s
+    x i = cos (angle * fromIntegral i)
+    y i = sin (angle * fromIntegral i)
 
 bezier2 :: Vector -> Vector -> Shape
 bezier2 controlPoint endPoint = Curve [controlPoint, endPoint] defaultOptions

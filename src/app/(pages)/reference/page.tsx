@@ -225,6 +225,21 @@ const docs: Record<string, SectionType> = {
                 </div>
             ),
         },
+        // Built in functions to make shapes which use the Primitives above
+        "Non-Primatives": {
+            root: () => (
+                <div>The following functions create shapes using the 2D primitives above.</div>
+            ),
+            regular: () => (
+                <div>
+                    The <code>regular :: Int -&gt; Length -&gt; Shape</code> function takes the number of sides and a
+                        radius and returns a regular polygon, with each point lying on a circle with the given radius.
+                    <br />
+                    <br />
+                    The polygon's origin is at its center, just like circles and ellipses.
+                </div>
+            ),
+        },
         "Combining Shapes": () => (
             <div>
                 Shapes can be combined using the <code>(&amp;) :: Shape -&gt; Shape -&gt; Shape</code> operator.
