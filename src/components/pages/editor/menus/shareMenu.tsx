@@ -39,6 +39,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
     const copyUrl = (): void => {
         const codeURL = new URL(window.location.href);
 
+        codeURL.searchParams.delete("id");
         codeURL.searchParams.set("code", code);
 
         if (title !== "untitled")
