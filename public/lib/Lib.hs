@@ -28,6 +28,7 @@ import Shape (
     pie,
     polygon,
     rect,
+    regular,
     rotate,
     scale,
     segment,
