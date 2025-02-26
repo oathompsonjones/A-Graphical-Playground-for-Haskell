@@ -7,6 +7,7 @@ import type { StaticImageData } from "next/image";
 import americanFlag from "assets/images/examples/americanFlag.png";
 import flower from "assets/images/examples/flower.png";
 import fractalTree from "assets/images/examples/fractalTree.png";
+import pacman from "assets/images/examples/pacman.png";
 import styles from "styles/pages/home.module.css";
 import unionFlag from "assets/images/examples/unionFlag.png";
 
@@ -46,6 +47,11 @@ export default function Home(): ReactNode {
             code: "JYWwDg9gTgLgBAGWAIwFCoLQbgEQKYDGANgIZR5wlwAmJMVAzjFAK4EwvlwwRzljkGeAHbwqyYMLIBPbuTypa9OABV5lOAF5EeEgDMNAHzgA5CNQpUAFGryWAlHBvqSji1GAA3SQHMnAZQALCAB3e0U6KiRhCm1oigAxIgg6OCSU%2BHTUrMzk1PcvXwDgsPQsXEJSLhgQ3j0WYXZgCGEGOBDA4AJAyiJkkLgWNp44ZBZgImoNCSkoWWY7VAJyOjwAISgSRsC8NoAuPbS8%2BAwAPkRJCjOneIAaC5jw5d0Ydc3t3cphHyIKK3i4AAPOCyMh%2BX7CdrAagwQKObRWX56GD3Dw%2BQIwcJwdo7ciobHYgBqhB4UCBAHIQZTtMT2NAnMCANRwCFwABUcAIEDaYMcVlkzNZHIYkkoUB8WIJSPgWgeFEBlOklKsYLgzK2PzwfKFcAATHAAPRwADMfJC0Nh7L1hpNkuxaIxsoBCqpTlV2A1v21Iit%2BqNpqc5phPQ5ftt6Geq1sFAOcAAkqI4NccknzgDrtG5UsVq9MxYwJbPRQiJc4MZ85bNNoAAxO3QGEsxfEEluttvt7HGCCwvBQc1CbHaMwWFml6V8YDomDNjq9hQtxF4ZF3CdT%2BLwzk5t5bbqfIujpst8eyyO59RWCs9bAARkc%2B%2Bl8Wb9snju0p7wmYveALV7gt6%2Bmqrhij6YNg%2BDEGQFA1HUDRNC0bQdF0PQkH0oRtEM3C8NQmwDOIkgyHIizYSQIQArG6bnEEJBgAoxGkaW-ylsCoLiiyPpBrCG6NsWIhPh2-ECW2pzCXIWwMKQrxOLSpJAiCdqCQpAnCecUDdqsYo%2BHxinaa2ylwEwqkANYUAA6p0rxaTpVl6QZEDGSZeAvvAHGBOgdGZrGmYUXAVE0YoOGfgg9YHlqCnaHRALcf5JGfsOxZjku8AOpisoRWOlyWVZAkAGQ0AF6jjplWUdrl7nqMlZTYCoOxwCAJCiiIzCyJAkjwBABg9nAAgQD4mwgKgdWirGcYAPJOOEg2Qto5DCO4cAACRwHoECTEQTgADybXyy2rRtW2clsngkG0y19mQ1AMI4yAkAQhkhOdDAzri84EgQh3HS22h6GAbTXrWAB0ow3YZvUQA0UxWAASgA4mscAAKwAGwI8jSOOIt74AMLvW0ACc1a1vj1Z8QslifZuLwfuoyNUMwDSGSTrDCIZrZxKWAAs8OEwTTgYGAwA2rqjjGjz8N8ad91QBdg5wAA2mVdhOKTTj8zawD2I4xgC%2Bt2Cy%2Bztzs-98P-f9f0ALpm3x123ZL0vaPL%2BWK1YytWKrRrq5rcDa9g5CeL2A56wbRsm7jFuoEAA",
             image: fractalTree,
             name: "Animated Fractal Tree",
+        },
+        {
+            code: "JYWwDg9gTgLgBAGWAIwFCrAQwMYkwOzgC4i4AxAGwk3gFoA%2BOAZQAtMwBTDHPQ%2BAXjhZcBAORx49KRKgEAzgDNoIVHDgB3Fhyhc1amLPyLlcQQfkUaHOAAoAah2wxocAKwAGd288BKOADo4BWAKCjgATQ5QiHUAuHwIJgMIAGtdPWFecS9BbGAobAprABZPVQyeMQlTIWASzzhSrxt4ACpauAB6OAAOPxtaNo7uvvK1VDxgQhI4AEkAeVsfCcwpmp18ABNtOAASIIgKTYpxGwAeC79sAgA3TDk4AG1MgmqAH2qz2if3ABp3fwARn8QIAunAANQQn7%2BACc-38PRB7lBoPKmm01mu%2BDuD0ECjADwAbM1kDgUgBzKAQACuWzgACFLNgUrZsDorABhW73OCAzxefm%2BHxAA",
+            image: pacman,
+            name: "Pacman",
         },
     ];
     /* eslint-enable max-len */
