@@ -98,9 +98,9 @@ export default function EditorPage(): ReactNode {
 
             saveSketch(formData).then(() => {
                 setSaved(true);
-                setNotification("success", "Sketch saved.");
+                setNotification("Sketch saved.", "success");
             }).catch((e: unknown) => {
-                setNotification("error", e instanceof Error ? e.message : "An error occurred.");
+                setNotification(e instanceof Error ? e.message : "An error occurred.", "error");
             });
         }
     };
@@ -152,7 +152,7 @@ export default function EditorPage(): ReactNode {
                 setId(idParam);
                 setSaved(true);
             }).catch(() => {
-                setNotification("error", "Failed to open sketch. Are you logged in to the correct account?");
+                setNotification("Failed to open sketch. Are you logged in to the correct account?", "error");
             });
         }
     }, [user]);

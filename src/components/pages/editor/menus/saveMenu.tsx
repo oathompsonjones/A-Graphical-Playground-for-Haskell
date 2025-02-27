@@ -35,9 +35,9 @@ export function SaveMenu({ open, setOpen, code, setSaved, setId }: {
             setOpen(false);
             setSaved(true);
             setId(id);
-            setNotification("success", "Sketch saved.");
+            setNotification("Sketch saved.", "success");
         }).catch((e: unknown) => {
-            setNotification("error", e instanceof Error ? e.message : "An error occurred.");
+            setNotification(e instanceof Error ? e.message : "An error occurred.", "error");
         });
     };
 

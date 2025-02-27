@@ -31,7 +31,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
 
     const copyCode = (): void => {
         void window.navigator.clipboard.writeText(decompressFromEncodedURIComponent(code)).then(() => {
-            setNotification("success", "Code copied to clipboard.");
+            setNotification("Code copied to clipboard.", "success");
             setOpen(false);
         });
     };
@@ -48,7 +48,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
             codeURL.searchParams.set("author", author);
 
         void window.navigator.clipboard.writeText(codeURL.toString()).then(() => {
-            setNotification("success", "URL copied to clipboard.");
+            setNotification("URL copied to clipboard.", "success");
             setOpen(false);
         });
     };
@@ -64,7 +64,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
                 }),
             }),
         ]).then(() => {
-            setNotification("success", "Image copied to clipboard.");
+            setNotification("Image copied to clipboard.", "success");
             setOpen(false);
         });
     };
@@ -76,7 +76,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
         a.href = image;
         a.download = "image.png";
         a.click();
-        setNotification("success", "Image downloaded.");
+        setNotification("Image downloaded.", "success");
         setOpen(false);
     };
 
