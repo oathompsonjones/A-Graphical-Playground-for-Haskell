@@ -160,7 +160,7 @@ translate vector shape = shape{_options = (_options shape){_position = _position
 rotate :: Radians -> Shape -> Shape
 rotate _ Empty = Empty
 rotate angle (Group shapes) = group shapes (rotate angle)
-rotate angle shape = shape{_options = (_options shape){_angle = angle}}
+rotate angle shape = shape{_options = (_options shape){_angle = _angle (_options shape) + angle}}
 
 scale :: Float -> Shape -> Shape
 scale _ Empty = Empty
