@@ -27,12 +27,11 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
     author: string | null;
 }): ReactNode {
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
-    const { setType, setMessage } = useContext(NotificationsContext);
+    const { setNotification } = useContext(NotificationsContext);
 
     const copyCode = (): void => {
         void window.navigator.clipboard.writeText(decompressFromEncodedURIComponent(code)).then(() => {
-            setType("success");
-            setMessage("Code copied to clipboard.");
+            setNotification("success", "Code copied to clipboard.");
             setOpen(false);
         });
     };
@@ -49,8 +48,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
             codeURL.searchParams.set("author", author);
 
         void window.navigator.clipboard.writeText(codeURL.toString()).then(() => {
-            setType("success");
-            setMessage("URL copied to clipboard.");
+            setNotification("success", "URL copied to clipboard.");
             setOpen(false);
         });
     };
@@ -66,8 +64,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
                 }),
             }),
         ]).then(() => {
-            setType("success");
-            setMessage("Image copied to clipboard.");
+            setNotification("success", "Image copied to clipboard.");
             setOpen(false);
         });
     };
@@ -79,8 +76,7 @@ export function ShareMenu({ open, setOpen, code, title, author }: {
         a.href = image;
         a.download = "image.png";
         a.click();
-        setType("success");
-        setMessage("Image downloaded.");
+        setNotification("success", "Image downloaded.");
         setOpen(false);
     };
 

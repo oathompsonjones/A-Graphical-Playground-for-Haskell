@@ -32,7 +32,7 @@ import { useStreamAction } from "hooks/useStreamAction";
 // eslint-disable-next-line max-statements, max-lines-per-function
 export default function EditorPage(): ReactNode {
     const { user } = useContext(UserContext);
-    const { setType, setMessage } = useContext(NotificationsContext);
+    const { setNotification } = useContext(NotificationsContext);
     const [openShare, setOpenShare] = useState(false);
     const [openOpen, setOpenOpen] = useState(false);
     const [openSave, setOpenSave] = useState(false);
@@ -98,11 +98,9 @@ export default function EditorPage(): ReactNode {
 
             saveSketch(formData).then(() => {
                 setSaved(true);
-                setType("success");
-                setMessage("Sketch saved.");
+                setNotification("success", "Sketch saved.");
             }).catch((e: unknown) => {
-                setType("error");
-                setMessage(e instanceof Error ? e.message : "An error occurred.");
+                setNotification("error", e instanceof Error ? e.message : "An error occurred.");
             });
         }
     };
@@ -154,8 +152,7 @@ export default function EditorPage(): ReactNode {
                 setId(idParam);
                 setSaved(true);
             }).catch(() => {
-                setType("error");
-                setMessage("Failed to open sketch. Are you logged in to the correct account?");
+                setNotification("error", "Failed to open sketch. Are you logged in to the correct account?");
             });
         }
     }, [user]);

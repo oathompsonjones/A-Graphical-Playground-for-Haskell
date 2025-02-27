@@ -27,7 +27,7 @@ export function SaveMenu({ open, setOpen, code, setSaved, setId }: {
     setId: Dispatch<SetStateAction<string | null>>;
 }): ReactNode {
     const { user } = useContext(UserContext);
-    const { setType, setMessage } = useContext(NotificationsContext);
+    const { setNotification } = useContext(NotificationsContext);
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
 
     const saveSketchAction = (formData: FormData): void => {
@@ -35,11 +35,9 @@ export function SaveMenu({ open, setOpen, code, setSaved, setId }: {
             setOpen(false);
             setSaved(true);
             setId(id);
-            setType("success");
-            setMessage("Sketch saved.");
+            setNotification("success", "Sketch saved.");
         }).catch((e: unknown) => {
-            setType("error");
-            setMessage(e instanceof Error ? e.message : "An error occurred.");
+            setNotification("error", e instanceof Error ? e.message : "An error occurred.");
         });
     };
 
