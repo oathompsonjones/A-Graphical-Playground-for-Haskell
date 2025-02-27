@@ -12,6 +12,8 @@ export type SectionType = (() => ReactNode) | {
     root?: () => ReactNode;
 };
 
+// Line, Ellipse, Rect, Polygon, Curve, Arc
+
 const list = (items: ReactNode[]): Awaited<ReactNode> => <ul>{items.map((item, i) => <li key={i}>{item}</li>)}</ul>;
 
 const docs: Record<string, SectionType> = {
@@ -123,14 +125,6 @@ const docs: Record<string, SectionType> = {
                     The line extends in the positive x-direction.
                 </div>
             ),
-            circle: () => (
-                <div>
-                    The <code>circle :: Length -&gt; Shape</code> function takes a radius and returns a circle.
-                    <br />
-                    <br />
-                    The circle's origin is at its center.
-                </div>
-            ),
             ellipse: () => (
                 <div>
                     The <code>ellipse :: Length -&gt; Length -&gt; Shape</code> function takes a horizontal axis and a
@@ -138,14 +132,6 @@ const docs: Record<string, SectionType> = {
                     <br />
                     <br />
                     Just like circles, the ellipse's origin is at its center.
-                </div>
-            ),
-            square: () => (
-                <div>
-                    The <code>square :: Length -&gt; Shape</code> function takes a side length and returns a square.
-                    <br />
-                    <br />
-                    The square's origin is at its top left corner.
                 </div>
             ),
             rect: () => (
@@ -229,6 +215,18 @@ const docs: Record<string, SectionType> = {
         "Non-Primatives": {
             root: () => (
                 <div>The following functions create shapes using the 2D primitives above.</div>
+            ),
+            circle: () => (
+                <div>
+                    The <code>circle :: Length -&gt; Shape</code> function is a shorthand for <code>ellipse r r</code>,
+                        where <code>r</code> is the radius of the circle.
+                </div>
+            ),
+            square: () => (
+                <div>
+                    The <code>square :: Length -&gt; Shape</code> function is a shorthand for <code>rect s s</code>,
+                        where <code>s</code> is the side length of the square.
+                </div>
             ),
             regular: () => (
                 <div>

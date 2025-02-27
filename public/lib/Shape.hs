@@ -91,13 +91,13 @@ ellipse :: Length -> Length -> Shape
 ellipse horizontalAxis verticalAxis = Ellipse horizontalAxis verticalAxis defaultOptions
 
 circle :: Length -> Shape
-circle radius = Ellipse radius radius defaultOptions
+circle radius = ellipse radius radius
 
 rect :: Length -> Length -> Shape
 rect width height = Rect width height defaultOptions
 
 square :: Length -> Shape
-square size = Rect size size defaultOptions
+square size = rect size size
 
 polygon :: [Vector] -> Shape
 polygon points = Polygon points defaultOptions
