@@ -76,12 +76,18 @@ export default function EditorPage(): ReactNode {
             setOpenNewWarning(true);
     };
     const open = (): void => {
-        if (user === null || saved)
+        if (user === null)
+            return;
+
+        if (saved)
             setOpenOpen(true);
         else
             setOpenOpenWarning(true);
     };
     const save = (): void => {
+        if (user === null)
+            return;
+
         if (id === null) {
             setOpenSave(true);
         } else {
