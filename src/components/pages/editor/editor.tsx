@@ -222,6 +222,8 @@ export function Editor({ code, updateCode, save, open, new: new_, run, setSaved 
                         break;
                 // Automatically close brackets.
                 case "(": case "[": case "{": {
+                    // TODO: Don't close brackets if the cursor is directly before a non-whitespace character.
+                    // TODO: When deleting opening brackets, delete closing pair if immediately after opening.
                     event.preventDefault();
 
                     textarea.value = [

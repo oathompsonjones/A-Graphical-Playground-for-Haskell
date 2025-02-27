@@ -18,6 +18,9 @@ import { logout } from "actions/auth/logout";
 import styles from "styles/pages/account.module.css";
 import { updateProfile } from "actions/auth/updateProfile";
 
+// TODO: Warn user before deleting sketch.
+// TODO: Warn user before opening a sketch if they have unsaved changes to their current sketch.
+
 /**
  * This is the account page.
  * @returns The page element.

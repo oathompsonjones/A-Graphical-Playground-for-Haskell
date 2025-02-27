@@ -3,8 +3,6 @@
 import { readFile, readdir } from "fs/promises";
 import { exec } from "child_process";
 
-// TODO: Try to solve issue where the code doesn't run first time.
-
 /**
  * Executes Haskell code, streaming the response into a ReadableStream.
  * @param code - The code to execute.
