@@ -525,13 +525,32 @@ const docs: Record<string, SectionType> = {
         </div>
     ),
     Other: {
-        "Utility Functions": () => (
+        Angles: () => (
             <div>
                 The following functions convert beetween degrees and radians (<code>Degrees</code> and <code>Radians
                 </code> are aliases for <code>Float</code>):
                 {list([
                     <span key={0}><code>degrees :: Radians -&gt; Degrees</code> — Converts radians to degrees.</span>,
                     <span key={1}><code>radians :: Degrees -&gt; Radians</code> — Converts degrees to radians.</span>,
+                ])}
+            </div>
+        ),
+        "Random Numbers": () => (
+            <div>
+                The following functions can be used to generate random numbers:
+                {list([
+                    <span key={1}><code>randoms :: Int -&gt; [Double]</code> — Generates an infinite list of random
+                        numbers between 0 and 1, using the given seed.</span>,
+                    <span key={2}><code>seed :: IO Int</code> — Returns a random seed value, which you can use to
+                        generate random numbers. The seed is generated using the current time, and is therefore wrapped
+                        in the <code>IO</code> monad. You can use the seed value as follows:
+                    <pre>{[
+                        "main :: IO ()",
+                        "main = do",
+                        "  seed <- randomSeed",
+                        "  let randoms = randoms seed",
+                        "  print $ take 10 randoms",
+                    ].join("\n")}</pre></span>,
                 ])}
             </div>
         ),
@@ -544,9 +563,11 @@ const docs: Record<string, SectionType> = {
                     <><code>infixr 8 &amp;</code></>,
                     <><code>infixl 9 &gt;&gt;&gt;</code></>,
                 ])}
-                This means that the expressions such as <code>
-                    render $ createCanvas 500 500 &lt;&lt;&lt; circle 100 &gt;&gt;&gt; translate (Vector 250 250) &amp;
-                    square 200 &gt;&gt;&gt; translate (Vector 250 250)</code> do not require parentheses.
+                This means that expressions such as the following do not require parentheses.
+                <pre>{[
+                    "render $ createCanvas 500 500 <<< circle 100 >>> translate (Vector 250 250)",
+                    "                                & square 200 >>> translate (Vector 250 250)",
+                ].join("\n")}</pre>
             </div>
         ),
     },

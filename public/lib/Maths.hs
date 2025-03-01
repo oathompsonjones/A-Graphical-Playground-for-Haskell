@@ -1,5 +1,7 @@
 module Maths where
 
+import Data.Time.Clock.POSIX (getPOSIXTime)
+
 type Length = Float
 
 ----------------
@@ -49,3 +51,20 @@ dot (Vector x1 y1) (Vector x2 y2) = x1 * x2 + y1 * y2
 
 cross :: Vector -> Vector -> Float
 cross a b = mag a * mag b * sin (acos (dot a b))
+
+----------------
+---- Random ----
+----------------
+
+randoms :: Int -> [Double]
+randoms seed = map fst (iterate (lcg . snd) (lcg seed))
+  where
+    lcg :: Int -> (Double, Int)
+    lcg seed = (fromIntegral newSeed / fromIntegral (2 ^ 32), newSeed)
+      where
+        newSeed = (1664525 * seed + 1013904223) `mod` 2 ^ 32
+
+seed :: IO Int
+seed = do
+    time <- getPOSIXTime
+    return (floor (time * 1000000))
