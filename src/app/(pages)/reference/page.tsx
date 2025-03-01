@@ -547,9 +547,8 @@ const docs: Record<string, SectionType> = {
                     <pre>{[
                         "main :: IO ()",
                         "main = do",
-                        "  seed <- randomSeed",
-                        "  let randoms = randoms seed",
-                        "  print $ take 10 randoms",
+                        "  s <- seed",
+                        "  print $ take 10 (randoms s)",
                     ].join("\n")}</pre></span>,
                 ])}
             </div>
