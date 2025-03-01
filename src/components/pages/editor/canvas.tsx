@@ -29,6 +29,9 @@ function CanvasComponent({ content }: { content: string[]; }): ReactNode {
             context.strokeStyle = parseColour(shape.s);
             context.lineWidth = shape.sw;
 
+            if (!("t" in shape))
+                continue;
+
             switch (shape.t) {
                 case ShapeType.Line:
                     context.moveTo(shape.p[0], shape.p[1]);

@@ -27,10 +27,10 @@ instance Show Vector where
 -- Convert a shape to a JSON string
 instance Show Shape where
     show :: Shape -> String
-    show Empty = ""
+    show Empty = "{}"
     show (Group shapes) =
         "["
-            ++ (intercalate "," [show shape | shape <- shapes, not (isEmpty shape)])
+            ++ (intercalate "," [show shape | shape <- shapes])
             ++ "]"
     show (Line length options) =
         "{\"t\":0,\"l\":"

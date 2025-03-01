@@ -178,6 +178,8 @@ const defaults = {
 const vectorSchema = z.tuple([z.number(), z.number()]);
 
 // Shapes
+const emptySchema = z.object({});
+
 const lineSchema = z.object({
     l: z.number(),
     t: z.literal(ShapeType.Line),
@@ -220,7 +222,7 @@ const baseShapeSchema = z.object({
     p: vectorSchema.optional().default(defaults.position),
     s: z.union([z.string(), z.number()]).optional().default(defaults.stroke),
     sw: z.number().optional().default(defaults.strokeWeight),
-}).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema, curveSchema, arcSchema]));
+}).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema, curveSchema, arcSchema, emptySchema]));
 
 const shapeSchema = baseShapeSchema.or(z.array(baseShapeSchema));
 
