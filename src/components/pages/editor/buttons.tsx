@@ -9,6 +9,8 @@ import type { ReactNode } from "react";
 import styles from "styles/components/pages/editor/buttons.module.css";
 
 // TODO: Fix font size on icons
+// TODO: Loop toggle?
+// TODO: Pixelated toggle?
 
 /**
  * Contains the buttons to interact with the editor.
