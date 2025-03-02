@@ -8,6 +8,7 @@ import americanFlag from "assets/images/examples/americanFlag.png";
 import flower from "assets/images/examples/flower.png";
 import fractalTree from "assets/images/examples/fractalTree.png";
 import pacman from "assets/images/examples/pacman.png";
+import sineCosine from "assets/images/examples/sineCosine.png";
 import styles from "styles/pages/home.module.css";
 import unionFlag from "assets/images/examples/unionFlag.png";
 
@@ -54,6 +55,11 @@ export default function Home(): ReactNode {
             code: "JYWwDg9gTgLgBAGWAIwFCrAQwMYkwOzgC4i4AxAGwk3gFoA%2BOAZQAtMwBTDHPQ%2BAXjhZcBAORx49KRKgEAzgDNoIVHDgB3Fhyhc1amLPyLlcQQfkUaHOAAoAah2wxocAKwAGd288BKOADo4BWAKCjgATQ5QiHUAuHwIJgMIAGtdPWFecS9BbGAobAprABZPVQyeMQlTIWASzzhSrxt4ACpauAB6OAAOPxtaNo7uvvK1VDxgQhI4AEkAeVsfCcwpmp18ABNtOAASIIgKTYpxGwAeC79sAgA3TDk4AG1MgmqAH2qz2if3ABp3fwARn8QIAunAANQQn7%2BACc-38PRB7lBoPKmm01mu%2BDuD0ECjADwAbM1kDgUgBzKAQACuWzgACFLNgUrZsDorABhW73OCAzxefm%2BHxAA",
             image: pacman,
             name: "Pacman",
+        },
+        {
+            code: "JYWwDg9gTgLgBAGWAIwFCoK4DtgwMLBQDGANgKZwBclcAYiRAIbwC0AfHAMoAWjYZmHPkKkKjOHAC8cVBLnyFLFnAAiURgHc44oiPJwNubtqxwAHi0ZngAZwA02uAE9L1%2ByYAmjqBBjNgWADmcOoewBg2sgrREgAUusT6AIwADClwbJlwMOpYNiTMFLEAamREMNBwAEwArOlJdQCUUTExAGRwJAEUVWkSmRw5jHkFMEWl5ZW16U0trfOtAyG%2BhXCxYMBwAPTVzQvRHV1YPX0ZWUMjqyVlFVBwDfWz%2BwqH3fenSxf5VxO31XX3J7PYH9LI%2BPxjbRzBaNM4cGw5CAAazIAHUyMBAtx4ABmaHzJSqdRacSQALwABmlRg3AoNjeADdGCQMAIQR14noKEk4XAET4UXAAEpkDz4kHRT65b6Q66TO6xaZwADU73SACo4EQIDZtLCHntgYS1JpHGSsJTqbStTrGczWeL2lqufdQfDEYKAPK5QJsiULKXDGXjG5TAGxB4qtVwTX00yMRqG57G4lmiDkuBUu40ija5ABfwQUwQCl8t7DLzauMUJkssiRdnOxLct18j0UVHcXB%2B-2Lc7S0Yh%2BVrJWq1Iam26hNrSNjvqxgJ6pP7WFLfnItEYrHwVKO3tyVCBdRgYzUOgMZhwdhcXj8Q-H4ziSSOlOm4bmVy2ByGGmOBlkWBgCIZlOnLeAzCkOAUgcCsTF8Wk7kvCDpCqGM4A2GRWliI4KDqdJ5EDS4xgATTgHE6j3OAORw6NWy%2BQc1l%2BSoARxNJl1aV5jlowjg0Y0M7gAFhYtjKIkVcwRWWUMJ2Kp2IUcT3QFTdMWxMjHQ5USr2UE0SXjMAwB8awQELYtS3EastQwKB-zgCIAmCZAyAAL2AADLOs%2BtNNiRyXIAnE%2BOHAB2KoADoAA4oNhOU-iSKpApC1Dxyipi7l6eoRJBHiGOiypYhYA0yIy-YOh81yoH8nK7mC8LIoCmK4oStZ8rY5L%2BOqPo8qSuS%2B0GAcfjagEBKKhYSucsqKpSuBqoilJWuHWL4sSti6qmPoks0ui%2BtlSalVY2bNNG3zypWqrQpmub6sWpqupO9r0k6lqNt5ej%2BuHIT0iG-bngUtslLgb1hl9SjX107R9MM0ATLgEtHCrN4iCsmy7KCOBSrchGPIbeYOTR47Kqms7avxhbGoe2aLtW%2B7mvJp6stev48qaOBPu6l5UbGvzbumonJpJpbZtutK1VZyV%2ByDbLeeEr7ivZo6Jra7mBeJhrULJxNBY66nE1psWiKHP5yI%2B4aYh%2B9dBRFMVWlN9t0RU%2BAqhfbTU1JdMLUzCASAYQwUZzMsuIx-91KbURXV5M3lO3d4ntFxSN2FUVo4UOntra2IAWUIXNXEHYNiiw2owBBd4211oQbTDMqU9iBveCX24f9xGezZhIQ55MOba3VTd33Vtw-%2Bn0m-9ZP9dy9O7rQ7P0OAPOAVVQvJyXdBjMXM8AElPTWZpl9MaQoDILAPDcgASd2SA8EgAHI1gAHlv2FgKwJldQAbWwXACGbRwOiPPhHzgAAfRw19lCA3IDYAAulEDQCEm4PyfpBZAjAiBIiPBAbAXgkDbgAOJ7ycGsIge9Ch4GGPAvCcA8LLlAfWSCz9oJXhSCFHkIUQpXlQpqDY4CVSqmfiwNhU8HC8LQhhVUDCmEsJSJAoAA",
+            image: sineCosine,
+            name: "Sine and Cosine",
         },
     ];
     /* eslint-enable max-len */
