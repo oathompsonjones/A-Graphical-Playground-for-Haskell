@@ -1,5 +1,6 @@
 module Internal where
 
+import Canvas (Canvas (..))
 import Color (Color (..))
 import Data.List (intercalate)
 import Maths (Radians, Vector (..))
@@ -18,6 +19,11 @@ removeFloat :: Float -> String
 removeFloat float
     | float == fromIntegral (round float) = show (round float)
     | otherwise = show float
+
+-- Convert a canvas to a JSON string (excluding the frames)
+instance Show Canvas where
+    show :: Canvas -> String
+    show (Canvas w h r b f) = "{\"w\":" ++ show w ++ ",\"h\":" ++ show h ++ ",\"r\":" ++ show r ++ ",\"b\":" ++ show b ++ "}"
 
 -- Convert a vector to a JSON string
 instance Show Vector where
