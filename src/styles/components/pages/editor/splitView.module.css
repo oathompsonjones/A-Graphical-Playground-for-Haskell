@@ -1,6 +1,9 @@
 .container {
     display: flex;
     flex: 1;
+    /*  This fixes the issue where if one section's content exceeds 
+        the size of the container, it would expand the container. */
+    height: 1px;
 }
 
 .splitter {
