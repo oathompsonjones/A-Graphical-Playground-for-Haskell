@@ -69,7 +69,7 @@ export default function Home(): ReactNode {
             <Stack direction={{ md: "row" }} gap={2} className={styles.title!}>
                 <Image src="/favicon.svg" alt="Haskell Logo" width={150} height={100} />
                 <div>
-                    <Typography variant="h2" component="h2">A Graphical Playground</Typography>
+                    <Typography variant="h2" component="h2"><b>A Graphical Playground</b></Typography>
                     <Typography variant="h3" component="h3">for Haskell</Typography>
                     <hr />
                     All the fun, with none of the hassle.
