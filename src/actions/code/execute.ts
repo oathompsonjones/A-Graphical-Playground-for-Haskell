@@ -25,8 +25,8 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
             "runhaskell main.hs",
         ].join(" && ");
 
-        const timeout = 3_600_000;
-        const updateDelay = 1;
+        const timeout = 150_000;
+        const updateDelay = 5;
         const stopDelay = 2_500;
 
         const stream = exec(`${dockerCmd} bash -c "${bashCmd}"`, { timeout });
@@ -66,7 +66,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
 
                     if (newData === undefined) {
                         if (Date.now() - timeOfLastNewData > stopDelay) {
-                            controller.enqueue(`INFO: No output for ${stopDelay}ms, listener killed.`);
+                            controller.enqueue(`\nINFO: No output for ${stopDelay / 1000}s, listener killed.`);
                             handleStreamEnd();
                         }
 
@@ -79,7 +79,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
 
                 /** Handles the timeout of the stream. */
                 function timeoutStream(): void {
-                    controller.enqueue(`INFO: Execution took longer than ${timeout}ms, listener killed.`);
+                    controller.enqueue(`\nINFO: Execution took longer than ${timeout / 1000}s, listener killed.`);
                     handleStreamEnd();
                 }
 
