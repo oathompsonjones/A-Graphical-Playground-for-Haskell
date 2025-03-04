@@ -2,15 +2,21 @@ module Lib (
     module Color,
     module Maths,
     module Shape,
-    Canvas (),
+    Canvas,
     render,
-    createCanvas,
     background,
+    createCanvas,
     fps,
     (<<<),
 ) where
 
-import Canvas
+import Canvas (
+    Canvas,
+    background,
+    createCanvas,
+    fps,
+    (<<<),
+ )
 import Color
 import Internal ()
 import Maths

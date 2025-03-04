@@ -23,7 +23,7 @@ removeFloat float
 -- Convert a canvas to a JSON string (excluding the frames)
 instance Show Canvas where
     show :: Canvas -> String
-    show (Canvas w h r b f) = "{\"w\":" ++ show w ++ ",\"h\":" ++ show h ++ ",\"r\":" ++ show r ++ ",\"b\":" ++ show b ++ ",\"f\":" ++ show f ++ "}"
+    show (Canvas w h r b f) = "{'w':" ++ show w ++ ",'h':" ++ show h ++ ",'r':" ++ show r ++ ",'b':" ++ show b ++ ",'f':" ++ show f ++ "}"
 
 -- Convert a vector to a JSON string
 instance Show Vector where
@@ -39,44 +39,44 @@ instance Show Shape where
             ++ (intercalate "," [show shape | shape <- shapes])
             ++ "]"
     show (Line length options) =
-        "{\"t\":0,\"l\":"
+        "{'t':0,'l':"
             ++ removeFloat length
             ++ jsonOptionsNoFill options
             ++ "}"
     show (Ellipse horizontalAxis verticalAxis options) =
-        "{\"t\":1,\"h\":"
+        "{'t':1,'h':"
             ++ removeFloat horizontalAxis
-            ++ ",\"v\":"
+            ++ ",'v':"
             ++ removeFloat verticalAxis
             ++ jsonOptions options
             ++ "}"
     show (Rect width height options) =
-        "{\"t\":2,\"w\":"
+        "{'t':2,'w':"
             ++ removeFloat width
-            ++ ",\"h\":"
+            ++ ",'h':"
             ++ removeFloat height
             ++ jsonOptions options
             ++ "}"
     show (Polygon points options) =
-        "{\"t\":3,\"v\":"
+        "{'t':3,'v':"
             ++ show points
             ++ jsonOptions options
             ++ "}"
     show (Curve points options) =
-        "{\"t\":4,\"v\":"
+        "{'t':4,'v':"
             ++ show points
             ++ jsonOptions options
             ++ "}"
     show (Arc horizontalAxis verticalAxis startAngle endAngle connect options) =
-        "{\"t\":5,\"h\":"
+        "{'t':5,'h':"
             ++ removeFloat horizontalAxis
-            ++ ",\"v\":"
+            ++ ",'v':"
             ++ removeFloat verticalAxis
-            ++ ",\"b\":"
+            ++ ",'b':"
             ++ removeFloat startAngle
-            ++ ",\"e\":"
+            ++ ",'e':"
             ++ removeFloat endAngle
-            ++ ",\"c\":"
+            ++ ",'c':"
             ++ jsonConnection connect
             ++ jsonOptions options
             ++ "}"
@@ -89,27 +89,27 @@ isEmpty _ = False
 jsonPos :: Vector -> String
 jsonPos (Vector x y)
     | x == 0 && y == 0 = ""
-    | otherwise = ",\"p\":" ++ show (Vector x y)
+    | otherwise = ",'p':" ++ show (Vector x y)
 
 jsonAng :: Radians -> String
 jsonAng a
     | a == defaultAngle = ""
-    | otherwise = ",\"a\":" ++ removeFloat a
+    | otherwise = ",'a':" ++ removeFloat a
 
 jsonFC :: Color -> String
 jsonFC c
     | c == defaultFill = ""
-    | otherwise = ",\"f\":" ++ show c
+    | otherwise = ",'f':" ++ show c
 
 jsonS :: Color -> String
 jsonS c
     | c == defaultStroke = ""
-    | otherwise = ",\"s\":" ++ show c
+    | otherwise = ",'s':" ++ show c
 
 jsonSW :: Float -> String
 jsonSW w
     | w == defaultStrokeWeight = ""
-    | otherwise = ",\"sw\":" ++ removeFloat w
+    | otherwise = ",'sw':" ++ removeFloat w
 
 jsonConnection :: Connection -> String
 jsonConnection Open = "0"
@@ -135,15 +135,15 @@ jsonOptions (ShapeOptions pos ang fc sc sw) =
 instance Show Color where
     show :: Color -> String
     show (RGB r g b) =
-        "\"rgb("
+        "'rgb("
             ++ show r
             ++ ","
             ++ show g
             ++ ","
             ++ show b
-            ++ ")\""
+            ++ ")'"
     show (RGBA r g b a) =
-        "\"rgba("
+        "'rgba("
             ++ show r
             ++ ","
             ++ show g
@@ -151,25 +151,25 @@ instance Show Color where
             ++ show b
             ++ ","
             ++ removeFloat a
-            ++ ")\""
+            ++ ")'"
     show (Hex ('#' : hex)) =
-        "\"#"
+        "'#"
             ++ hex
-            ++ "\""
+            ++ "'"
     show (Hex hex) =
-        "\"#"
+        "'#"
             ++ hex
-            ++ "\""
+            ++ "'"
     show (HSL h s l) =
-        "\"hsl("
+        "'hsl("
             ++ show h
             ++ ","
             ++ show s
             ++ "%,"
             ++ show l
-            ++ "%)\""
+            ++ "%)'"
     show (HSLA h s l a) =
-        "\"hsla("
+        "'hsla("
             ++ show h
             ++ ","
             ++ show s
@@ -177,7 +177,7 @@ instance Show Color where
             ++ show l
             ++ "%,"
             ++ removeFloat a
-            ++ ")\""
+            ++ ")'"
     show Transparent = "0"
     show AliceBlue = "1"
     show AntiqueWhite = "2"
