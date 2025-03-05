@@ -42,8 +42,10 @@ export function Sketch({ sketch, setSketches }: {
             <Card>
                 <CardContent className={styles.sketch!}>
                     <Typography variant="h5">
-                        <Button variant="text" onClick={handleOpenClick}>
-                            {sketch.name}
+                        <Button variant="text" color="secondary" onClick={handleOpenClick}>
+                            <Typography variant="h6">
+                                {sketch.name}
+                            </Typography>
                         </Button>
                     </Typography>
                     <Button color="error" onClick={() => setOpenDelete(true)} size="small">
@@ -52,12 +54,12 @@ export function Sketch({ sketch, setSketches }: {
                 </CardContent>
                 <CardContent>
                     <Typography variant="caption" color="textDisabled">
-                        <b>Created At:</b>
+                        <b>Created At: </b>
                         {new Date(parseInt(sketch.createdAt, 10)).toLocaleString()}
                     </Typography>
                     <br />
                     <Typography variant="caption" color="textDisabled">
-                        <b>Last Edited At:</b>
+                        <b>Modified At: </b>
                         {new Date(parseInt(sketch.modifiedAt, 10)).toLocaleString()}
                     </Typography>
                 </CardContent>
