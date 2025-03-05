@@ -1,6 +1,7 @@
 "use client";
 
 import { AppBar, Avatar, MenuItem, Toolbar, Typography, useMediaQuery } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -8,7 +9,6 @@ import { SketchContext } from "contexts/sketch";
 import { UserContext } from "contexts/user";
 import logo from "assets/images/logo.png";
 import styles from "styles/components/header.module.css";
-import { useContext } from "react";
 
 /**
  * Contains the header element.
@@ -18,11 +18,14 @@ export function Header(): ReactNode {
     const { user } = useContext(UserContext);
     const { saved } = useContext(SketchContext);
     const edge = useMediaQuery((theme) => theme.breakpoints.down("md"));
+    const [mounted, setMounted] = useState(false);
 
     let signInText = user?.username ?? user?.email.split("@")[0] ?? "Sign In";
 
     if (edge && signInText.length > 10)
         signInText = `${signInText.slice(0, 8)}...`;
+
+    useEffect(() => setMounted(true), []);
 
     return (
         <AppBar component="header" className={styles.header!}>
@@ -39,7 +42,7 @@ export function Header(): ReactNode {
                 </MenuItem>
                 <MenuItem className={styles.menuItem!} component={Link} href="/editor">
                     Editor
-                    {!saved && <Typography variant="h4" className={styles.saved!}>•</Typography>}
+                    {mounted && !saved && <Typography variant="h4" className={styles.saved!}>•</Typography>}
                 </MenuItem>
                 <div className={styles.spacer} />
                 <MenuItem className={styles.account!} component={Link} href="/account">
