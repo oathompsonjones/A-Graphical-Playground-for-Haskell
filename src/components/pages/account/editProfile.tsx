@@ -78,10 +78,9 @@ export function EditProfile({ action, pending }: {
                                         }
                                     }}
                                 />
-                                <label htmlFor="avatarUpload" className={styles.avatarLabel} />
-                                <Typography variant="h6">
-                                    Change Avatar
-                                </Typography>
+                                <label htmlFor="avatarUpload" className={styles.avatarLabel}>
+                                    <Typography variant="h6">Change Avatar</Typography>
+                                </label>
                             </div>
                         </div>
                     </Grid>
