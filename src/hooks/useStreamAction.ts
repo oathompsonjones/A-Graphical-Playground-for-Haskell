@@ -39,7 +39,7 @@ export function useStreamAction<T, U extends unknown[]>(
 
     /** Terminates the stream. */
     function terminateStream(): void {
-        streamReader?.releaseLock();
+        void streamReader?.cancel();
     }
 
     /** Clears the streamed data. */
