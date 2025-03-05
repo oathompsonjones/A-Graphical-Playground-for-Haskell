@@ -4,6 +4,7 @@ import { AppBar, Avatar, MenuItem, Toolbar, Typography, useMediaQuery } from "@m
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { SketchContext } from "contexts/sketch";
 import { UserContext } from "contexts/user";
 import logo from "assets/images/logo.png";
 import styles from "styles/components/header.module.css";
@@ -15,6 +16,7 @@ import { useContext } from "react";
  */
 export function Header(): ReactNode {
     const { user } = useContext(UserContext);
+    const { saved } = useContext(SketchContext);
     const edge = useMediaQuery((theme) => theme.breakpoints.down("md"));
 
     let signInText = user?.username ?? user?.email.split("@")[0] ?? "Sign In";
@@ -29,9 +31,16 @@ export function Header(): ReactNode {
                     <Image src={logo} alt="Haskell Logo" />
                     <Typography variant="h5" component="h5">A Graphical Playground for Haskell</Typography>
                 </div>
-                <MenuItem className={styles.menuItem!} component={Link} href="/">Home</MenuItem>
-                <MenuItem className={styles.menuItem!} component={Link} href="/editor">Editor</MenuItem>
-                <MenuItem className={styles.menuItem!} component={Link} href="/reference">Reference</MenuItem>
+                <MenuItem className={styles.menuItem!} component={Link} href="/">
+                    Home
+                </MenuItem>
+                <MenuItem className={styles.menuItem!} component={Link} href="/reference">
+                    Reference
+                </MenuItem>
+                <MenuItem className={styles.menuItem!} component={Link} href="/editor">
+                    Editor
+                    {!saved && <Typography variant="h4" className={styles.saved!}>•</Typography>}
+                </MenuItem>
                 <div className={styles.spacer} />
                 <MenuItem className={styles.account!} component={Link} href="/account">
                     {signInText}
