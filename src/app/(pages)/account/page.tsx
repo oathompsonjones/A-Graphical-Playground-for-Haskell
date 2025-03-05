@@ -69,7 +69,8 @@ export default function Account(): ReactNode {
                 )
                 : (
                     <div className={styles.sketches}>
-                        {sketches.map((sketch, i) => <Sketch key={i} sketch={sketch} setSketches={setSketches} />)}
+                        {sketches.sort((a, b) => (a.modifiedAt < b.modifiedAt ? 1 : -1))
+                            .map((sketch, i) => <Sketch key={i} sketch={sketch} setSketches={setSketches} />)}
                     </div>
                 )}
             <br />
