@@ -32,10 +32,13 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
     const loggedIn = user !== null;
     const { author, saved, title } = useContext(SketchContext);
     const [metaKey, setMetaKey] = useState(<KeyboardControlKey fontSize="small" />);
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         if (navigator.platform.includes("Mac"))
             setMetaKey(<KeyboardCommandKey fontSize="small" />);
+
+        setMounted(true);
     }, []);
 
     return (
@@ -85,7 +88,7 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
             <Divider orientation="vertical" className={styles.divider!} />
 
             <Typography className={styles.heading!}>
-                {author === null ? title : `${author}/${title} — ${saved ? "Saved" : "Unsaved"}`}
+                {mounted && (author === null ? title : `${author}/${title} — ${saved ? "Saved" : "Unsaved"}`)}
             </Typography>
 
             <Divider orientation="vertical" className={styles.divider!} />
