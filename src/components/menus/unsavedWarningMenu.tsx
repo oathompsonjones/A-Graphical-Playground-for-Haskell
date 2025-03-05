@@ -1,25 +1,24 @@
 "use client";
 
+import { ArrowCircleRight, Cancel } from "@mui/icons-material";
 import { Dialog, IconButton, Typography } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
-import { InsertDriveFile, Save } from "@mui/icons-material";
-import styles from "styles/components/pages/editor/menu.module.css";
+import { redirect } from "next/navigation";
+import styles from "styles/components/menu.module.css";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
 /**
- * This is the new warning menu.
+ * This is the unsaved code warning menu.
  * @param props - The properties of the component.
- * @param props.open - Whether the menu is open.
- * @param props.setOpen - The function to set the menu state.
- * @param props.new - The function to create a new sketch.
- * @param props.save - The function to save the sketch.
- * @returns The new warning menu element.
+ * @param props.open - Whether the warning menu is open.
+ * @param props.setOpen - The function to set the warning menu state.
+ * @param props.url - The URL to redirect to.
+ * @returns The unsaved code warning menu element.
  */
-export function NewWarningMenu({ open, setOpen, new: new_, save }: {
+export function UnsavedWarningMenu({ open, setOpen, url }: {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
-    new: () => void;
-    save: () => void;
+    url: string;
 }): ReactNode {
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
 
@@ -27,18 +26,17 @@ export function NewWarningMenu({ open, setOpen, new: new_, save }: {
         {
             action: (): void => {
                 setOpen(false);
-                new_();
             },
-            icon: <InsertDriveFile />,
-            label: "Create New Sketch",
+            icon: <Cancel />,
+            label: "Cancel",
         },
         {
             action: (): void => {
                 setOpen(false);
-                save();
+                redirect(url);
             },
-            icon: <Save />,
-            label: "Save Sketch",
+            icon: <ArrowCircleRight />,
+            label: "Continue",
         },
     ];
 
@@ -47,7 +45,7 @@ export function NewWarningMenu({ open, setOpen, new: new_, save }: {
             <div className={styles.dialog}>
                 <Typography variant="h5">You have unsaved changes.</Typography>
                 <Typography variant="h6">
-                    Would you like to save your changes before creating a new sketch?
+                    These changes will be lost if you continue. Are you sure you want to continue?
                 </Typography>
                 <div className={styles.options}>
                     {newOptions.map(({ action, icon, label }, i) => (

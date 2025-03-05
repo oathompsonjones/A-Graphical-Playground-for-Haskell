@@ -3,7 +3,7 @@
 import { Dialog, IconButton, Typography } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { FileOpen, Save } from "@mui/icons-material";
-import styles from "styles/components/pages/editor/menu.module.css";
+import styles from "styles/components/menu.module.css";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
 /**

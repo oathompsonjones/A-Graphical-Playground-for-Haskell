@@ -4,8 +4,9 @@ import { ContentCopy, CopyAll, Download, Image } from "@mui/icons-material";
 import { Dialog, IconButton, Typography } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { NotificationsContext } from "contexts/notifications";
+import { SketchContext } from "contexts/sketch";
 import { decompressFromEncodedURIComponent } from "lz-string";
-import styles from "styles/components/pages/editor/menu.module.css";
+import styles from "styles/components/menu.module.css";
 import { useContext } from "react";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
@@ -14,20 +15,15 @@ import { useOutsideClick } from "hooks/useOutsideClick";
  * @param props - The properties of the component.
  * @param props.open - Whether the share menu is open.
  * @param props.setOpen - The function to set the share menu state.
- * @param props.code - The code to share.
- * @param props.title - The title of the code.
- * @param props.author - The author of the code.
  * @returns The share menu element.
  */
-export function ShareMenu({ open, setOpen, code, title, author }: {
+export function ShareMenu({ open, setOpen }: {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
-    code: string;
-    title: string;
-    author: string | null;
 }): ReactNode {
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
     const { setNotification } = useContext(NotificationsContext);
+    const { code, title, author } = useContext(SketchContext);
 
     const copyCode = (): void => {
         void window.navigator.clipboard.writeText(decompressFromEncodedURIComponent(code)).then(() => {

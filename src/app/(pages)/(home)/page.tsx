@@ -12,8 +12,6 @@ import sineCosine from "assets/images/examples/sineCosine.png";
 import styles from "styles/pages/home.module.css";
 import unionFlag from "assets/images/examples/unionFlag.png";
 
-// TODO: Warn user before opening a sketch if they have unsaved changes to their current sketch.
-
 /**
  * This is the home page.
  * @returns The home page.

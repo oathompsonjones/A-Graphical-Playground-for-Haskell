@@ -2,6 +2,7 @@
 
 import { NotificationsContextProvider } from "contexts/notifications";
 import type { ReactNode } from "react";
+import { SketchContextProvider } from "./sketch";
 import { ThemeContextProvider } from "contexts/theme";
 import { UserContextProvider } from "./user";
 
@@ -14,11 +15,13 @@ import { UserContextProvider } from "./user";
 export function Providers({ children }: { children: ReactNode; }): ReactNode {
     return (
         <ThemeContextProvider>
-            <UserContextProvider>
-                <NotificationsContextProvider>
-                    {children}
-                </NotificationsContextProvider>
-            </UserContextProvider>
+            <NotificationsContextProvider>
+                <UserContextProvider>
+                    <SketchContextProvider>
+                        {children}
+                    </SketchContextProvider>
+                </UserContextProvider>
+            </NotificationsContextProvider>
         </ThemeContextProvider>
     );
 }

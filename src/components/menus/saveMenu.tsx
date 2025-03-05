@@ -3,9 +3,10 @@
 import { Button, Dialog, FormControl, TextField } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { NotificationsContext } from "contexts/notifications";
+import { SketchContext } from "contexts/sketch";
 import { UserContext } from "contexts/user";
 import { saveSketch } from "actions/code/saveSketch";
-import styles from "styles/components/pages/editor/menu.module.css";
+import styles from "styles/components/menu.module.css";
 import { useContext } from "react";
 import { useOutsideClick } from "hooks/useOutsideClick";
 
@@ -14,20 +15,15 @@ import { useOutsideClick } from "hooks/useOutsideClick";
  * @param props - The properties of the component.
  * @param props.open - Whether the menu is open.
  * @param props.setOpen - The function to set the menu state.
- * @param props.code - The code to save.
- * @param props.setSaved - The function to set the saved state.
- * @param props.setId - The function to set the ID of the sketch.
  * @returns The save menu element.
  */
-export function SaveMenu({ open, setOpen, code, setSaved, setId }: {
+export function SaveMenu({ open, setOpen }: {
     open: boolean;
     setOpen: Dispatch<SetStateAction<boolean>>;
-    code: string;
-    setSaved: Dispatch<SetStateAction<boolean>>;
-    setId: Dispatch<SetStateAction<string | null>>;
 }): ReactNode {
     const { user } = useContext(UserContext);
     const { setNotification } = useContext(NotificationsContext);
+    const { code, setSaved, setId } = useContext(SketchContext);
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
 
     const saveSketchAction = (formData: FormData): void => {

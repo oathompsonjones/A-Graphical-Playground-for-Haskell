@@ -1,5 +1,6 @@
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
+import { memo } from "react";
 import styles from "styles/components/pages/editor/console.module.css";
 
 /**
@@ -8,10 +9,12 @@ import styles from "styles/components/pages/editor/console.module.css";
  * @param props.content - The content to display on the console.
  * @returns The console element.
  */
-export function Console({ content }: { content?: string; }): ReactNode {
+function ConsoleComponent({ content }: { content?: string; }): ReactNode {
     return (
         <PlainPaper className={styles.console!}>
             <pre>{content}</pre>
         </PlainPaper>
     );
 }
+
+export const Console = memo(ConsoleComponent);

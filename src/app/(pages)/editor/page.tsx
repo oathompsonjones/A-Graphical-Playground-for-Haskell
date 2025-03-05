@@ -1,64 +1,53 @@
 "use client";
 
 import { Typography, useMediaQuery } from "@mui/material";
-import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Buttons } from "components/pages/editor/buttons";
 import { Canvas } from "components/pages/editor/canvas";
 import { Console } from "components/pages/editor/console";
 import { Editor } from "components/pages/editor/editor";
-import { NewWarningMenu } from "components/pages/editor/menus/newWarningMenu";
+import { NewWarningMenu } from "components/menus/newWarningMenu";
 import { NotificationsContext } from "contexts/notifications";
-import { OpenMenu } from "components/pages/editor/menus/openMenu";
-import { OpenWarningMenu } from "components/pages/editor/menus/openWarningMenu";
+import { OpenMenu } from "components/menus/openMenu";
+import { OpenWarningMenu } from "components/menus/openWarningMenu";
 import type { ReactNode } from "react";
-import { SaveMenu } from "components/pages/editor/menus/saveMenu";
-import { ShareMenu } from "components/pages/editor/menus/shareMenu";
+import { SaveMenu } from "components/menus/saveMenu";
+import { ShareMenu } from "components/menus/shareMenu";
 import type { Sketch } from "schemas/database";
+import { SketchContext } from "contexts/sketch";
 import { SplitView } from "components/pages/editor/splitView";
 import { UserContext } from "contexts/user";
+import { decompressFromEncodedURIComponent } from "lz-string";
 import { execute } from "actions/code/execute";
 import { getSketch } from "database/index";
 import { redirect } from "next/navigation";
 import { saveSketch } from "actions/code/saveSketch";
 import styles from "styles/pages/editor.module.css";
-import { useLocalStorage } from "hooks/useLocalStorage";
 import { useStreamAction } from "hooks/useStreamAction";
 
 /**
  * This is the editor page.
  * @returns The page element.
  */
-// eslint-disable-next-line max-statements, max-lines-per-function
+// eslint-disable-next-line max-statements
 export default function EditorPage(): ReactNode {
     const { user } = useContext(UserContext);
+    const {
+        code, id, resetCode, resetId, resetSaved, resetTitle,
+        saved, setAuthor, setCode, setId, setSaved, setTitle,
+    } = useContext(SketchContext);
     const { setNotification } = useContext(NotificationsContext);
     const [openShare, setOpenShare] = useState(false);
     const [openOpen, setOpenOpen] = useState(false);
     const [openSave, setOpenSave] = useState(false);
     const [openOpenWarning, setOpenOpenWarning] = useState(false);
     const [openNewWarning, setOpenNewWarning] = useState(false);
-    const [saved, setSaved, resetSaved] = useLocalStorage("saved", false);
-    const [id, setId, resetId] = useLocalStorage<string | null>("id", null);
-    const [title, setTitle, resetTitle] = useLocalStorage("title", "untitled");
-    const [code, setCode, resetCode] = useLocalStorage("code", compressToEncodedURIComponent([
-        "import Lib",
-        "",
-        "-- Start writing your code here.",
-        "main :: IO ()",
-        "main = render $ background LightGrey (createCanvas 800 600)",
-        "",
-    ].join("\n")));
-    const updateCode = (rawCode: string): void => setCode(compressToEncodedURIComponent(rawCode));
-    const [author, setAuthor] = useLocalStorage<string | null>("author", user === null
-        ? null
-        : user.username ?? user.email.split("@")[0]!);
     const [codeOutput, executeStream, terminateStream, clearStream] = useStreamAction(execute);
     const [loaded, setLoaded] = useState(false);
     const [, loadDocker] = useStreamAction(execute);
     const [graphics, setGraphics] = useState<string[]>([]);
 
-    const reset = (): void => {
+    const reset = useCallback((): void => {
         clearStream();
         resetTitle();
         resetCode();
@@ -66,16 +55,16 @@ export default function EditorPage(): ReactNode {
         resetId();
         setAuthor(user?.username ?? user?.email.split("@")[0] ?? null);
         redirect("/editor");
-    };
+    }, [user]);
 
-    const clear = clearStream;
-    const new_ = (): void => {
+    const clear = useCallback(clearStream, []);
+    const new_ = useCallback((): void => {
         if (user === null || saved)
             reset();
         else
             setOpenNewWarning(true);
-    };
-    const open = (): void => {
+    }, [user, saved]);
+    const open = useCallback((): void => {
         if (user === null)
             return;
 
@@ -83,8 +72,8 @@ export default function EditorPage(): ReactNode {
             setOpenOpen(true);
         else
             setOpenOpenWarning(true);
-    };
-    const save = (): void => {
+    }, [user, saved]);
+    const save = useCallback((): void => {
         if (user === null)
             return;
 
@@ -103,13 +92,16 @@ export default function EditorPage(): ReactNode {
                 setNotification(e instanceof Error ? e.message : "An error occurred.", "error");
             });
         }
-    };
-    const share = (): void => setOpenShare(true);
-    const stop = terminateStream;
-    const run = (): void => {
+    }, [user, id, code]);
+    const share = useCallback((): void => setOpenShare(true), []);
+    const stop = useCallback(terminateStream, []);
+    const run = useCallback((): void => {
         stop();
         executeStream(decompressFromEncodedURIComponent(code));
-    };
+    }, [code]);
+
+    // Extract the graphics commands, and send them to the canvas.
+    const newGraphics = codeOutput.join("").match(/(canvas|frame)\((.*)\)\n/g) ?? [];
 
     // Remove the graphics commands from the console output.
     const consoleOutput = codeOutput.join("")
@@ -182,22 +174,16 @@ export default function EditorPage(): ReactNode {
 
     return (
         <div className={`full-width ${styles.container}`}>
-            <ShareMenu open={openShare} setOpen={setOpenShare} code={code} title={title} author={author} />
+            <ShareMenu open={openShare} setOpen={setOpenShare} />
             <NewWarningMenu open={openNewWarning} setOpen={setOpenNewWarning} new={reset} save={save} />
             <OpenWarningMenu
                 open={openOpenWarning} setOpen={setOpenOpenWarning} openFn={() => setOpenOpen(true)} save={save} />
             <OpenMenu open={openOpen} setOpen={setOpenOpen} />
-            <SaveMenu open={openSave} setOpen={setOpenSave} code={code} setSaved={setSaved} setId={setId} />
-            <Buttons
-                new={new_} clear={clear} open={open} save={save} share={share} stop={stop} run={run}
-                loggedIn={user !== null} author={author} title={title} saved={saved}
-            />
+            <SaveMenu open={openSave} setOpen={setOpenSave} />
+            <Buttons new={new_} clear={clear} open={open} save={save} share={share} stop={stop} run={run} />
             <SplitView id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
-                    <Editor
-                        code={decompressFromEncodedURIComponent(code)} updateCode={updateCode}
-                        save={save} open={open} new={new_} run={run} setSaved={setSaved}
-                    />
+                    <Editor save={save} open={open} new={new_} run={run} />
                     <Console content={consoleOutput} />
                 </SplitView>
                 <Canvas content={graphics} />

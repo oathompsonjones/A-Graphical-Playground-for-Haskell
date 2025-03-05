@@ -1,6 +1,9 @@
 import "styles/codeTheme.css";
-import type { Dispatch, FormEvent, KeyboardEvent, ReactNode, SetStateAction, UIEvent } from "react";
+import type { FormEvent, KeyboardEvent, ReactNode, UIEvent } from "react";
+import { memo, useContext } from "react";
 import { PlainPaper } from "./plainPaper";
+import { SketchContext } from "contexts/sketch";
+import { decompressFromEncodedURIComponent } from "lz-string";
 import { renderToString } from "react-dom/server";
 import styles from "styles/components/pages/editor/editor.module.css";
 
@@ -19,25 +22,22 @@ That's why we are storing the highlight.js instance in a state variable,
 /**
  * This is the text editor.
  * @param props - The properties of the editor.
- * @param props.code - The initial code to display.
- * @param props.updateCode - The function to call when the code changes.
  * @param props.save - The function to call when the user saves the code.
  * @param props.open - The function to call when the user opens a file.
  * @param props.new - The function to call when the user creates a new file.
  * @param props.run - The function to call when the user runs the code.
- * @param props.setSaved - The function to whether the code has been saved.
  * @returns The editor element.
  */
 // eslint-disable-next-line max-lines-per-function
-export function Editor({ code, updateCode, save, open, new: new_, run, setSaved }: {
-    code: string;
-    updateCode: (rawCode: string) => void;
+function EditorComponent({ save, open, new: new_, run }: {
     save: () => void;
     open: () => void;
     new: () => void;
     run: () => void;
-    setSaved: Dispatch<SetStateAction<boolean>>;
 }): ReactNode {
+    const { code: compressedCode, setSaved, updateCode } = useContext(SketchContext);
+    const code = decompressFromEncodedURIComponent(compressedCode);
+
     /**
      * Highlight the code and update the display.
      * We use separate <code> elements for each line to render line numbers.
@@ -298,3 +298,5 @@ export function Editor({ code, updateCode, save, open, new: new_, run, setSaved 
         </PlainPaper>
     );
 }
+
+export const Editor = memo(EditorComponent);
