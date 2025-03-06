@@ -23,7 +23,7 @@ removeFloat float
 -- Convert a canvas to a JSON string (excluding the frames)
 instance Show Canvas where
     show :: Canvas -> String
-    show (Canvas w h r b f) = "{\"w\":" ++ show w ++ ",\"h\":" ++ show h ++ ",\"r\":" ++ show r ++ ",\"b\":" ++ show b ++ ",\"f\":" ++ show f ++ "}"
+    show (Canvas w h r b _) = "{\"w\":" ++ show w ++ ",\"h\":" ++ show h ++ ",\"r\":" ++ show r ++ ",\"b\":" ++ show b ++ "}"
 
 -- Convert a vector to a JSON string
 instance Show Vector where

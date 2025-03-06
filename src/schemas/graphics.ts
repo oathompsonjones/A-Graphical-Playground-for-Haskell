@@ -224,14 +224,12 @@ const baseShapeSchema = z.object({
     sw: z.number().optional().default(defaults.strokeWeight),
 }).and(z.union([lineSchema, ellipseSchema, rectSchema, polygonSchema, curveSchema, arcSchema, emptySchema]));
 
-const shapeSchema = baseShapeSchema.or(z.array(baseShapeSchema));
-
+export const shapeSchema = baseShapeSchema.or(z.array(baseShapeSchema));
 export type Shape = z.infer<typeof shapeSchema>;
 
 // Canvas
 export const canvasSchema = z.object({
     b: z.string().or(z.number()),
-    f: z.array(shapeSchema),
     h: z.number().int(),
     r: z.number(),
     w: z.number().int(),

@@ -1,9 +1,9 @@
 "use client";
 
 import { Typography, useMediaQuery } from "@mui/material";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Buttons } from "components/pages/editor/buttons";
-import { Canvas } from "components/pages/editor/canvas";
+import { CanvasController } from "components/pages/editor/canvasController";
 import { Console } from "components/pages/editor/console";
 import { Editor } from "components/pages/editor/editor";
 import { NewWarningMenu } from "components/menus/newWarningMenu";
@@ -32,10 +32,7 @@ import { useStreamAction } from "hooks/useStreamAction";
 // eslint-disable-next-line max-statements
 export default function EditorPage(): ReactNode {
     const { user } = useContext(UserContext);
-    const {
-        code, id, resetCode, resetId, resetSaved, resetTitle,
-        saved, setAuthor, setCode, setId, setSaved, setTitle,
-    } = useContext(SketchContext);
+    const { code, id, resetSketch, saved, setAuthor, setCode, setId, setSaved, setTitle } = useContext(SketchContext);
     const { setNotification } = useContext(NotificationsContext);
     const [openShare, setOpenShare] = useState(false);
     const [openOpen, setOpenOpen] = useState(false);
@@ -46,17 +43,13 @@ export default function EditorPage(): ReactNode {
     const [loaded, setLoaded] = useState(false);
     const [, loadDocker] = useStreamAction(execute);
     const [graphics, setGraphics] = useState<string[]>([]);
+    const interval = useRef<NodeJS.Timeout>(null);
 
     const reset = useCallback((): void => {
         clearStream();
-        resetTitle();
-        resetCode();
-        resetSaved();
-        resetId();
-        setAuthor(user?.username ?? user?.email.split("@")[0] ?? null);
+        resetSketch();
         redirect("/editor");
     }, [user]);
-
     const clear = useCallback(clearStream, []);
     const new_ = useCallback((): void => {
         if (user === null || saved)
@@ -94,24 +87,38 @@ export default function EditorPage(): ReactNode {
         }
     }, [user, id, code]);
     const share = useCallback((): void => setOpenShare(true), []);
-    const stop = useCallback(terminateStream, []);
+    const stop = useCallback((): void => {
+        terminateStream();
+
+        if (interval.current !== null) {
+            clearInterval(interval.current);
+            interval.current = null;
+        }
+    }, [interval.current]);
     const run = useCallback((): void => {
         stop();
         executeStream(decompressFromEncodedURIComponent(code));
-    }, [code]);
+    }, [code, interval.current]);
 
     // Extract the graphics commands, and send them to the canvas.
-    const newGraphics = codeOutput.join("").match(/(canvas|frame)\((.*)\)\n/g) ?? [];
+    const newGraphics = codeOutput.join("").match(/(canvas|frame|done)\((.*)\)\n/g) ?? [];
 
     // Remove the graphics commands from the console output.
-    const consoleOutput = codeOutput.join("")
+    let message = "";
+
+    if (newGraphics.length > 0) {
+        message = newGraphics[newGraphics.length - 1]?.startsWith("done()") ?? false
+            ? "Done compiling!\n"
+            : "Compiling (the animation may be jittery until this is complete)...\n";
+    }
+
+    const consoleOutput = message + codeOutput.join("")
         .split("\n")
-        .map((output) => (output.startsWith("drawToCanvas(") ? "Compiling..." : output))
+        .map((output) => (output.startsWith("canvas(") || output.startsWith("frame(") || output.startsWith("done()")
+            ? ""
+            : output))
         .join("\n")
         .replace(/\n+/g, "\n");
-
-    // Extract the graphics commands, and send them to the canvas.
-    const newGraphics = codeOutput.join("").match(/drawToCanvas\((.*)\)/g) ?? [];
 
     if (JSON.stringify(graphics) !== JSON.stringify(newGraphics))
         setGraphics(newGraphics);
@@ -120,6 +127,9 @@ export default function EditorPage(): ReactNode {
     useEffect(() => {
         const url = new URL(window.location.href);
         const idParam = url.searchParams.get("id");
+
+        if (url.searchParams.size > 0)
+            resetSketch();
 
         if (idParam === null) {
             const codeParam = url.searchParams.get("code");
@@ -134,6 +144,9 @@ export default function EditorPage(): ReactNode {
 
             if (authorParam !== null)
                 setAuthor(authorParam);
+
+            if (authorParam === "examples")
+                setSaved(true);
         } else if (user !== null) {
             getSketch(idParam).then((sketchJson) => {
                 const sketchObj = JSON.parse(sketchJson) as Sketch;
@@ -156,6 +169,9 @@ export default function EditorPage(): ReactNode {
             setLoaded(true);
         }
     }, [loaded]);
+
+    // Handle stopping the animation when the component unmounts.
+    useEffect(() => stop, []);
 
     // This can't be done as an early return because React complains about rendering different numbers of hooks.
     if (useMediaQuery("(orientation: portrait)")) {
@@ -186,7 +202,7 @@ export default function EditorPage(): ReactNode {
                     <Editor save={save} open={open} new={new_} run={run} />
                     <Console content={consoleOutput} />
                 </SplitView>
-                <Canvas content={graphics} />
+                <CanvasController content={graphics} interval={interval} />
             </SplitView>
         </div>
     );

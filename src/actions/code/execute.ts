@@ -26,7 +26,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
         ].join(" && ");
 
         const timeout = 150_000;
-        const updateDelay = 5;
+        const updateDelay = 1;
         const stopDelay = 2_500;
 
         const stream = exec(`${dockerCmd} bash -c "${bashCmd}"`, { timeout });

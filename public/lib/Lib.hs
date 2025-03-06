@@ -11,7 +11,7 @@ module Lib (
 ) where
 
 import Canvas (
-    Canvas,
+    Canvas (..),
     background,
     createCanvas,
     fps,
@@ -51,4 +51,7 @@ import Shape (
 
 -- Prints the instructions to render to the canvas
 render :: Canvas -> IO ()
-render canvas = putStrLn $ "drawToCanvas(" ++ show canvas ++ ")"
+render canvas = do
+    putStrLn $ "canvas(" ++ show canvas ++ ")"
+    mapM_ (putStrLn . (\x -> "frame(" ++ show x ++ ")")) (_frames canvas)
+    putStrLn "done()"

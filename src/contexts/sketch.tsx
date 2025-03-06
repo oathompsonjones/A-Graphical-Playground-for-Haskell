@@ -22,6 +22,7 @@ export const SketchContext = createContext<{
     updateCode: (rawCode: string) => void;
     author: string | null;
     setAuthor: Dispatch<SetStateAction<string | null>>;
+    resetSketch: () => void;
 }>(null!);
 
 /**
@@ -49,6 +50,14 @@ export function SketchContextProvider({ children }: { children: ReactNode; }): R
         ? null
         : user.username ?? user.email.split("@")[0]!);
 
+    const resetSketch = (): void => {
+        resetTitle();
+        resetCode();
+        resetSaved();
+        resetId();
+        setAuthor(user?.username ?? user?.email.split("@")[0] ?? null);
+    };
+
     return (
         <SketchContext.Provider value={{
             author,
@@ -57,6 +66,7 @@ export function SketchContextProvider({ children }: { children: ReactNode; }): R
             resetCode,
             resetId,
             resetSaved,
+            resetSketch,
             resetTitle,
             saved,
             setAuthor,
