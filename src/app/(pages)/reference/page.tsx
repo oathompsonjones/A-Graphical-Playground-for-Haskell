@@ -1,11 +1,28 @@
 import { Box, Icon, Stack, Typography } from "@mui/material";
 import { Contents } from "components/pages/reference/contents";
 import { Controls } from "components/pages/reference/controls";
+import Image from "next/image";
 import { KeyboardReturn } from "@mui/icons-material";
 import type { ReactNode } from "react";
 import { Section } from "components/pages/reference/section";
-
-// TODO: Add image examples for shapes and transformations.
+import arc from "assets/images/docs/arc.png";
+import bezier2 from "assets/images/docs/bezier2.png";
+import bezier3 from "assets/images/docs/bezier3.png";
+import circle from "assets/images/docs/circle.png";
+import ellipse from "assets/images/docs/ellipse.png";
+import fill from "assets/images/docs/fill.png";
+import line from "assets/images/docs/line.png";
+import pie from "assets/images/docs/pie.png";
+import polygon from "assets/images/docs/polygon.png";
+import rect from "assets/images/docs/rect.png";
+import regular from "assets/images/docs/regular.png";
+import rotate from "assets/images/docs/rotate.png";
+import scale from "assets/images/docs/scale.png";
+import segment from "assets/images/docs/segment.png";
+import square from "assets/images/docs/square.png";
+import stroke from "assets/images/docs/stroke.png";
+import strokeWeight from "assets/images/docs/strokeWeight.png";
+import translate from "assets/images/docs/translate.png";
 
 export type SectionType = (() => ReactNode) | {
     [key: string]: SectionType;
@@ -119,6 +136,7 @@ const docs: Record<string, SectionType> = {
             ),
             line: () => (
                 <div>
+                    <Image src={line} alt="line" width={500} height={500} />
                     The <code>line :: Length -&gt; Shape</code> function takes a length and returns a line.
                     <br />
                     <br />
@@ -127,6 +145,7 @@ const docs: Record<string, SectionType> = {
             ),
             ellipse: () => (
                 <div>
+                    <Image src={ellipse} alt="ellipse" width={500} height={500} />
                     The <code>ellipse :: Length -&gt; Length -&gt; Shape</code> function takes a horizontal axis and a
                         vertical axis and returns an ellipse.
                     <br />
@@ -136,6 +155,7 @@ const docs: Record<string, SectionType> = {
             ),
             rect: () => (
                 <div>
+                    <Image src={rect} alt="rect" width={500} height={500} />
                     The <code>rect :: Length -&gt; Length -&gt; Shape</code> function takes a width and height and
                         returns a rectangle.
                     <br />
@@ -145,6 +165,7 @@ const docs: Record<string, SectionType> = {
             ),
             polygon: () => (
                 <div>
+                    <Image src={polygon} alt="polygon" width={500} height={500} />
                     The <code>polygon :: [Vector] -&gt; Shape</code> function takes a list of points and returns a
                         polygon.
                     <br />
@@ -154,6 +175,7 @@ const docs: Record<string, SectionType> = {
             ),
             bezier2: () => (
                 <div>
+                    <Image src={bezier2} alt="bezier2" width={500} height={500} />
                     The <code>bezier2 :: Vector -&gt; Vector -&gt; Shape</code> function takes two points and returns a
                         quadratic Bezier curve.
                     <br />
@@ -164,6 +186,7 @@ const docs: Record<string, SectionType> = {
             ),
             bezier3: () => (
                 <div>
+                    <Image src={bezier3} alt="bezier3" width={500} height={500} />
                     The <code>bezier3 :: Vector -&gt; Vector -&gt; Vector -&gt; Shape</code> function takes three points
                         and returns a cubic Bezier curve.
                     <br />
@@ -174,6 +197,7 @@ const docs: Record<string, SectionType> = {
             ),
             arc: () => (
                 <div>
+                    <Image src={arc} alt="arc" width={500} height={500} />
                     The <code>arc :: Length -&gt; Length -&gt; Radians -&gt; Radians -&gt; Shape</code> function takes a
                         horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
                         arc.
@@ -184,6 +208,7 @@ const docs: Record<string, SectionType> = {
             ),
             pie: () => (
                 <div>
+                    <Image src={pie} alt="pie" width={500} height={500} />
                     The <code>pie :: Length -&gt; Length -&gt; Radians -&gt; Radians -&gt; Shape</code> function takes a
                         horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
                         arc with two straight lines connecting the center to the start and end points.
@@ -194,6 +219,7 @@ const docs: Record<string, SectionType> = {
             ),
             segment: () => (
                 <div>
+                    <Image src={segment} alt="segment" width={500} height={500} />
                     The <code>arc :: Length -&gt; Length -&gt; Radians -&gt; Radians -&gt; Shape</code> function takes a
                         horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical
                         arc with a straight line connecting the start and end points.
@@ -218,18 +244,21 @@ const docs: Record<string, SectionType> = {
             ),
             circle: () => (
                 <div>
+                    <Image src={circle} alt="circle" width={500} height={500} />
                     The <code>circle :: Length -&gt; Shape</code> function is a shorthand for <code>ellipse r r</code>,
                         where <code>r</code> is the radius of the circle.
                 </div>
             ),
             square: () => (
                 <div>
+                    <Image src={square} alt="square" width={500} height={500} />
                     The <code>square :: Length -&gt; Shape</code> function is a shorthand for <code>rect s s</code>,
                         where <code>s</code> is the side length of the square.
                 </div>
             ),
             regular: () => (
                 <div>
+                    <Image src={regular} alt="regular" width={500} height={500} />
                     The <code>regular :: Int -&gt; Length -&gt; Shape</code> function takes the number of sides and a
                         radius and returns a regular polygon, with each point lying on a circle with the given radius.
                     <br />
@@ -263,6 +292,7 @@ const docs: Record<string, SectionType> = {
             ),
             fill: () => (
                 <div>
+                    <Image src={fill} alt="fill" width={500} height={500} />
                     The <code>fill :: Color -&gt; Shape -&gt; Shape</code> function sets the fill color of the shape.
                     <br />
                     <br />
@@ -272,6 +302,7 @@ const docs: Record<string, SectionType> = {
             ),
             stroke: () => (
                 <div>
+                    <Image src={stroke} alt="stroke" width={500} height={500} />
                     The <code>stroke :: Color -&gt; Shape -&gt; Shape</code> function sets the stroke color of the
                         shape.
                     <br />
@@ -282,12 +313,14 @@ const docs: Record<string, SectionType> = {
             ),
             strokeWeight: () => (
                 <div>
+                    <Image src={strokeWeight} alt="strokeWeight" width={500} height={500} />
                     The <code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> function sets the stroke thickness of
                         the shape.
                 </div>
             ),
             translate: () => (
                 <div>
+                    <Image src={translate} alt="translate" width={500} height={500} />
                     The <code>translate :: Vector -&gt; Shape -&gt; Shape</code> function translates the shape by the
                         given offset.
                     <br />
@@ -305,6 +338,7 @@ const docs: Record<string, SectionType> = {
             ),
             rotate: () => (
                 <div>
+                    <Image src={rotate} alt="rotate" width={500} height={500} />
                     The <code>rotate :: Radians -&gt; Shape -&gt; Shape</code> function rotates the shape clockwise by
                         the given angle, in radians, around its origin.
                     <br />
@@ -314,6 +348,7 @@ const docs: Record<string, SectionType> = {
             ),
             scale: () => (
                 <div>
+                    <Image src={scale} alt="scale" width={500} height={500} />
                     The <code>scale :: Float -&gt; Shape -&gt; Shape</code> function scales the shape by the given
                         scale factor.
                     <br />

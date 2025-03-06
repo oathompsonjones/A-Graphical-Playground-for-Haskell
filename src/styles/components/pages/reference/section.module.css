@@ -26,3 +26,11 @@
 .colored {
     background-color: var(--mui-palette-primary-main);
 }
+
+.wrapper img {
+    float: right;
+    border-radius: 1rem;
+    width: 20%;
+    height: auto;
+    margin-left: 1rem;
+}
