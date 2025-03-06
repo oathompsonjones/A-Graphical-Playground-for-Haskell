@@ -10,6 +10,7 @@ import fractalTree from "assets/images/examples/fractalTree.png";
 import pacman from "assets/images/examples/pacman.png";
 import sineCosine from "assets/images/examples/sineCosine.png";
 import styles from "styles/pages/home.module.css";
+import ukrainianFlag from "assets/images/examples/ukrainianFlag.png";
 import unionFlag from "assets/images/examples/unionFlag.png";
 
 /**
@@ -25,6 +26,11 @@ export default function Home(): ReactNode {
             code: "JYWwDg9gTgLgBAGWAIwFCoLQbgEQKYBmwAdnnDABZkDGEANhAK5QDOcA7maXgCarJ1GZALxwAEngAecAEQAGOQCYAjABYA7DNRRecUROkzkyZQGZTeLewrAYI8VNkFnLrZmz4ipclTgsKAIZgeGycAOQ6cADmECRR5BBwjCx4qCwwUMDBbKIE9DxQcAAUAGQAlHB44DAAnnAA2umZwcXAcABUcIodxcoKcnAA9HBmZRUAPnBtADzY9XIAdAvKigC6q6hwHFQ6m1t%2BGVlkdaI61PDKAJwKvf1DI6YVAHwvcER0dHA6PHAvT3DECAAZQyEAA1mQ-uQoAFiCw6AE7ABNOA1dDpAKsPRvfKfUoVZDxRowTFwaR1SbSWYNRbLOSrAA0qLg1PmSwAHIzKgA3PDEYpQJjEH6SColEo8vkCoU-GoTSYQHg-IqCxjCsliiWK5Wq9VyjZbax4Xb7OCE7FneDqABsAyKRT6N2Gox66mer3enwEQl%2Br0BIMFEL2WwxhXJ2NDYV9-wysPhiLIRQAanhztBitJOtaAKxwADUcGzcgqRTqnWzuYLRbGwYOmKjokjUah-tBEOjb2AHzgAHUbHZa03sZA6DUYvz6im04UiqYBp0irQ2LConQ8GNinOekUWCQ4Cu1xva6aT6etpMD2RqUUQEEvgEeMA48Vb2BilXVCWb3eip01J%2BaSWS5VjGMYNncOAAFkAj3PkMjqSASHgCACB8MgwEFKIYRAVBbz3U4%2BR4Y04AAEjgahYW5AI2GmWiDmaEI4AlUMWD2I0TX2CjiConIzQCagwSwmVtlsRNqB0BMAGFKOokZrgGR1i1QIA",
             image: americanFlag,
             name: "Star Spangled Banner",
+        },
+        {
+            code: "JYWwDg9gTgLgBAGWAIwFCuQGwK4FM4C8cAErgB5wBEAxAAy0CsAbAEICclqAnrpphAHdCJclWoAxcQBEAHPU6oQAQ2AA7OAC4NcAJIB5OAAoAlIpXqiUXKoAmuKHAAkcZEoDGAawDmUCNltwAJq8-EKGblZKMLgAwkqqAG5KAM5wbPRwTPTGcAA8%2BXBWbvDptHAAzBkAfDVwAGbAfHAsOPg1VXCqEADKML4euKhAA",
+            image: ukrainianFlag,
+            name: "Slava Ukraini",
         },
         {
             code: "JYWwDg9gTgLgBAGWAIwFCoLQbgEQKYBmwAdnnDABZkDGEANhAK5QDOcA7maXgCarJ1GZALxwASgHEAQnAAMcAMwA2OAEYATAFZUUXnFGSZ62QHY4xuABYFqdhWAwR46ec2bX7rdszZ8RUnAsECBkVHRgBIx0cLTELDAAhsQwLKhJAOZ0TlAJPMBJbAqyAHQAnEqoeQnpEMQJ0aIsAI6wcAAUqrJdcABUal3yANRwSt19o7IAlOhYuIQkZJRkLBQJYHhsnADkunA1JOnkEHCMLHioLLQwdEk8%2BnBZuQdwAGRwxLUIeE-E6ahwHCoun%2BAMCVxuxB4WzgCXuumo8DaVRqdWifVUxVUkzUFgAfPi4EQ6NE7A4yPjce8IABlGBQCAAa3JBPpiUc7VhfQyWWmoIe3zyv3ulwg11u0NUcAp5BycRujgAmu0MCYpiCAR9iF8fodGuDxcqsVKCXSCvKyG0AGp4BHQQ2qTTYibTVDAXQQu6iR6C9KSt7eg7qV5UrUCg5%2BkPan3qEF2PDAvluvAe6Gw0TwxHI2r1OAAenM2Ms8mlROiuju0o%2BtPpTONlNZCXZbU5MN%2BPPV-J1ktESZTag7Ad%2BQZ77oNkulprljYt1ttUDgmgAHPIimq%2BZqo%2BH7r2DW0MEaJ7KWOalRMOxuw0Pt6PIdC9weTUfze1ZzA7ZpulpLC68G3bvcADd4xgYBqHqCMKGgYAAC9akSOgIyA2BQPqIM3kgqAYLg1DYyBc4%2BSQkCwIQuEbXgYx5AmOtCWAYlATJaiqzpRlmUpSdj2nAANKwug7DCsOScDSIRfpP26EtaJJex2UrGlmNrQ8zWnJUKI7QiULoYc4AzHFKPEglS20vRZOrFjqPY81uMsIs%2BKg2DBM04T4E6boNGLAzJKMisCSYmtWJlJTFXMGyfDgABZBISDgX86QATzgSASHgCACHIKgEvpdIchAVAQEi4hSMheM4AAEhiJIAISNgAB5arBUUPWDHdIWDX9MluXD43w0EwOISq2FEZAEmoBksqYFqBCEdpqF0acAGEKqq0S9LVIA",
