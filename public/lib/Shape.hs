@@ -43,7 +43,7 @@ data Shape
         , _options :: ShapeOptions
         }
     | Arc
-        { _horizontalAxis :: Float
+        { _horizontalAxis :: Length
         , _verticalAxis :: Length
         , _startAngle :: Radians
         , _endAngle :: Radians
