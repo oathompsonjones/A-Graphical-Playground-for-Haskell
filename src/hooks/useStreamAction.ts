@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 /**
  * Generator function that streams the response body from a fetch request.
@@ -23,23 +23,22 @@ async function* readStream<T>(reader: ReadableStreamDefaultReader<T>): AsyncGene
 
 /**
  * Custom hook that streams data from an external resource.
- * @template T - The type of the data.
- * @template U - The type of the arguments.
+ * @template T - The type of the arguments.
  * @param action - The action which returns the data stream.
  * @param action.onExecute - The function to execute the stream.
  * @param action.onCancel - The function to cancel the stream.
  * @returns A 4-tuple containing the streamed data, the function to execute the stream,
  * the function to terminate the stream, and the function to clear the streamed data.
  */
-export function useStreamAction<T, U extends unknown[]>(
-    action: (...args: U) => Promise<ReadableStream<T>>,
-): [T[], (...args: Parameters<typeof action>) => void, () => void, () => void] {
-    const [data, setData] = useState<T[]>([]);
-    const [streamReader, setStreamReader] = useState<ReadableStreamDefaultReader<T> | null>(null);
+export function useStreamAction<T extends unknown[]>(
+    action: (...args: T) => Promise<ReadableStream<string>>,
+): [string[], (...args: T) => void, () => void, () => void] {
+    const [data, setData] = useState<string[]>([]);
+    const streamReader = useRef<ReadableStreamDefaultReader<string>>(null);
 
     /** Terminates the stream. */
     function terminateStream(): void {
-        void streamReader?.cancel();
+        void streamReader.current?.cancel();
     }
 
     /** Clears the streamed data. */
@@ -51,17 +50,14 @@ export function useStreamAction<T, U extends unknown[]>(
      * Runs the action and streams the data.
      * @param args - The arguments to pass to the action.
      */
-    function executeStream(...args: Parameters<typeof action>): void {
+    function executeStream(...args: T): void {
         terminateStream();
         clearStream();
 
         void (async (): Promise<void> => {
-            const stream = await action(...args);
-            const _streamReader = stream.getReader();
+            streamReader.current = (await action(...args)).getReader();
 
-            setStreamReader(_streamReader);
-
-            for await (const value of readStream(_streamReader))
+            for await (const value of readStream(streamReader.current))
                 setData((prev) => [...prev, value]);
         })();
     }
