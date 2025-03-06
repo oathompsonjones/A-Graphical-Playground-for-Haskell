@@ -8,6 +8,7 @@ module Lib (
     createCanvas,
     fps,
     (<<<),
+    (<<<:),
 ) where
 
 import Canvas (
@@ -16,6 +17,7 @@ import Canvas (
     createCanvas,
     fps,
     (<<<),
+    (<<<:),
  )
 import Color
 import Internal ()

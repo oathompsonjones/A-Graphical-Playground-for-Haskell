@@ -28,5 +28,10 @@ fps fps canvas = canvas{_fps = fps}
 (<<<) :: Canvas -> Shape -> Canvas
 (<<<) canvas shape = canvas{_frames = _frames canvas ++ [shape]}
 
+-- Add a list of shapes to the canvas
+(<<<:) :: Canvas -> [Shape] -> Canvas
+(<<<:) canvas shapes = canvas{_frames = _frames canvas ++ shapes}
+
 -- Set operator precedence
 infixl 7 <<<
+infixl 7 <<<:
