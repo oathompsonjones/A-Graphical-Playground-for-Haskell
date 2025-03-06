@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, IconButton, Stack, Typography } from "@mui/material";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import type { AlertColor } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import Link from "next/link";
@@ -23,18 +23,28 @@ export function NotificationsContextProvider({ children }: { children: ReactNode
         message: <>This website uses cookies. <Link href="/privacy">Learn more</Link></>,
         type: "info",
     });
+    const [opaque, setOpaque] = useState(true);
+    const [hover, setHover] = useState(false);
 
-    const setNotification = (message: ReactNode, type: AlertColor = "info"): void => {
-        setState({ message, type });
-    };
-
+    const setNotification = (message: ReactNode, type: AlertColor = "info"): void => setState({ message, type });
     const onClick = (): void => setState(null);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => setOpaque(false), 5_000);
+
+        setOpaque(true);
+        setHover(false);
+
+        return (): void => clearTimeout(timeout);
+    }, [state]);
 
     return (
         <NotificationsContext.Provider value={{ setNotification }}>
             {children}
             {state !== null && (
-                <Alert className={styles.notifications!} severity={state.type}>
+                <Alert
+                    className={`${styles.notifications} ${opaque || hover ? "" : styles.translucent}`}
+                    severity={state.type} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
                     <Stack direction="row" spacing={1} alignItems="center">
                         <Typography>{state.message}</Typography>
                         <IconButton className={styles.close!} onClick={onClick}>
