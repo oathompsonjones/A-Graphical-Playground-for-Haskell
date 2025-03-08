@@ -18,8 +18,6 @@ import unionFlag from "assets/images/examples/unionFlag.png";
  * @returns The home page.
  */
 export default function Home(): ReactNode {
-    const issuesURL = "https://github.com/oathompsonjones/A-Graphical-Playground-for-Haskell/issues";
-
     /* eslint-disable max-len */
     const staticExamples: Array<{ name: string; code: string; image: StaticImageData; }> = [
         {
@@ -108,7 +106,7 @@ export default function Home(): ReactNode {
                 <Typography variant="h6">
                     Check out the <Link href="/reference">reference page</Link> for documentation.
                     If you have any other questions, or would like to report a bug, please visit
-                        the <Link href={issuesURL}>GitHub issue tracker</Link>.
+                        the <Link href="/issues">GitHub issue tracker</Link>.
                 </Typography>
             </div>
         </>
