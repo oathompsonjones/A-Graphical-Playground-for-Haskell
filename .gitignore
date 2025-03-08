@@ -24,6 +24,7 @@ report/*
 !report/eushield-normal.pdf
 !report/sections
 !report/images
+!report/participant-information.pdf
 
 # misc
 .DS_Store
