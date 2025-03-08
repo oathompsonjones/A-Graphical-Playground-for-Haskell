@@ -25,7 +25,7 @@ jobs:
       - name: Upload participant information file
         uses: actions/upload-artifact@v4
         with:
-          name: PDF
+          name: Participant Information
           path: build/participant-information.pdf
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@3.6.2
