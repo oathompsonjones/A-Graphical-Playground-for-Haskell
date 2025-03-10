@@ -91,8 +91,7 @@ const docs: Record<string, SectionType> = {
             Having created the canvas, you can draw shapes on it using the <code>(&lt;&lt;&lt;) :: Canvas -&gt; Shape
                 -&gt; Canvas</code> operator. This operator adds a new frame to your animation. Chaining multiple shapes
                 together will draw them in sequence, not on top of each other. You can append a list of frames by using
-                Haskell's <code>foldl</code> function, like this: <code>foldl (&lt;&lt;&lt;) canvas frames</code>, or
-                by using the <code>(&lt;&lt;&lt;:) :: Canvas -&gt; [Shape] -&gt; Canvas</code> operator.
+                the <code>(&lt;&lt;&lt;:) :: Canvas -&gt; [Shape] -&gt; Canvas</code> operator.
             <br />
             <br />
             Finally, to render the canvas in the editor, use the <code>render :: Canvas -&gt; IO ()</code> function.
@@ -370,15 +369,15 @@ const docs: Record<string, SectionType> = {
                 <br />
                 The following examples all produce the same result:
                 {list([
-                    <><code>fill Red (translate (Vector 50 50) (rotate (radians 45) (circle 50)))</code></>,
-                    <><code>circle 50 &gt;&gt;&gt; fill Red &gt;&gt;&gt; translate (Vector 50 50) &gt;&gt;&gt;
-                        rotate (radians 45)</code></>,
-                    <><code>circle 50 &gt;&gt;&gt; (fill Red . translate (Vector 50 50) . rotate (radians
-                        45))</code></>,
-                    <><code>circle 50 &gt;&gt;&gt; (foldr (.) id [fill Red, translate (Vector 50 50), rotate
-                        (radians 45)])</code></>,
-                    <><code>foldl (&gt;&gt;&gt;) (circle 50) [fill Red, translate (Vector 50 50), rotate (radians
-                        45)]</code></>,
+                    <><pre>fill Red (translate (Vector 50 50) (rotate (radians 45) (circle 50)))</pre></>,
+                    <><pre>circle 50 &gt;&gt;&gt; fill Red &gt;&gt;&gt; translate (Vector 50 50) &gt;&gt;&gt;
+                        rotate (radians 45)</pre></>,
+                    <><pre>circle 50 &gt;&gt;&gt; (fill Red . translate (Vector 50 50) . rotate (radians
+                        45))</pre></>,
+                    <><pre>circle 50 &gt;&gt;&gt; (foldr (.) id [fill Red, translate (Vector 50 50), rotate
+                        (radians 45)])</pre></>,
+                    <><pre>foldl (&gt;&gt;&gt;) (circle 50) [fill Red, translate (Vector 50 50), rotate (radians
+                        45)]</pre></>,
                 ])}
             </div>
         ),
@@ -594,6 +593,7 @@ const docs: Record<string, SectionType> = {
                 Precedence for the <code>(&lt;&lt;&lt;)</code>, <code>(&amp;)</code>,
                     and <code>(&gt;&gt;&gt;)</code> operators is defined as follows:
                 {list([
+                    <><code>infixl 7 &lt;&lt;&lt;:</code></>,
                     <><code>infixl 7 &lt;&lt;&lt;</code></>,
                     <><code>infixr 8 &amp;</code></>,
                     <><code>infixl 9 &gt;&gt;&gt;</code></>,
