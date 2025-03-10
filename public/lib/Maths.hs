@@ -37,6 +37,11 @@ data Vector = Vector Float Float deriving (Eq)
 (^/^) :: Vector -> Float -> Vector
 (^/^) (Vector x y) s = Vector (x / s) (y / s)
 
+infixl 6 ^+^
+infixl 6 ^-^
+infixl 7 ^*^
+infixl 7 ^/^
+
 mag :: Vector -> Float
 mag (Vector x y) = sqrt (x ^ 2 + y ^ 2)
 
