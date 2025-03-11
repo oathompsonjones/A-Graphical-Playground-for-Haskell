@@ -1,8 +1,9 @@
 "use client";
 
-import { Button, Card, CardContent, Typography } from "@mui/material";
+import { Button, Card, CardContent, IconButton, Tooltip, Typography } from "@mui/material";
 import type { Dispatch, SetStateAction } from "react";
 import { type ReactNode, useContext, useState } from "react";
+import { Delete } from "@mui/icons-material";
 import { DeleteWarningMenu } from "components/menus/deleteWarningMenu";
 import { SketchContext } from "contexts/sketch";
 import type { Sketch as SketchSchema } from "schemas/database";
@@ -48,9 +49,11 @@ export function Sketch({ sketch, setSketches }: {
                             </Typography>
                         </Button>
                     </Typography>
-                    <Button color="error" onClick={() => setOpenDelete(true)} size="small">
-                        Delete
-                    </Button>
+                    <Tooltip title="Delete" placement="left" arrow>
+                        <IconButton color="error" onClick={() => setOpenDelete(true)} size="small">
+                            <Delete />
+                        </IconButton>
+                    </Tooltip>
                 </CardContent>
                 <CardContent>
                     <Typography variant="caption" color="textDisabled">
