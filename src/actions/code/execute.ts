@@ -3,12 +3,17 @@
 import { readFile, readdir } from "fs/promises";
 import { exec } from "child_process";
 
+type Response = {
+    status: "done" | "error" | "running";
+    data: string;
+};
+
 /**
  * Executes Haskell code, streaming the response into a ReadableStream.
  * @param code - The code to execute.
  * @returns A ReadableStream containing the output of the code.
  */
-export async function execute(code: string): Promise<ReadableStream<string>> {
+export async function execute(code: string): Promise<ReadableStream<Response>> {
     try {
         const base64 = (str: string): string => Buffer.from(str).toString("base64");
         const files = await readdir("public/lib");
@@ -56,7 +61,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
                 stream.stdout.on("data", (data) => updateQueue.push(String(data)));
                 stream.stderr.on("data", (data) => updateQueue.push(String(data)));
                 stream.on("error", (error) => {
-                    controller.enqueue(error.message);
+                    controller.enqueue({ data: error.message, status: "error" });
                     handleStreamEnd();
                 });
 
@@ -66,7 +71,7 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
 
                     if (newData === undefined) {
                         if (Date.now() - timeOfLastNewData > stopDelay) {
-                            controller.enqueue(`\nINFO: No output for ${stopDelay / 1000}s, listener killed.`);
+                            controller.enqueue({ data: "IDLE", status: "done" });
                             handleStreamEnd();
                         }
 
@@ -74,12 +79,12 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
                     }
 
                     timeOfLastNewData = Date.now();
-                    controller.enqueue(newData);
+                    controller.enqueue({ data: newData, status: "running" });
                 }
 
                 /** Handles the timeout of the stream. */
                 function timeoutStream(): void {
-                    controller.enqueue(`\nINFO: Execution took longer than ${timeout / 1000}s, listener killed.`);
+                    controller.enqueue({ data: "TIMEOUT", status: "done" });
                     handleStreamEnd();
                 }
 
@@ -95,11 +100,12 @@ export async function execute(code: string): Promise<ReadableStream<string>> {
     } catch (err) {
         return new ReadableStream({
             start(controller): void {
-                controller.enqueue(
-                    typeof err === "object" && err !== null && "stderr" in err
+                controller.enqueue({
+                    data: typeof err === "object" && err !== null && "stderr" in err
                         ? String(err.stderr)
                         : `Error: ${err instanceof Error ? err.message : String(err)}`,
-                );
+                    status: "error",
+                });
                 controller.close();
             },
         });

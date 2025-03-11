@@ -3,6 +3,7 @@
     border-radius: 0;
     width: 100%;
     height: 100%;
+    position: relative;
 }
 
 .console pre {
@@ -11,4 +12,14 @@
     padding: 1rem;
     overflow: auto;
     margin: 0;
+}
+
+.indicator {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+}
+
+.indicator svg {
+    font-size: 1rem;
 }

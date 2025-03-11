@@ -101,7 +101,8 @@ export default function EditorPage(): ReactNode {
     }, [code, interval.current]);
 
     // Extract the graphics commands, and send them to the canvas.
-    const newGraphics = codeOutput.join("").match(/(canvas|frame|done)\((.*)\)\n/g) ?? [];
+    const newGraphics = codeOutput.filter(({ status }) => status === "running").map(({ data }) => data).join("")
+        .match(/(canvas|frame|done)\((.*)\)\n/g) ?? [];
 
     // Remove the graphics commands from the console output.
     let message = "";
@@ -112,7 +113,8 @@ export default function EditorPage(): ReactNode {
             : "Compiling (the animation may be jittery until this is complete)...\n";
     }
 
-    const consoleOutput = message + codeOutput.join("")
+    const consoleOutput = message + codeOutput.filter(({ status }) => status === "running").map(({ data }) => data)
+        .join("")
         .split("\n")
         .map((output) => (output.startsWith("canvas(") || output.startsWith("frame(") || output.startsWith("done()")
             ? ""
@@ -200,7 +202,7 @@ export default function EditorPage(): ReactNode {
             <SplitView id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
                     <Editor save={save} open={open} new={new_} run={run} />
-                    <Console content={consoleOutput} />
+                    <Console content={consoleOutput} status={codeOutput.at(-1)?.status ?? "done"} />
                 </SplitView>
                 <CanvasController content={graphics} interval={interval} />
             </SplitView>
