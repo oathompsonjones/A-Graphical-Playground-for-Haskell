@@ -141,6 +141,10 @@ const docs: Record<string, SectionType> = {
             To create a 500 pixel square canvas, set the background color to white and set the FPS to 60, you can use
                 the following code:
             <pre>{["canvas :: Canvas", "canvas = fps 60 (background White (createCanvas 500 500))"].join("\n")}</pre>
+            <br />
+            <br />
+            It should be noted that animations will automatically loop when they reach the end. Attempting to render an
+                infinite animation will cause the editor to slow down and eventually crash, so this is not recommended.
         </div>
     ),
     Vectors: () => (
