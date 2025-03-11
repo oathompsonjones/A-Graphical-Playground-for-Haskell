@@ -686,17 +686,19 @@ const docs: Record<string, SectionType> = {
 export default function Reference(): ReactNode {
     return (
         <>
-            <Typography variant="h2">Reference</Typography>
-            <Stack direction={{ md: "row" }} alignItems="top" gap={5}>
-                <Contents docs={docs} />
-                <Controls controls={[
-                    [<KeyboardReturn />, "Run your sketch."],
-                    [<Icon>S</Icon>, "Save your sketch."],
-                    [<Icon>O</Icon>, "Open one of your saved sketches."],
-                    [<Icon>N</Icon>, "Create a new sketch."],
-                    [<Icon>/</Icon>, "Comment/uncomment the current line."],
-                ]} />
-            </Stack>
+            <div className="wrapper">
+                <Typography variant="h2">Reference</Typography>
+                <Stack direction={{ md: "row" }} alignItems="top" gap={5}>
+                    <Contents docs={docs} />
+                    <Controls controls={[
+                        [<KeyboardReturn />, "Run your sketch."],
+                        [<Icon>S</Icon>, "Save your sketch."],
+                        [<Icon>O</Icon>, "Open one of your saved sketches."],
+                        [<Icon>N</Icon>, "Create a new sketch."],
+                        [<Icon>/</Icon>, "Comment/uncomment the current line."],
+                    ]} />
+                </Stack>
+            </div>
             {Object.entries(docs).map(([title, content], i) => (
                 <Section title={title} content={content} depth={0} colored={i % 2 === 0} key={i} />
             ))}

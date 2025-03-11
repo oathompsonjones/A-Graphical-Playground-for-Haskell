@@ -11,11 +11,13 @@ import { NotificationsContext } from "contexts/notifications";
 import { OpenMenu } from "components/menus/openMenu";
 import { OpenWarningMenu } from "components/menus/openWarningMenu";
 import type { ReactNode } from "react";
+import Reference from "../reference/page";
 import { SaveMenu } from "components/menus/saveMenu";
 import { ShareMenu } from "components/menus/shareMenu";
 import type { Sketch } from "schemas/database";
 import { SketchContext } from "contexts/sketch";
 import { SplitView } from "components/pages/editor/splitView";
+import { TabView } from "components/pages/editor/tabView";
 import { UserContext } from "contexts/user";
 import { decompressFromEncodedURIComponent } from "lz-string";
 import { execute } from "actions/code/execute";
@@ -29,7 +31,7 @@ import { useStreamAction } from "hooks/useStreamAction";
  * This is the editor page.
  * @returns The page element.
  */
-// eslint-disable-next-line max-statements
+// eslint-disable-next-line max-statements, max-lines-per-function
 export default function EditorPage(): ReactNode {
     const { user } = useContext(UserContext);
     const { code, id, resetSketch, saved, setAuthor, setCode, setId, setSaved, setTitle } = useContext(SketchContext);
@@ -204,7 +206,10 @@ export default function EditorPage(): ReactNode {
                     <Editor save={save} open={open} new={new_} run={run} />
                     <Console content={consoleOutput} status={codeOutput.at(-1)?.status ?? "done"} />
                 </SplitView>
-                <CanvasController content={graphics} interval={interval} />
+                <TabView titles={["Canvas", "Reference"]}>
+                    <CanvasController content={graphics} interval={interval} />
+                    <Reference />
+                </TabView>
             </SplitView>
         </div>
     );
