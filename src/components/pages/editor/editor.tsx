@@ -35,7 +35,7 @@ function EditorComponent({ save, open, new: new_, run }: {
     new: () => void;
     run: () => void;
 }): ReactNode {
-    const { code: compressedCode, setSaved, updateCode } = useContext(SketchContext);
+    const { code: compressedCode, updateCode } = useContext(SketchContext);
     const code = decompressFromEncodedURIComponent(compressedCode);
 
     /**
@@ -96,9 +96,6 @@ function EditorComponent({ save, open, new: new_, run }: {
 
         // Update the code and display.
         updateCode(event.currentTarget.value);
-
-        // The code has changed, so it's no longer saved.
-        setSaved(false);
     };
 
     /**

@@ -54,7 +54,12 @@
     }
 }
 
-.saved {
+.unsaved {
     padding-left: 1rem;
-    color: var(--mui-palette-warning-main);
+    color: var(--mui-palette-warning-main) !important;
+}
+
+.open {
+    padding-left: 1rem;
+    color: var(--mui-palette-success-main) !important;
 }

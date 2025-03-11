@@ -1,6 +1,6 @@
 "use client";
 
-import { AppBar, Avatar, MenuItem, Toolbar, Typography, useMediaQuery } from "@mui/material";
+import { AppBar, Avatar, MenuItem, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,7 @@ import styles from "styles/components/header.module.css";
  */
 export function Header(): ReactNode {
     const { user } = useContext(UserContext);
-    const { saved } = useContext(SketchContext);
+    const { open, saved, title } = useContext(SketchContext);
     const edge = useMediaQuery((theme) => theme.breakpoints.down("md"));
     const [mounted, setMounted] = useState(false);
 
@@ -26,6 +26,15 @@ export function Header(): ReactNode {
         signInText = `${signInText.slice(0, 8)}...`;
 
     useEffect(() => setMounted(true), []);
+
+    let status: "none" | "open" | "unsaved" = "none";
+
+    if (mounted && open) {
+        status = "open";
+
+        if (!saved)
+            status = "unsaved";
+    }
 
     return (
         <AppBar component="header" className={styles.header!}>
@@ -42,7 +51,13 @@ export function Header(): ReactNode {
                 </MenuItem>
                 <MenuItem className={styles.menuItem!} component={Link} href="/editor">
                     Editor
-                    {mounted && !saved && <Typography variant="h4" className={styles.saved!}>•</Typography>}
+                    {mounted && status !== "none" &&
+                        <Tooltip
+                            title={`${title} — ${status === "open" ? "Saved" : "Unsaved"}`}
+                            placement="right"
+                            arrow>
+                            <Typography variant="h4" className={styles[status]!}>•</Typography>
+                        </Tooltip>}
                 </MenuItem>
                 <div className={styles.spacer} />
                 <MenuItem className={styles.account!} component={Link} href="/account">
