@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import type { SectionType } from "app/(pages)/reference/page";
 import { Typography } from "@mui/material";
 import type { Variant } from "@mui/material/styles/createTypography";
@@ -19,6 +19,13 @@ export function Section({ title, content, depth, colored }: {
     depth: number;
     colored: boolean;
 }): ReactNode {
+    const [doc, setDoc] = useState<Document | null>(null);
+
+    useEffect(() => {
+        if (typeof window.document !== "undefined")
+            setDoc(window.document);
+    }, [doc]);
+
     return (
         <div className={`${styles.wrapper} ${colored && depth === 0 ? styles.colored : ""} edge wrapper`}>
             <br />
@@ -30,7 +37,7 @@ export function Section({ title, content, depth, colored }: {
                 >{title}<hr /></Typography>
             }
             {content instanceof Function
-                ? content()
+                ? content(doc)
                 : Object.entries(content)
                     .map(([subtitle, subcontent], i) => (
                         <Section title={subtitle} content={subcontent} depth={depth + 1} colored={colored} key={i} />

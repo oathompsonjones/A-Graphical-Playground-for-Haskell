@@ -1,4 +1,6 @@
-import { Box, Icon, Stack, Typography } from "@mui/material";
+"use client";
+
+import { Icon, Stack, Typography } from "@mui/material";
 import { Contents } from "components/pages/reference/contents";
 import { Controls } from "components/pages/reference/controls";
 import Image from "next/image";
@@ -24,12 +26,27 @@ import stroke from "assets/images/docs/stroke.png";
 import strokeWeight from "assets/images/docs/strokeWeight.png";
 import translate from "assets/images/docs/translate.png";
 
-export type SectionType = (() => ReactNode) | {
-    [key: string]: SectionType;
-    root?: () => ReactNode;
+const invertColor = (color: string, doc: Document | null): string => {
+    if (doc === null)
+        return "black";
+
+    const element = doc.createElement("div");
+
+    element.style.color = color;
+    doc.body.appendChild(element);
+    const { color: rgb } = getComputedStyle(element);
+
+    doc.body.removeChild(element);
+
+    const [r, g, b] = rgb.match(/\d+/g)!.map(Number);
+
+    return r! * 0.299 + g! * 0.587 + b! * 0.114 > 186 ? "black" : "white";
 };
 
-// Line, Ellipse, Rect, Polygon, Curve, Arc
+export type SectionType = ((doc: Document | null) => ReactNode) | {
+    [key: string]: SectionType;
+    root?: (doc: Document | null) => ReactNode;
+};
 
 const list = (items: ReactNode[]): Awaited<ReactNode> => <ul>{items.map((item, i) => <li key={i}>{item}</li>)}</ul>;
 
@@ -83,18 +100,35 @@ const docs: Record<string, SectionType> = {
             To set up the canvas, use the <code>createCanvas :: Int -&gt; Int -&gt; Canvas</code> function, providing a
                 width and a height. Once you've created the canvas, you can set a background color using
                 the <code>background :: Color -&gt; Canvas -&gt; Canvas</code> function, providing a color, and the
-                canvas you created earlier. You can use the <code>fps :: Int -&gt; Canvas -&gt; Canvas</code> function
-                to set the frames per second of the animation. By default, the canvas has a transparent background and
-                an fps of 24.
-            <br />
-            <br />
-            Having created the canvas, you can draw shapes on it using the <code>(&lt;&lt;&lt;) :: Canvas -&gt; Shape
-                -&gt; Canvas</code> operator. This operator adds a new frame to your animation. Chaining multiple shapes
-                together will draw them in sequence, not on top of each other. You can append a list of frames by using
-                the <code>(&lt;&lt;&lt;:) :: Canvas -&gt; [Shape] -&gt; Canvas</code> operator.
+                canvas you created earlier. By default, the canvas has a transparent background.
             <br />
             <br />
             Finally, to render the canvas in the editor, use the <code>render :: Canvas -&gt; IO ()</code> function.
+            <br />
+            <br />
+            To create a 500 pixel square canvas and set the background color to white, you can use the following code:
+            <pre>{["canvas :: Canvas", "canvas = background White (createCanvas 500 500)"].join("\n")}</pre>
+        </div>
+    ),
+    "Images and Animations": () => (
+        <div>
+            An image is just an animation with a single frame. A frame is just a shape, or multiple shapes combined
+                using the <code>(&amp;) :: Shape -&gt; Shape -&gt; Shape</code> operator.
+            <br />
+            <br />
+            To append a frame to the canvas, you can use the <code>(&lt;&lt;&lt;) :: Canvas -&gt; Shape -&gt;
+                Canvas</code> operator. As this operator returns the canvas, you can chain multiple frames together by
+                using it multiple times. You can append a list of frames by using the <code>(&lt;&lt;&lt;:) :: Canvas
+                -&gt; [Shape] -&gt; Canvas</code> operator.
+            <br />
+            <br />
+            Frames will be rendered in the order they are appended to the canvas. You can use the <code>fps :: Int -&gt;
+                Canvas -&gt; Canvas</code> function to set the frames rate of the animation. By default, the fps is 24.
+            <br />
+            <br />
+            To create a 500 pixel square canvas, set the background color to white and set the FPS to 60, you can use
+                the following code:
+            <pre>{["canvas :: Canvas", "canvas = fps 60 (background White (createCanvas 500 500))"].join("\n")}</pre>
         </div>
     ),
     Vectors: () => (
@@ -383,7 +417,7 @@ const docs: Record<string, SectionType> = {
         ),
     },
     // eslint-disable-next-line max-lines-per-function
-    Colors: () => (
+    Colors: (doc) => (
         <div>
             Colors are represented using the <code>Color</code> data type, which has the following constructors:
             {list([
@@ -549,11 +583,7 @@ const docs: Record<string, SectionType> = {
                 "YellowGreen",
             ].map((color, i, arr) => (
                 <span key={i}>
-                    <Box
-                        component="code" sx={{
-                            "&:hover": { backgroundColor: color },
-                            "&::after": { content: `'${color}'`, mixBlendMode: "difference" },
-                        }} />
+                    <code style={{ background: color, color: invertColor(color, doc) }}>{color}</code>
                     {i < arr.length - 1 ? ", " : ". "}
                 </span>
             ))}
