@@ -314,106 +314,109 @@ const docs: Record<string, SectionType> = {
                     a rotation or scaling may result in unexpected behavior.
             </div>
         ),
-        Transformations: {
-            root: () => (
+    },
+    Transformations: {
+        root: () => (
+            <div>
+                To modify a shape, you can use any of the functions in this section. They all take some argument, the
+                    shape to be transformed, and return the transformed shape.
+                <br />
+                By default, shapes are drawn at the top left corner of the canvas, with no rotation or scaling, have a
+                    stroke color of black, a stroke weight of 1, and no fill color.
+            </div>
+        ),
+        fill: () => (
+            <div>
+                <Image src={fill} alt="fill" width={500} height={500} />
+                The <code>fill :: Color -&gt; Shape -&gt; Shape</code> function sets the fill color of the shape.
+            </div>
+        ),
+        stroke: () => (
+            <div>
+                <Image src={stroke} alt="stroke" width={500} height={500} />
+                The <code>stroke :: Color -&gt; Shape -&gt; Shape</code> function sets the stroke color of the shape.
+            </div>
+        ),
+        strokeWeight: () => (
+            <div>
+                <Image src={strokeWeight} alt="strokeWeight" width={500} height={500} />
+                The <code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> function sets the stroke thickness of the
+                    shape.
+            </div>
+        ),
+        translate: () => (
+            <div>
+                <Image src={translate} alt="translate" width={500} height={500} />
+                The <code>translate :: Vector -&gt; Shape -&gt; Shape</code> function translates the shape by the given
+                    offset.
+                <br />
+                <br />
+                This moves the shape's origin, so for circles and ellipses, it moves the center of the shape, for
+                    lines, it moves the starting point, and for squares and rectangles, it moves the top left
+                    corner. For polygons, each point moves with the origin, maintaining their same relative
+                    positions to each other.
+            </div>
+        ),
+        rotate: () => (
+            <div>
+                <Image src={rotate} alt="rotate" width={500} height={500} />
+                The <code>rotate :: Radians -&gt; Shape -&gt; Shape</code> function rotates the shape clockwise by the
+                    given angle, in radians, around its origin.
+                <br />
+                <br />
+                As with translations, the rotation is applied about the shape's origin point.
+            </div>
+        ),
+        scale: () => (
+            <div>
+                <Image src={scale} alt="scale" width={500} height={500} />
+                The <code>scale :: Float -&gt; Shape -&gt; Shape</code> function scales the shape by the given scale
+                    factor.
+                <br />
+                <br />
+                Once again, the scale factor is applied about the shape's origin point.
+            </div>
+        ),
+        Shorthands: {
+            noFill: () => (
                 <div>
-                    To modify a shape, you can use any of the functions in this section. They all take some argument,
-                        the shape to be transformed, and return the transformed shape.
-                    <br />
-                    By default, shapes are drawn at the top left corner of the canvas, with no rotation or scaling, have
-                        a stroke color of black, a stroke weight of 1, and no fill color.
-                </div>
-            ),
-            fill: () => (
-                <div>
-                    <Image src={fill} alt="fill" width={500} height={500} />
-                    The <code>fill :: Color -&gt; Shape -&gt; Shape</code> function sets the fill color of the shape.
-                    <br />
-                    <br />
                     The <code>noFill :: Shape -&gt; Shape</code> function is a shorthand for <code>fill
                         Transparent</code>.
                 </div>
             ),
-            stroke: () => (
+            noStroke: () => (
                 <div>
-                    <Image src={stroke} alt="stroke" width={500} height={500} />
-                    The <code>stroke :: Color -&gt; Shape -&gt; Shape</code> function sets the stroke color of the
-                        shape.
-                    <br />
-                    <br />
                     The <code>noStroke :: Shape -&gt; Shape</code> function is a shorthand for <code>stroke
                         Transparent</code>.
                 </div>
             ),
-            strokeWeight: () => (
+            translateX: () => (
                 <div>
-                    <Image src={strokeWeight} alt="strokeWeight" width={500} height={500} />
-                    The <code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> function sets the stroke thickness of
-                        the shape.
+                    The <code>translateX :: Float -&gt; Shape -&gt; Shape</code> function is shorthand
+                        for <code>translate (Vector x 0)</code>.
                 </div>
             ),
-            translate: () => (
+            translateY: () => (
                 <div>
-                    <Image src={translate} alt="translate" width={500} height={500} />
-                    The <code>translate :: Vector -&gt; Shape -&gt; Shape</code> function translates the shape by the
-                        given offset.
-                    <br />
-                    <br />
-                    This moves the shape's origin, so for circles and ellipses, it moves the center of the shape, for
-                        lines, it moves the starting point, and for squares and rectangles, it moves the top left
-                        corner. For polygons, each point moves with the origin, maintaining their same relative
-                        positions to each other.
+                    The <code>translateY :: Float -&gt; Shape -&gt; Shape</code> function is shorthand
+                        for <code>translate (Vector 0 y)</code>.
                 </div>
             ),
-            rotate: () => (
+            center: () => (
                 <div>
-                    <Image src={rotate} alt="rotate" width={500} height={500} />
-                    The <code>rotate :: Radians -&gt; Shape -&gt; Shape</code> function rotates the shape clockwise by
-                        the given angle, in radians, around its origin.
+                    The <code>center :: Canvas -&gt; Shape -&gt; Shape</code> function is a more complex translation
+                        shorthand, which moves the shape's center to the center of the canvas.
                     <br />
                     <br />
-                    As with translations, the rotation is applied about the shape's origin point.
+                    For shapes who's origin is at their center, this is the same as using <code>translate (Vector
+                        (width / 2) (height / 2))</code> where <code>width</code>, and <code>height</code> are the
+                        width and height of your canvas.
+                    <br />
+                    <br />
+                    For other shapes, <code>center</code> calculates the required offset to account for the shape's
+                        origin point and current angle of rotation.
                 </div>
             ),
-            scale: () => (
-                <div>
-                    <Image src={scale} alt="scale" width={500} height={500} />
-                    The <code>scale :: Float -&gt; Shape -&gt; Shape</code> function scales the shape by the given
-                        scale factor.
-                    <br />
-                    <br />
-                    Once again, the scale factor is applied about the shape's origin point.
-                </div>
-            ),
-            Shorthands: {
-                translateX: () => (
-                    <div>
-                        The <code>translateX :: Float -&gt; Shape -&gt; Shape</code> function is shorthand
-                            for <code>translate (Vector x 0)</code>.
-                    </div>
-                ),
-                translateY: () => (
-                    <div>
-                        The <code>translateY :: Float -&gt; Shape -&gt; Shape</code> function is shorthand
-                            for <code>translate (Vector 0 y)</code>, respectively.
-                    </div>
-                ),
-                center: () => (
-                    <div>
-                        The <code>center :: Canvas -&gt; Shape -&gt; Shape</code> function is a more complex translation
-                            shorthand, which moves the shape's center to the center of the canvas.
-                        <br />
-                        <br />
-                        For shapes who's origin is at their center, this is the same as using <code>translate (Vector
-                            (width / 2) (height / 2))</code> where <code>width</code>, and <code>height</code> are the
-                            width and height of your canvas.
-                        <br />
-                        <br />
-                        For other shapes, <code>center</code> calculates the required offset to account for the shape's
-                            origin point and current angle of rotation.
-                    </div>
-                ),
-            },
         },
         "Chaining Transformations": () => (
             <div>
