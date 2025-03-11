@@ -1,19 +1,20 @@
 module Canvas where
 
-import Color
-import Shape
+import Color (Color (Transparent))
+import Maths (Length)
+import Shape (Shape)
 
 -- Data structure to represent a canvas
 data Canvas = Canvas
-    { _width :: Int
-    , _height :: Int
+    { _width :: Length
+    , _height :: Length
     , _fps :: Int
     , _backgroundColor :: Color
     , _frames :: [Shape]
     }
 
 -- Creates a new canvas, setting the size of canvas element
-createCanvas :: Int -> Int -> Canvas
+createCanvas :: Length -> Length -> Canvas
 createCanvas width height = Canvas width height 24 Transparent []
 
 -- Set the background color of the canvas
