@@ -1,8 +1,5 @@
-import { ButtonGroup, Divider, Icon, IconButton, Tooltip, Typography } from "@mui/material";
-import {
-    Clear, FileOpen, InsertDriveFile, IosShare, KeyboardCommandKey,
-    KeyboardControlKey, KeyboardReturn, PlayArrow, Save, Stop,
-} from "@mui/icons-material";
+import { ButtonGroup, Divider, IconButton, Tooltip, Typography } from "@mui/material";
+import { Clear, FileOpen, InsertDriveFile, IosShare, PlayArrow, Save, Stop } from "@mui/icons-material";
 import { memo, useContext, useEffect, useState } from "react";
 import { PlainPaper } from "./plainPaper";
 import type { ReactNode } from "react";
@@ -10,7 +7,6 @@ import { SketchContext } from "contexts/sketch";
 import { UserContext } from "contexts/user";
 import styles from "styles/components/pages/editor/buttons.module.css";
 
-// TODO: Fix font size on icons
 // TODO: Loop toggle?
 // TODO: Pixelated toggle?
 
@@ -31,20 +27,14 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
     const { user } = useContext(UserContext);
     const loggedIn = user !== null;
     const { author, saved, title } = useContext(SketchContext);
-    const [metaKey, setMetaKey] = useState(<KeyboardControlKey fontSize="small" />);
     const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
-        if (navigator.platform.includes("Mac"))
-            setMetaKey(<KeyboardCommandKey fontSize="small" />);
-
-        setMounted(true);
-    }, []);
+    useEffect(() => setMounted(true), []);
 
     return (
         <PlainPaper className={styles.container!}>
             <ButtonGroup variant="text">
-                <Tooltip title={<>New ({metaKey}<Icon fontSize="small">N</Icon>)</>} arrow>
+                <Tooltip title="New" arrow>
                     <IconButton onClick={new_}>
                         <InsertDriveFile />
                     </IconButton>
@@ -55,12 +45,12 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
 
             {loggedIn
                 ? (<ButtonGroup variant="text">
-                    <Tooltip title={<>Open ({metaKey}<Icon fontSize="small">O</Icon>)</>} arrow>
+                    <Tooltip title="Open" arrow>
                         <IconButton onClick={open}>
                             <FileOpen />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title={<>Save ({metaKey}<Icon fontSize="small">S</Icon>)</>} arrow>
+                    <Tooltip title="Save" arrow>
                         <IconButton onClick={save}>
                             <Save />
                         </IconButton>
@@ -104,7 +94,7 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
                         <Stop />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title={<>Run ({metaKey}<KeyboardReturn fontSize="small" />)</>} arrow>
+                <Tooltip title="Run" arrow>
                     <IconButton color="success" onClick={run}>
                         <PlayArrow />
                     </IconButton>
