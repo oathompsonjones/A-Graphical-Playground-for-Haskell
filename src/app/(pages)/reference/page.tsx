@@ -134,7 +134,8 @@ const docs: Record<string, SectionType> = {
     Vectors: () => (
         <div>
             To represent a point, you use the <code>Vector</code> data type, which stores an <code>x</code> and
-                a <code>y</code> value.
+                a <code>y</code> value. To create a vector, you call the <code>Vector</code> constructor directly, like
+                this: <code>Vector 1 2</code>.
             <br />
             <br />
             Vectors support the following operators:
