@@ -1,25 +1,15 @@
 module Lib (
+    module Canvas,
     module Color,
+    module CyclicCanvasShape,
     module Maths,
     module Shape,
-    Canvas,
     render,
-    background,
-    createCanvas,
-    fps,
-    (<<<),
-    (<<<:),
 ) where
 
-import Canvas (
-    Canvas (..),
-    background,
-    createCanvas,
-    fps,
-    (<<<),
-    (<<<:),
- )
+import Canvas
 import Color
+import CyclicCanvasShape
 import Internal ()
 import Maths
 import Shape (

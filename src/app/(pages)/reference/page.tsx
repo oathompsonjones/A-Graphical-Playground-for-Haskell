@@ -359,11 +359,6 @@ const docs: Record<string, SectionType> = {
                         given offset.
                     <br />
                     <br />
-                    The <code>translateX :: Float -&gt; Shape -&gt; Shape</code> and <code>translateY :: Float -&gt;
-                        Shape -&gt; Shape</code> functions are shorthand for <code>translate
-                            (Vector x 0)</code> and <code>translate (Vector 0 y)</code>, respectively.
-                    <br />
-                    <br />
                     This moves the shape's origin, so for circles and ellipses, it moves the center of the shape, for
                         lines, it moves the starting point, and for squares and rectangles, it moves the top left
                         corner. For polygons, each point moves with the origin, maintaining their same relative
@@ -390,6 +385,35 @@ const docs: Record<string, SectionType> = {
                     Once again, the scale factor is applied about the shape's origin point.
                 </div>
             ),
+            Shorthands: {
+                translateX: () => (
+                    <div>
+                        The <code>translateX :: Float -&gt; Shape -&gt; Shape</code> function is shorthand
+                            for <code>translate (Vector x 0)</code>.
+                    </div>
+                ),
+                translateY: () => (
+                    <div>
+                        The <code>translateY :: Float -&gt; Shape -&gt; Shape</code> function is shorthand
+                            for <code>translate (Vector 0 y)</code>, respectively.
+                    </div>
+                ),
+                center: () => (
+                    <div>
+                        The <code>center :: Canvas -&gt; Shape -&gt; Shape</code> function is a more complex translation
+                            shorthand, which moves the shape's center to the center of the canvas.
+                        <br />
+                        <br />
+                        For shapes who's origin is at their center, this is the same as using <code>translate (Vector
+                            (width / 2) (height / 2))</code> where <code>width</code>, and <code>height</code> are the
+                            width and height of your canvas.
+                        <br />
+                        <br />
+                        For other shapes, <code>center</code> calculates the required offset to account for the shape's
+                            origin point and current angle of rotation.
+                    </div>
+                ),
+            },
         },
         "Chaining Transformations": () => (
             <div>
