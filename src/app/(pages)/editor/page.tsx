@@ -132,8 +132,10 @@ export default function EditorPage(): ReactNode {
         const url = new URL(window.location.href);
         const idParam = url.searchParams.get("id");
 
-        if (url.searchParams.size > 0)
-            resetSketch();
+        if (url.searchParams.size === 0)
+            return;
+
+        resetSketch();
 
         if (idParam === null) {
             const codeParam = url.searchParams.get("code");
@@ -164,6 +166,8 @@ export default function EditorPage(): ReactNode {
                 setNotification("Failed to open sketch. Are you logged in to the correct account?", "error");
             });
         }
+
+        redirect("/editor");
     }, [user]);
 
     // Loads the docker instance in case it's gone to sleep.
