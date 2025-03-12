@@ -685,22 +685,24 @@ const docs: Record<string, SectionType> = {
 
 /**
  * This is the reference page.
+ * @param props - The properties of the page.
+ * @param props.hideControls - Whether to hide the controls.
  * @returns The reference page.
  */
-export default function Reference(): ReactNode {
+export default function Reference({ hideControls }: { hideControls?: boolean; }): ReactNode {
     return (
         <>
             <div className="wrapper">
                 <Typography variant="h2">Reference</Typography>
                 <Stack direction={{ md: "row" }} alignItems="top" gap={5}>
                     <Contents docs={docs} />
-                    <Controls controls={[
+                    {!(hideControls ?? false) && <Controls controls={[
                         [<KeyboardReturn />, "Run your sketch."],
                         [<Icon>S</Icon>, "Save your sketch."],
                         [<Icon>O</Icon>, "Open one of your saved sketches."],
                         [<Icon>N</Icon>, "Create a new sketch."],
                         [<Icon>/</Icon>, "Comment/uncomment the current line."],
-                    ]} />
+                    ]} />}
                 </Stack>
             </div>
             {Object.entries(docs).map(([title, content], i) => (

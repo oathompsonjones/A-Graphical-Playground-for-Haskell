@@ -208,7 +208,7 @@ export default function EditorPage(): ReactNode {
                 </SplitView>
                 <TabView titles={["Canvas", "Reference"]}>
                     <CanvasController content={graphics} interval={interval} />
-                    <Reference />
+                    <Reference hideControls />
                 </TabView>
             </SplitView>
         </div>
