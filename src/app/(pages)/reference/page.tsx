@@ -469,6 +469,17 @@ const docs: Record<string, SectionType> = {
                     For other shapes, <code>center</code> calculates the required offset to account for the shape's
                         origin point and current angle of rotation. As this function does more than just a simple
                         translation, it is important to consider the order in which transformations are applied.
+                    <br />
+                    <br />
+                    As this function requires the canvas as an argument, it is recommended that you write your code like
+                        this:
+                    <pre>{[
+                        "canvas :: Canvas",
+                        "canvas = createCanvas 500 500",
+                        "",
+                        "main :: IO ()",
+                        "main = redner $ canvas <<< circle 100 >>> center canvas",
+                    ].join("\n")}</pre>
                 </div>
             ),
         },
