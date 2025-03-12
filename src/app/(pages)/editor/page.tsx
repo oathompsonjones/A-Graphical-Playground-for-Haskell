@@ -153,6 +153,8 @@ export default function EditorPage(): ReactNode {
 
             if (authorParam === "examples")
                 setSaved(true);
+
+            redirect("/editor");
         } else if (user !== null) {
             getSketch(idParam).then((sketchJson) => {
                 const sketchObj = JSON.parse(sketchJson) as Sketch;
@@ -162,12 +164,11 @@ export default function EditorPage(): ReactNode {
                 setAuthor(user.username ?? user.email.split("@")[0] ?? null);
                 setId(idParam);
                 setSaved(true);
+                redirect("/editor");
             }).catch(() => {
                 setNotification("Failed to open sketch. Are you logged in to the correct account?", "error");
             });
         }
-
-        redirect("/editor");
     }, [user]);
 
     // Loads the docker instance in case it's gone to sleep.
