@@ -1,6 +1,6 @@
 "use client";
 
-import { Icon, Stack, Typography } from "@mui/material";
+import { Icon, Stack, Tooltip, Typography } from "@mui/material";
 import { Contents } from "components/pages/reference/contents";
 import { Controls } from "components/pages/reference/controls";
 import Image from "next/image";
@@ -26,9 +26,9 @@ import stroke from "assets/images/docs/stroke.png";
 import strokeWeight from "assets/images/docs/strokeWeight.png";
 import translate from "assets/images/docs/translate.png";
 
-const invertColor = (color: string, doc: Document | null): string => {
+const namedToRGB = (color: string, doc: Document | null): [number, number, number] => {
     if (doc === null)
-        return "black";
+        return [255, 255, 255];
 
     const element = doc.createElement("div");
 
@@ -40,7 +40,43 @@ const invertColor = (color: string, doc: Document | null): string => {
 
     const [r, g, b] = rgb.match(/\d+/g)!.map(Number);
 
-    return r! * 0.299 + g! * 0.587 + b! * 0.114 > 186 ? "black" : "white";
+    return [r!, g!, b!];
+};
+
+const rgbToHex = (r: number, g: number, b: number): string => `#${[r, g, b]
+    .map((c) => c.toString(16).padStart(2, "0")).join("")}`;
+
+const rgbToHsl = (r: number, g: number, b: number): [number, number, number] => {
+    const [R, G, B] = [r / 255, g / 255, b / 255];
+    const cMax = Math.max(R, G, B);
+    const cMin = Math.min(R, G, B);
+    const d = cMax - cMin;
+    let [h, s, l] = [0, 0, 0];
+
+    // Calculate hue
+    if (d === 0)
+        h = 0;
+    else if (cMax === r)
+        h = (g - b) / d % 6;
+    else if (cMax === g)
+        h = (b - r) / d + 2;
+    else
+        h = (r - g) / d + 4;
+
+    h = Math.round(h * 60);
+
+    if (h < 0)
+        h += 360;
+
+    // Calculate lightness
+    l = (cMax + cMin) / 2;
+    l = Number((l * 100).toFixed(1));
+
+    // Calculate saturation
+    s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+    s = Number((s * 100).toFixed(1));
+
+    return [h, s, l];
 };
 
 export type SectionType = ((doc: Document | null) => ReactNode) | {
@@ -625,11 +661,25 @@ const docs: Record<string, SectionType> = {
                 "WhiteSmoke",
                 "Yellow",
                 "YellowGreen",
-            ].map((color, i, arr) => (
-                <span key={i}>
-                    <code style={{ background: color, color: invertColor(color, doc) }}>{color}</code>
-                    {i < arr.length - 1 ? ", " : ". "}
-                </span>
+            ].map((name) => {
+                const rgb = namedToRGB(name, doc);
+                const hex = rgbToHex(...rgb);
+                const hsl = rgbToHsl(...rgb);
+                const contrast = hsl[2] > 40 ? "black" : "white";
+
+                return { contrast, hex, hsl, name, rgb };
+            }).sort((a, b) => a.hsl[0] - b.hsl[0]).map(({ name, rgb, hsl, hex, contrast }, i) => (
+                <Tooltip
+                    title={[
+                        `rgb(${rgb.join(", ")})`,
+                        `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`,
+                        hex,
+                    ].join(" • ")} key={i} placement="top" arrow>
+                    <span>
+                        <code style={{ background: name, color: contrast }}>{name}</code>
+                        {" "}
+                    </span>
+                </Tooltip>
             ))}
         </div>
     ),
