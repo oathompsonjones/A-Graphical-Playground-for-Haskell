@@ -30,16 +30,23 @@
         "@mui/material": "^6.4.7",
         "@svgr/webpack": "^8.1.0",
         "@types/bcrypt": "^5.0.2",
-        "babel-plugin-react-compiler": "19.0.0-beta-714736e-20250131",
+        "babel-plugin-react-compiler": "19.0.0-beta-bafa41b-20250307",
         "bcrypt": "^5.1.1",
         "highlight.js": "^11.11.1",
         "lz-string": "^1.5.0",
         "mongodb": "^6.14.2",
-        "next": "15.2.1",
+        "next": "15.2.2",
         "react": "19.0.0",
         "react-dom": "19.0.0",
         "sharp": "^0.33.5",
         "zod": "^3.24.2"
     },
-    "packageManager": "pnpm@10.2.0+sha256.72f1630812107c8723eb5be4517725f3e13f09cfd8f71571cf29f23ce318bdb7"
+    "packageManager": "pnpm@10.2.0+sha256.72f1630812107c8723eb5be4517725f3e13f09cfd8f71571cf29f23ce318bdb7",
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "bcrypt",
+            "esbuild",
+            "sharp"
+        ]
+    }
 }
