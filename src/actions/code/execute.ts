@@ -84,7 +84,7 @@ export async function execute(code: string): Promise<ReadableStream<Response>> {
 
                 /** Handles the timeout of the stream. */
                 function timeoutStream(): void {
-                    controller.enqueue({ data: "TIMEOUT", status: "done" });
+                    controller.enqueue({ data: "TIMEOUT", status: "error" });
                     handleStreamEnd();
                 }
 

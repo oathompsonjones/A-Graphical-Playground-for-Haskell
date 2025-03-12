@@ -215,7 +215,10 @@ export default function EditorPage(): ReactNode {
             <SplitView id="editor-horizontal">
                 <SplitView vertical id="editor-vertical">
                     <Editor save={save} open={open} new={new_} run={run} />
-                    <Console content={consoleOutput} status={codeOutput.at(-1)?.status ?? "done"} />
+                    <Console
+                        content={consoleOutput}
+                        status={codeOutput.at(-1)?.status ?? "done"}
+                        message={codeOutput.at(-1)?.data ?? ""} />
                 </SplitView>
                 <TabView titles={["Canvas", "Reference"]}>
                     <CanvasController content={graphics} interval={interval} />

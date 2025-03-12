@@ -10,9 +10,14 @@ import styles from "styles/components/pages/editor/console.module.css";
  * @param props - The properties of the component.
  * @param props.content - The content to display on the console.
  * @param props.status - The status to set the colour indicator.
+ * @param props.message - The message to display on the tooltip.
  * @returns The console element.
  */
-function ConsoleComponent({ content, status }: { content?: string; status: "done" | "error" | "running"; }): ReactNode {
+function ConsoleComponent({ content, status, message }: {
+    content?: string;
+    status: "done" | "error" | "running";
+    message: string;
+}): ReactNode {
     const colourMap = {
         done: "warning",
         error: "error",
@@ -21,7 +26,7 @@ function ConsoleComponent({ content, status }: { content?: string; status: "done
 
     const messageMap = {
         done: "Listener is idle",
-        error: "Listener has encountered an error",
+        error: `Listener has encountered an error: ${message}`,
         running: "Listener is running",
     } as const;
 
