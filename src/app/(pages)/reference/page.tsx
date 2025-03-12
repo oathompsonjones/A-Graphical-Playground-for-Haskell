@@ -467,7 +467,8 @@ const docs: Record<string, SectionType> = {
                     <br />
                     <br />
                     For other shapes, <code>center</code> calculates the required offset to account for the shape's
-                        origin point and current angle of rotation.
+                        origin point and current angle of rotation. As this function does more than just a simple
+                        translation, it is important to consider the order in which transformations are applied.
                 </div>
             ),
         },
