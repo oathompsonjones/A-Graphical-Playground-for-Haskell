@@ -154,20 +154,26 @@ export default function EditorPage(): ReactNode {
             if (authorParam === "examples")
                 setSaved(true);
 
+            // Clear search parameters.
             redirect("/editor");
         } else if (user !== null) {
-            getSketch(idParam).then((sketchJson) => {
-                const sketchObj = JSON.parse(sketchJson) as Sketch;
+            getSketch(idParam)
+                .then((sketchJson) => {
+                    const sketchObj = JSON.parse(sketchJson) as Sketch;
 
-                setTitle(sketchObj.name);
-                setCode(sketchObj.content);
-                setAuthor(user.username ?? user.email.split("@")[0] ?? null);
-                setId(idParam);
-                setSaved(true);
-                redirect("/editor");
-            }).catch(() => {
-                setNotification("Failed to open sketch. Are you logged in to the correct account?", "error");
-            });
+                    setTitle(sketchObj.name);
+                    setCode(sketchObj.content);
+                    setAuthor(user.username ?? user.email.split("@")[0] ?? null);
+                    setId(idParam);
+                    setSaved(true);
+                })
+                .catch(() => {
+                    setNotification("Failed to open sketch. Are you logged in to the correct account?", "error");
+                })
+                .finally(() => {
+                    // Clear search parameters.
+                    redirect("/editor");
+                });
         }
     }, [user]);
 
