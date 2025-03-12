@@ -2,8 +2,12 @@
     display: flex;
     flex: 1;
     /*  This fixes the issue where if one section's content exceeds 
-        the size of the container, it would expand the container. */
+    the size of the container, it would expand the container. */
     height: 1px;
+}
+
+.dragging {
+    user-select: none;
 }
 
 .splitter {

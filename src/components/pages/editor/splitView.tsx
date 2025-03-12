@@ -67,7 +67,7 @@ export function SplitView({ children, id, vertical }: {
 
     return (
         <div
-            className={`${styles.container} ${styles[orientation]}`}
+            className={`${styles.container} ${styles[orientation]} ${canDrag ? styles.dragging : ""}`}
             ref={container}
             onMouseMove={handleDrag}
             onMouseLeave={disableDrag}
