@@ -3,59 +3,92 @@
 
 % Begin the document.
 \begin{document}
-\chapter{Introduction}
-    % The preliminary material of your report should contain:
-    % \begin{itemize}
-    %     \item The title page.
-    %     \item An abstract page.
-    %     \item Declaration of ethics and own work.
-    %     \item Optionally an acknowledgements page.
-    %     \item The table of contents.
-    % \end{itemize}
+\chapter{Introduction} \label{ch:introduction}
+    This project — A Graphical Playground for Haskell — is a web-based Haskell
+        editor with a built-in graphics library, allowing users to create images and
+        animations using Haskell.
+    The editor provides a simple, interactive interface for writing Haskell code
+        and viewing the output in real time, all within a web browser.
+    The project creates a beginner-friendly experience by providing a visual,
+        interactive environment for learning and experimenting with the language, while
+        also offering a fun and engaging way to create graphics and animations for
+        users of all skill levels.
 
-    %     As in this example \texttt{skeleton.tex}, the above material should be included
-    %         between: \begin{verbatim}
-    % \begin{preliminary}
-    %     ...
-    % \end{preliminary}
-    % \end{verbatim} This style file uses roman numeral page numbers
-    %         for the preliminary material.
+    \section{Aims and Motivations}
+        There are a variety of motivations for creating this project, including
+            educational benefits for students learning Haskell, as well as practical
+            applications for users interested in creating graphics and animations.
 
-    % The main content of the dissertation, starting with the first chapter, starts
-    %     with page~1.
-    % \emph{\textbf{The main content must not go beyond page~40.}}
+        The project aims to provide an experience that is both beginner-friendly and
+            engaging for users of all skill levels.
+        For beginners, the editor offers a visual, interactive environment for learning
+            Haskell, allowing them to see how their code works in real time.
+        For more experienced users, the editor provides a fun and engaging way to
+            create graphics and animations using Haskell, with the ability to experiment
+            and iterate quickly.
 
-    % The report then contains a bibliography and any appendices, which may go beyond
-    %     page~40.
-    % The appendices are only for any supporting material that's important to go on
-    %     record.
-    % However, you cannot assume markers of dissertations will read them.
+        \subsection{Educational Value}
+            Imagine a first-year Computer Science class — a mix of students with varying
+                levels of programming experience, from those who have never written a line of
+                code to those who have been programming for years.
+            Those who do have experience programming have mostly worked with imperative
+                languages like Python or Java, and are now learning Haskell for the first time.
+            The students follow along, trying to understand the code and how it works; but
+                as the program grows more complex, many students start to get lost.
+            Without a way to visualise the program's execution or to see how the different
+                parts of the program interact, they struggle to keep up with the lectures.
+            They strain see how different parts of the program fit together, or how the
+                program's output changes as they modify the code.
 
-    % You may not change the dissertation format (e.g., reduce the font size, change
-    %     the margins, or reduce the line spacing from the default single spacing).
-    % Be careful if you copy-paste packages into your document preamble from
-    %     elsewhere.
-    % Some \LaTeX{} packages, such as \texttt{fullpage} or \texttt{savetrees}, change
-    %     the margins of your document.
-    % Do not include them!
+            This project aims to address this problem by providing students with an
+                interactive, visual environment for learning Haskell.
+            A graphical editor allows students to see how their code works in real time,
+                helping them understand the program's execution and how the different parts of
+                the program interact, while also providing a fun and engaging way to learn
+                Haskell.
+            By providing a web-based service, users never even need to install Haskell on
+                their own computers — they can start coding right away, from any device with a
+                web browser.
 
-    % Over-length or incorrectly-formatted dissertations will not be accepted and you
-    %     would have to modify your dissertation and resubmit.
-    % You cannot assume we will check your submission before the final deadline and
-    %     if it requires resubmission after the deadline to conform to the page and style
-    %     requirements you will be subject to the usual late penalties based on your
-    %     final submission time.
+        \subsection{Practical Applications}
+            Beyond its educational value, the project also has practical applications for
+                users interested in creating graphics and animations using Haskell.
+            The editor's simple interface and built-in graphics library make it easy to
+                create images and animations, with the ability to experiment and iterate
+                quickly.
+            By including documentation for the graphics library and examples of how to use
+                it, the project aims to make it easy for users to get started creating their
+                own graphics and animations.
 
-    % \section{Using Sections}
-    %     Divide your chapters into sub-parts as appropriate.
+    \section{Dissertation Outline}
+        Chapter~\ref{ch:background} provides relevant background information on
+            Haskell, functional programming, graphics, and web technologies.
+        This is followed by an exploration of related works, including existing Haskell
+            editors and graphics libraries, placing this project in context.
 
-    % \section{Citations}
-    %     When citing work using author names, your sentences should still read as
-    %         correct English if any parts in parenthesis are removed.
-    %     Use {\tt {\textbackslash}citet} when citing the name as text that's part of
-    %         your sentence, and use {\tt {\textbackslash}citep} for a parenthetical
-    %         citation.
+        Chapter~\ref{ch:design} describes the design of the project, including the
+            architecture of the editor and the graphics library, as well as the user
+            interface and user experience design.
+        This compares different design choices, explaining the rationale behind the
+            decisions made.
 
-    %     You may use any consistent reference style that you prefer, including ``[1]''
-    %         numerical citations~\cite{P1}~\cite{P2}.
+        In Chapter~\ref{ch:implementation}, the implementation of the project is
+            detailed, illustrating the technologies used and the development process, as
+            well as addressing any challenges faced.
+        This includes the development of both the front-end and back-end components of
+            the project, as well as their integration.
+
+        Chapter~\ref{ch:evaluation} evaluates the project how successfully it meets its
+            aims and objectives, as well as how well it performs in practice.
+        This includes a discussion of the user testing and feedback survey conducted,
+            as well as any insights gained from the evaluation process.
+
+        Chapter~\ref{ch:limitations}, meanwhile, discusses the potential areas for
+            future work and improvements to the project.
+        This includes suggestions for how the project could be extended or enhanced in
+            the future, as well as any limitations of the current implementation.
+
+        Finally, Chapter~\ref{ch:conclusions} concludes the dissertation, summarising
+            the project and reflecting on the process of creating it.
+
 \end{document}
