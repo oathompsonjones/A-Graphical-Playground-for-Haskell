@@ -66,8 +66,8 @@ export function SketchContextProvider({ children }: { children: ReactNode; }): R
 
     useEffect(() => {
         if (code !== defaults.code) {
-            setOpen(true);
-            setSaved(false);
+            setOpen(author !== "examples");
+            setSaved(author === "examples");
         }
     }, [code]);
 
