@@ -31,7 +31,7 @@
     display: flex;
     gap: 1rem;
     overflow: auto;
-    justify-content: center;
+    scroll-behavior: smooth;
 }
 
 .examplesScroll::after,

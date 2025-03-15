@@ -4,6 +4,8 @@
     /*  This fixes the issue where if one section's content exceeds 
     the size of the container, it would expand the container. */
     height: 1px;
+    /* This fixes Firefox being bad. */
+    max-height: calc(100vh - 11rem);
 }
 
 .dragging {
