@@ -19,6 +19,7 @@ export function Examples({ examples }: {
     // Firefox needs a little help.
     useEffect(() => {
         const containers = document.querySelectorAll(`.${styles.examplesScroll}`);
+
         for (const container of containers)
             container.scrollLeft = (container.scrollWidth - container.clientWidth) / 2;
     }, []);
