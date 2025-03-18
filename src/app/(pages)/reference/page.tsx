@@ -1,6 +1,8 @@
+/* eslint-disable max-lines */
+
 "use client";
 
-import { Icon, Stack, Tooltip, Typography } from "@mui/material";
+import { Icon, MenuItem, Select, Stack, Tooltip, Typography } from "@mui/material";
 import { Contents } from "components/pages/reference/contents";
 import { Controls } from "components/pages/reference/controls";
 import Image from "next/image";
@@ -25,6 +27,157 @@ import square from "assets/images/docs/square.png";
 import stroke from "assets/images/docs/stroke.png";
 import strokeWeight from "assets/images/docs/strokeWeight.png";
 import translate from "assets/images/docs/translate.png";
+import { useState } from "react";
+
+const cssNamedColours = [
+    "AliceBlue",
+    "AntiqueWhite",
+    "Aqua",
+    "AquaMarine",
+    "Azure",
+    "Beige",
+    "Bisque",
+    "Black",
+    "BlanchedAlmond",
+    "Blue",
+    "BlueViolet",
+    "Brown",
+    "BurlyWood",
+    "CadetBlue",
+    "Chartreuse",
+    "Chocolate",
+    "Coral",
+    "CornflowerBlue",
+    "Cornsilk",
+    "Crimson",
+    "Cyan",
+    "DarkBlue",
+    "DarkCyan",
+    "DarkGoldenRod",
+    "DarkGray",
+    "DarkGreen",
+    "DarkGrey",
+    "DarkKhaki",
+    "DarkMagenta",
+    "DarkOliveGreen",
+    "DarkOrange",
+    "DarkOrchid",
+    "DarkRed",
+    "DarkSalmon",
+    "DarkSeaGreen",
+    "DarkSlateBlue",
+    "DarkSlateGray",
+    "DarkSlateGrey",
+    "DarkTurquoise",
+    "DarkViolet",
+    "DeepPink",
+    "DeepSkyBlue",
+    "DimGray",
+    "DimGrey",
+    "DodgerBlue",
+    "FireBrick",
+    "FloralWhite",
+    "ForestGreen",
+    "Fuchsia",
+    "Gainsboro",
+    "GhostWhite",
+    "Gold",
+    "GoldenRod",
+    "Gray",
+    "Green",
+    "GreenYellow",
+    "Grey",
+    "HoneyDew",
+    "HotPink",
+    "IndianRed",
+    "Indigo",
+    "Ivory",
+    "Khaki",
+    "Lavender",
+    "LavenderBlush",
+    "LawnGreen",
+    "LemonChiffon",
+    "LightBlue",
+    "LightCoral",
+    "LightCyan",
+    "LightGoldenRodYellow",
+    "LightGray",
+    "LightGreen",
+    "LightGrey",
+    "LightPink",
+    "LightSalmon",
+    "LightSeaGreen",
+    "LightSkyBlue",
+    "LightSlateGray",
+    "LightSlateGrey",
+    "LightSteelBlue",
+    "LightYellow",
+    "Lime",
+    "LimeGreen",
+    "Linen",
+    "Magenta",
+    "Maroon",
+    "MediumAquaMarine",
+    "MediumBlue",
+    "MediumOrchid",
+    "MediumPurple",
+    "MediumSeaGreen",
+    "MediumSlateBlue",
+    "MediumSpringGreen",
+    "MediumTurquoise",
+    "MediumVioletRed",
+    "MidnightBlue",
+    "MintCream",
+    "MistyRose",
+    "Moccasin",
+    "NavajoWhite",
+    "Navy",
+    "Oldlace",
+    "Olive",
+    "OliveDrab",
+    "Orange",
+    "OrangeRed",
+    "Orchid",
+    "PaleGoldenRod",
+    "PaleGreen",
+    "PaleTurquoise",
+    "PaleVioletRed",
+    "PapayaWhip",
+    "PeachPuff",
+    "Peru",
+    "Pink",
+    "Plum",
+    "PowderBlue",
+    "Purple",
+    "Red",
+    "RosyBrown",
+    "RoyalBlue",
+    "SaddleBrown",
+    "Salmon",
+    "SandyBrown",
+    "SeaGreen",
+    "SeaShell",
+    "Sienna",
+    "Silver",
+    "SkyBlue",
+    "SlateBlue",
+    "SlateGray",
+    "SlateGrey",
+    "Snow",
+    "SpringGreen",
+    "SteelBlue",
+    "Tan",
+    "Teal",
+    "Thistle",
+    "Tomato",
+    "Turquoise",
+    "Violet",
+    "Wheat",
+    "White",
+    "WhiteSmoke",
+    "Yellow",
+    "YellowGreen",
+];
 
 const namedToRGB = (color: string, doc: Document | null): [number, number, number] => {
     if (doc === null)
@@ -54,26 +207,27 @@ const rgbToHsl = (r: number, g: number, b: number): [number, number, number] => 
     let [h, s, l] = [0, 0, 0];
 
     // Calculate hue
-    if (d === 0)
-        h = 0;
-    else if (cMax === r)
-        h = (g - b) / d % 6;
-    else if (cMax === g)
-        h = (b - r) / d + 2;
-    else
-        h = (r - g) / d + 4;
+    switch (cMax) {
+        case cMin:
+            break;
+        case R:
+            h = (G - B) / d + (G < B ? 6 : 0);
+            break;
+        case G:
+            h = (B - R) / d + 2;
+            break;
+        default:
+            h = (R - G) / d + 4;
+            break;
+    }
 
-    h = Math.round(h * 60);
-
-    if (h < 0)
-        h += 360;
-
-    // Calculate lightness
+    // Calculate lightness and saturation
     l = (cMax + cMin) / 2;
-    l = Number((l * 100).toFixed(1));
-
-    // Calculate saturation
     s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
+
+    // Adjust values
+    h = Number((h * 60).toFixed(1));
+    l = Number((l * 100).toFixed(1));
     s = Number((s * 100).toFixed(1));
 
     return [h, s, l];
@@ -508,193 +662,62 @@ const docs: Record<string, SectionType> = {
             </div>
         ),
     },
-    // eslint-disable-next-line max-lines-per-function
-    Colors: (doc) => (
-        <div>
-            Colors are represented using the <code>Color</code> data type, which has the following constructors:
-            {list([
-                <><code>RGB Float Float Float</code> — Represents a color with red, green, and blue values.</>,
-                <><code>RGBA Float Float Float Float</code> — Represents a color with red, green, blue, and alpha
-                    values.</>,
-                <><code>Hex String</code> — Represents a color using a hexadecimal string. You can prefix the string
-                    with a hash (e.g. <code>"#ff0000"</code>) or you can leave it out (e.g. <code>"ff0000"</code>).</>,
-                <><code>HSL Float Float Float</code> — Represents a color with hue, saturation,
-                    and lightness values.</>,
-                <><code>HSLA Float Float Float Float</code> — Represents a color with hue, saturation, lightness, and
-                    alpha values.</>,
-                <><code>Transparent</code> — Represents a transparent color.</>,
-            ])}
 
-            You can also use the following CSS named colors: {[
-                "AliceBlue",
-                "AntiqueWhite",
-                "Aqua",
-                "AquaMarine",
-                "Azure",
-                "Beige",
-                "Bisque",
-                "Black",
-                "BlanchedAlmond",
-                "Blue",
-                "BlueViolet",
-                "Brown",
-                "BurlyWood",
-                "CadetBlue",
-                "Chartreuse",
-                "Chocolate",
-                "Coral",
-                "CornflowerBlue",
-                "Cornsilk",
-                "Crimson",
-                "Cyan",
-                "DarkBlue",
-                "DarkCyan",
-                "DarkGoldenRod",
-                "DarkGray",
-                "DarkGreen",
-                "DarkGrey",
-                "DarkKhaki",
-                "DarkMagenta",
-                "DarkOliveGreen",
-                "DarkOrange",
-                "DarkOrchid",
-                "DarkRed",
-                "DarkSalmon",
-                "DarkSeaGreen",
-                "DarkSlateBlue",
-                "DarkSlateGray",
-                "DarkSlateGrey",
-                "DarkTurquoise",
-                "DarkViolet",
-                "DeepPink",
-                "DeepSkyBlue",
-                "DimGray",
-                "DimGrey",
-                "DodgerBlue",
-                "FireBrick",
-                "FloralWhite",
-                "ForestGreen",
-                "Fuchsia",
-                "Gainsboro",
-                "GhostWhite",
-                "Gold",
-                "GoldenRod",
-                "Gray",
-                "Green",
-                "GreenYellow",
-                "Grey",
-                "HoneyDew",
-                "HotPink",
-                "IndianRed",
-                "Indigo",
-                "Ivory",
-                "Khaki",
-                "Lavender",
-                "LavenderBlush",
-                "LawnGreen",
-                "LemonChiffon",
-                "LightBlue",
-                "LightCoral",
-                "LightCyan",
-                "LightGoldenRodYellow",
-                "LightGray",
-                "LightGreen",
-                "LightGrey",
-                "LightPink",
-                "LightSalmon",
-                "LightSeaGreen",
-                "LightSkyBlue",
-                "LightSlateGray",
-                "LightSlateGrey",
-                "LightSteelBlue",
-                "LightYellow",
-                "Lime",
-                "LimeGreen",
-                "Linen",
-                "Magenta",
-                "Maroon",
-                "MediumAquaMarine",
-                "MediumBlue",
-                "MediumOrchid",
-                "MediumPurple",
-                "MediumSeaGreen",
-                "MediumSlateBlue",
-                "MediumSpringGreen",
-                "MediumTurquoise",
-                "MediumVioletRed",
-                "MidnightBlue",
-                "MintCream",
-                "MistyRose",
-                "Moccasin",
-                "NavajoWhite",
-                "Navy",
-                "Oldlace",
-                "Olive",
-                "OliveDrab",
-                "Orange",
-                "OrangeRed",
-                "Orchid",
-                "PaleGoldenRod",
-                "PaleGreen",
-                "PaleTurquoise",
-                "PaleVioletRed",
-                "PapayaWhip",
-                "PeachPuff",
-                "Peru",
-                "Pink",
-                "Plum",
-                "PowderBlue",
-                "Purple",
-                "Red",
-                "RosyBrown",
-                "RoyalBlue",
-                "SaddleBrown",
-                "Salmon",
-                "SandyBrown",
-                "SeaGreen",
-                "SeaShell",
-                "Sienna",
-                "Silver",
-                "SkyBlue",
-                "SlateBlue",
-                "SlateGray",
-                "SlateGrey",
-                "Snow",
-                "SpringGreen",
-                "SteelBlue",
-                "Tan",
-                "Teal",
-                "Thistle",
-                "Tomato",
-                "Turquoise",
-                "Violet",
-                "Wheat",
-                "White",
-                "WhiteSmoke",
-                "Yellow",
-                "YellowGreen",
-            ].map((name) => {
-                const rgb = namedToRGB(name, doc);
-                const hex = rgbToHex(...rgb);
-                const hsl = rgbToHsl(...rgb);
-                const contrast = hsl[2] > 40 ? "black" : "white";
+    Colors: (doc) => {
+        const [sortByColour, setSortByColour] = useState(true);
 
-                return { contrast, hex, hsl, name, rgb };
-            }).sort((a, b) => a.hsl[0] - b.hsl[0]).map(({ name, rgb, hsl, hex, contrast }, i) => (
-                <Tooltip
-                    title={[
-                        `rgb(${rgb.join(", ")})`,
-                        `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`,
-                        hex,
-                    ].join(" • ")} key={i} placement="top" arrow>
-                    <span>
-                        <code style={{ background: name, color: contrast }}>{name}</code>
-                        {" "}
-                    </span>
-                </Tooltip>
-            ))}
-        </div>
-    ),
+        return (
+            <div>
+                Colors are represented using the <code>Color</code> data type, which has the following constructors:
+                {list([
+                    <><code>RGB Float Float Float</code> — Represents a color with red, green, and blue values.</>,
+                    <><code>RGBA Float Float Float Float</code> — Represents a color with red, green, blue, and alpha
+                        values.</>,
+                    <><code>Hex String</code> — Represents a color using a hexadecimal string. You can prefix the string
+                        with a hash (e.g. <code>"#ff0000"</code>) or you can leave it out (e.g. <code>"ff0000"</code>).
+                    </>,
+                    <><code>HSL Float Float Float</code> — Represents a color with hue, saturation,
+                        and lightness values.</>,
+                    <><code>HSLA Float Float Float Float</code> — Represents a color with hue, saturation, lightness,
+                        and alpha values.</>,
+                    <><code>Transparent</code> — Represents a transparent color.</>,
+                ])}
+
+                You can also use the following CSS named colors (sort by <Select
+                    value={Number(sortByColour)} label="sortMode" variant="standard" size="small"
+                    onChange={(e) => setSortByColour(Boolean(e.target.value))}
+                >
+                    <MenuItem value={0}>Alphabetical</MenuItem>
+                    <MenuItem value={1}>Colour</MenuItem>
+                </Select>):
+                <br />
+                {cssNamedColours.map((name) => {
+                    const rgb = namedToRGB(name, doc);
+                    const hex = rgbToHex(...rgb);
+                    const hsl = rgbToHsl(...rgb);
+                    const contrast = rgb[0] * 0.299 + rgb[1] * 0.587 + rgb[0] * 0.114 > 140 ? "black" : "white";
+
+                    return { contrast, hex, hsl, name, rgb };
+                })
+                    .sort((a, b) => (sortByColour
+                        ? a.hsl[0] - b.hsl[0] || a.hsl[1] - b.hsl[1] || a.hsl[2] - b.hsl[2]
+                        : a.name.localeCompare(b.name)))
+                    .map(({ name, rgb, hsl, hex, contrast }, i) => (
+                        <Tooltip
+                            title={[
+                                `rgb(${rgb.join(", ")})`,
+                                `hsl(${hsl[0]}, ${hsl[1]}%, ${hsl[2]}%)`,
+                                hex,
+                            ].join(" • ")} key={i} placement="top" arrow>
+                            <span>
+                                <code style={{ background: name, color: contrast.toString() }}>{name}</code>
+                                {" "}
+                            </span>
+                        </Tooltip>
+                    ))}
+            </div>
+        );
+    },
     Other: {
         Angles: () => (
             <div>
