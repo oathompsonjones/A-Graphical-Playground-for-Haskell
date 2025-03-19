@@ -1,7 +1,6 @@
 module Lib (
     module Canvas,
     module Color,
-    module CyclicCanvasShape,
     module Maths,
     module Shape,
     render,
@@ -9,7 +8,6 @@ module Lib (
 
 import Canvas
 import Color
-import CyclicCanvasShape
 import Internal ()
 import Maths
 import Shape (
