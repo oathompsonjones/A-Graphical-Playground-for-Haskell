@@ -8,40 +8,64 @@
 \usepackage{float}
 \usepackage[hidelinks]{hyperref}
 \usepackage{pdfpages}
+\usepackage{courier}
 \usepackage{listings}
-\usepackage{xcolor}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 
-\definecolor{commentColour}{rgb}{0,0.6,0}
-\definecolor{numberColour}{rgb}{0.5,0.5,0.5}
-\definecolor{stringColour}{rgb}{0.58,0,0.82}
+\lstdefinelanguage{Haskell}{
+    keywords=[1]{
+        Int,Float,Double,Bool,String,Data,List,Time,Clock,POSIX,IO,Eq,Show,
+        Lib,Internal,Canvas,
+        Maths,Length,Radians,Degrees,Vector,
+        Color,RGB,RGBA,Hex,HSL,HSLA,
+        Transparent,AliceBlue,AntiqueWhite,Aqua,AquaMarine,Azure,Beige,Bisque,Black,BlanchedAlmond,Blue,BlueViolet,Brown,
+        BurlyWood,CadetBlue,Chartreuse,Chocolate,Coral,CornflowerBlue,Cornsilk,Crimson,Cyan,DarkBlue,DarkCyan,DarkGoldenRod,
+        DarkGray,DarkGreen,DarkGrey,DarkKhaki,DarkMagenta,DarkOliveGreen,DarkOrange,DarkOrchid,DarkRed,DarkSalmon,DarkSeaGreen,
+        DarkSlateBlue,DarkSlateGray,DarkSlateGrey,DarkTurquoise,DarkViolet,DeepPink,DeepSkyBlue,DimGray,DimGrey,DodgerBlue,
+        FireBrick,FloralWhite,ForestGreen,Fuchsia,Gainsboro,GhostWhite,Gold,GoldenRod,Gray,Green,GreenYellow,Grey,HoneyDew,
+        HotPink,IndianRed,Indigo,Ivory,Khaki,Lavender,LavenderBlush,LawnGreen,LemonChiffon,LightBlue,LightCoral,LightCyan,
+        LightGoldenRodYellow,LightGray,LightGreen,LightGrey,LightPink,LightSalmon,LightSeaGreen,LightSkyBlue,LightSlateGray,
+        LightSlateGrey,LightSteelBlue,LightYellow,Lime,LimeGreen,Linen,Magenta,Maroon,MediumAquaMarine,MediumBlue,MediumOrchid,
+        MediumPurple,MediumSeaGreen,MediumSlateBlue,MediumSpringGreen,MediumTurquoise,MediumVioletRed,MidnightBlue,MintCream,
+        MistyRose,Moccasin,NavajoWhite,Navy,Oldlace,Olive,OliveDrab,Orange,OrangeRed,Orchid,PaleGoldenRod,PaleGreen,PaleTurquoise,
+        PaleVioletRed,PapayaWhip,PeachPuff,Peru,Pink,Plum,PowderBlue,Purple,Red,RosyBrown,RoyalBlue,SaddleBrown,Salmon,SandyBrown,
+        SeaGreen,SeaShell,Sienna,Silver,SkyBlue,SlateBlue,SlateGray,SlateGrey,Snow,SpringGreen,SteelBlue,Tan,Teal,Thistle,
+        Tomato,Turquoise,Violet,Wheat,White,WhiteSmoke,Yellow,YellowGreen,
+        Shape,ShapeOptions,Connection,Open,Chord,Empty,Group,Line,Ellipse,Rect,Polygon,Curve,Arc,Pie
+    },
+    keywords=[2]{module,where,import,deriving,type,data,do,return,instance,infixr,infixl},
+    morestring=[b]",
+    morecomment=[l]{--}
+}
+
 \definecolor{backgroundColour}{rgb}{0.95,0.95,0.95}
 
-\lstdefinestyle{mystyle}{
+\lstset{
     backgroundcolor=\color{backgroundColour},
     basicstyle=\ttfamily,
     breakatwhitespace=false,
     breaklines=true,
     captionpos=b,
-    commentstyle=\color{commentColour},
+    commentstyle=\color{gray},
     extendedchars=true,
     frame=single,
     keepspaces=true,
-    keywordstyle=\color{magenta},
+    keywordstyle=[1]{\color{Orange}},
+    keywordstyle=[2]{\color{Magenta}},
+    language=Haskell,
     numbers=left,
     numbersep=5pt,
-    numberstyle=\ttfamily\color{numberColour},
-    rulecolor=\color{black},
+    numberstyle=\ttfamily\color{Gray},
+    rulecolor=\color{Black},
     showspaces=false,
     showstringspaces=false,
     showtabs=false,
-    stringstyle=\color{stringColour},
+    stringstyle=\color{Green},
     tabsize=2,
 }
-
-\lstset{style=mystyle}
 
 \begin{document}
 

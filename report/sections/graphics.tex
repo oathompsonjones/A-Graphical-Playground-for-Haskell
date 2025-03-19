@@ -200,7 +200,7 @@ data Color
             It is simple a type alias for \verb|Float|, so provides no additional type
                 safety, but does provide a level of semantic clarity, particularly in the
                 documentation.
-            \begin{lstlisting}[language=Haskell, label={lst:length}, caption={The Length type definition.}]
+            \begin{lstlisting}[label={lst:length}, caption={The Length type definition.}]
 type Length = Float\end{lstlisting}
 
         \subsection{The Vector Type}
@@ -222,7 +222,7 @@ type Length = Float\end{lstlisting}
             For example, a function that takes a \verb|Vector| as an argument would not
                 accept a tuple of \verb|Float|s, even though they are semantically the same.
 
-            \begin{lstlisting}[language=Haskell, label={lst:vector}, caption={The Vector type definition.}]
+            \begin{lstlisting}[label={lst:vector}, caption={The Vector type definition.}]
 data Vector = Vector Float Float\end{lstlisting}
 
             \subsubsection{Vector Operations}
@@ -242,7 +242,7 @@ data Vector = Vector Float Float\end{lstlisting}
                     based on the standard mathematical notation for vectors, which uses a caret
                     above the vector symbol.
 
-                \begin{lstlisting}[language=Haskell, label={lst:vectorOps}, morekeywords={Vector}, caption={The vector operators.}]
+                \begin{lstlisting}[label={lst:vectorOps}, caption={The vector operators.}]
 (^+^) :: Vector -> Vector -> Vector
 (^-^) :: Vector -> Vector -> Vector
 (^*^) :: Vector -> Float -> Vector
@@ -251,7 +251,7 @@ data Vector = Vector Float Float\end{lstlisting}
                 The remaining functions are equally simple to define, and make use of several
                     functions from the \verb|Prelude| module.
 
-                \begin{lstlisting}[language=Haskell, label={lst:vectorFns}, morekeywords={Vector}, caption={The remaining vector functions.}]
+                \begin{lstlisting}[label={lst:vectorFns}, caption={The remaining vector functions.}]
 mag :: Vector -> Float
 arg :: Vector -> Float
 norm :: Vector -> Vector
@@ -273,7 +273,7 @@ cross :: Vector -> Vector -> Float\end{lstlisting}
                 \verb|Length| type.
             We can then define functions for converting between degrees and radians.
 
-            \begin{lstlisting}[language=Haskell, label={lst:angleFns}, morekeywords={Degrees, Radians}, caption={The angle functions.}]  
+            \begin{lstlisting}[label={lst:angleFns}, caption={The angle functions.}]  
 type Degrees = Float
 type Radians = Float                
 radians :: Degrees -> Radians
@@ -293,7 +293,7 @@ degrees :: Radians -> Degrees\end{lstlisting}
                     \text{ mod } m$$ where $X_0$ is the seed, $a$ is the multiplier, $c$ is the
                 increment, and $m$ is the modulus.
 
-            \begin{lstlisting}[language=Haskell, label={lst:random}, caption={The random number
+            \begin{lstlisting}[label={lst:random}, caption={The random number
                 generator, which uses a linear congruential generator to generate an infinite
                 list of pseudo-random numbers, mapped to the range [0, 1].}]
 randoms :: Int -> [Double]
@@ -312,7 +312,7 @@ randoms seed = map fst (iterate (lcg . snd) (lcg seed))
                 time, using the \verb|Data.Time.Clock.POSIX| module's \verb|getPOSIXTime|
                 function.
 
-            \begin{lstlisting}[language=Haskell, label={lst:seed}, caption={The seed function.}]
+            \begin{lstlisting}[label={lst:seed}, caption={The seed function.}]
 seed :: IO Int
 seed = do
   time <- getPOSIXTime
@@ -391,9 +391,7 @@ seed = do
                 This stores the position (\verb|Vector|), angle (\verb|Radians|), fill colour
                     (\verb|Color|), stroke colour (\verb|Color|) and stroke weight (\verb|Float|).
 
-                \begin{lstlisting}[language=Haskell, label={lst:shape}, morekeywords={Connection, Open, Chord, 
-                    Pie, ShapeOptions, Vector, Radians, Color, Length, Shape, Empty, Group, Line, Ellipse, Rect, 
-                    Polygon, Curve, Arc}, caption={The Shape type definition.}]
+                \begin{lstlisting}[label={lst:shape}, caption={The Shape type definition.}]
 data Connection = Open | Chord | Pie
 data ShapeOptions = ShapeOptions { ... }
 data Shape
@@ -420,8 +418,7 @@ data Shape
                     \item The stroke weight is 1.
                 \end{itemize}
 
-                \begin{lstlisting}[language=Haskell, label={lst:shapes}, morekeywords={Shape, Length, Vector, Radians,
-                    Color, ShapeOptions, Connection, Open, Chord, Pie}, caption={The functions to create shapes.}]
+                \begin{lstlisting}[label={lst:shapes}, caption={The functions to create shapes.}]
 empty :: Shape
 line :: Length -> Shape
 ellipse :: Length -> Length -> Shape
@@ -461,7 +458,7 @@ pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
                 The name of the operator is taken directly from CodeWorld, where it is also
                     used to group shapes together.
 
-                \begin{lstlisting}[language=Haskell, label={lst:group}, morekeywords={Shape}, caption={The group operator.}]
+                \begin{lstlisting}[label={lst:group}, caption={The group operator.}]
 (&) :: Shape -> Shape -> Shape\end{lstlisting}
 
         \subsection{Transformations}
@@ -479,8 +476,7 @@ pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
                     \verb|strokeWeight| function is used to set the stroke weight of a shape.
                 The stroke weight is the thickness of the stroke, and is measured in pixels.
 
-                \begin{lstlisting}[language=Haskell, label={lst:colour}, morekeywords={Shape, Color},
-                    caption={The colour transformation functions.}]
+                \begin{lstlisting}[label={lst:colour}, caption={The colour transformation functions.}]
 fill :: Color -> Shape -> Shape
 stroke :: Color -> Shape -> Shape
 strokeWeight :: Float -> Shape -> Shape\end{lstlisting}
@@ -494,8 +490,7 @@ strokeWeight :: Float -> Shape -> Shape\end{lstlisting}
                     function is used to rotate a shape, and the \verb|scale| function is used to
                     resize a shape.
 
-                \begin{lstlisting}[language=Haskell, label={lst:geometric}, morekeywords={Shape, Vector,
-                            Radians}, caption={The geometric transformation functions.}]
+                \begin{lstlisting}[label={lst:geometric}, caption={The geometric transformation functions.}]
 translate :: Vector -> Shape -> Shape
 rotate :: Radians -> Shape -> Shape
 scale :: Float -> Shape -> Shape\end{lstlisting}
@@ -516,8 +511,7 @@ scale :: Float -> Shape -> Shape\end{lstlisting}
             \item A \verb|[Shape]| to represent the frames of the animation.
         \end{enumerate}
 
-        \begin{lstlisting}[language=Haskell, label={lst:canvas}, morekeywords={Canvas, Length, Color, Shape},
-            caption={The Canvas type definition.}]
+        \begin{lstlisting}[label={lst:canvas}, caption={The Canvas type definition.}]
 data Canvas = Canvas { ... }\end{lstlisting}
 
         Now that we have our \verb|Canvas| type, we need to provide an interface for
@@ -535,8 +529,7 @@ data Canvas = Canvas { ... }\end{lstlisting}
         To modify the frame rate and background colour, the user can then use the
             \verb|fps| and \verb|background| functions, respectively.
 
-        \begin{lstlisting}[language=Haskell, label={lst:fps}, morekeywords={Canvas, Length},
-            caption={The createCanvas, fps and backgrounds function.}]
+        \begin{lstlisting}[label={lst:fps}, caption={The createCanvas, fps and backgrounds function.}]
 createCanvas :: Length -> Length -> Canvas
 fps :: Int -> Canvas -> Canvas
 background :: Color -> Canvas -> Canvas\end{lstlisting}
@@ -545,8 +538,7 @@ background :: Color -> Canvas -> Canvas\end{lstlisting}
         This is handled by two operators, \verb|(<<<)|, which adds a single
             \verb|Shape|, and \verb|(<<<:)|, which appends a list of \verb|Shape|s.
 
-        \begin{lstlisting}[language=Haskell, label={lst:<<<}, morekeywords={Canvas, Shape},
-            caption={The operators to append a frame to the canvas.}]
+        \begin{lstlisting}[label={lst:<<<}, caption={The operators to append a frame to the canvas.}]
 (<<<) :: Canvas -> Shape -> Canvas
 (<<<:) canvas shapes = canvas{_frames = _frames canvas ++ shapes}\end{lstlisting}
 
