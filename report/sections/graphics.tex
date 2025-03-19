@@ -1,0 +1,465 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+\chapter{The Graphics Library} \label{ch:graphics}
+    The graphics library is a key component of the system, as it provides the
+        functionality for creating images and animations using Haskell.
+    The implementation of the graphics library was largely independent of the rest
+        of the system, as it is responsible for generating the necessary data to render
+        images and animations, rather than rendering them itself.
+
+    \section{Library Overview}
+        A graphics library does not need to be overly complex.
+        A simple, well-documented API, with selection of graphical primitives and
+            transformations, and a few helper modules, is all that is needed to allow users
+            of all skill levels to use the library with ease.
+
+        There were several sources of inspiration for the graphics library, including
+            CodeWorld and P5.js.
+        P5.js is a JavaScript library, and is therefore designed for imperative
+            programming, with a large reliance on side effects and global state.
+        Despite that, P5.js provides a straightforward API, with a nice selection of
+            well-named functions, many of which can be adapted to fit the functional
+            programming paradigm.
+        CodeWorld, on the other hand, uses Haskell, so it is purely functional, with no
+            side effects or global state, relying instead on function composition and
+            recursion.
+        While CodeWorld's API provides an excellent example of a functional graphics
+            library, it is less straightforward than P5.js.
+        The aim for our library is to find a balance between the simplicity of P5.js,
+            and the functional design of CodeWorld.
+
+        \subsection{Required Modules}
+            The graphics library is split into a few modules, each with a specific purpose.
+            Deciding which modules would be needed, proved to be relatively simple, as the
+                library is not overly complex.
+            The first and most obvious module required is the main module, which exports
+                the public API for the library — the \verb|Lib| module.
+            The second is the \verb|Internal| module, which simply contains the internal
+                types and functions used by the library, which are not exposed to the user, but
+                are used throughout the library.
+            From there, we need to consider what a graphics library needs to be able to do.
+            \begin{itemize}
+                \item The library needs to be able to represent the two-dimensional space
+                      to draw on, i.e. the canvas.
+                \item The library needs to be able to represent the graphical primitives
+                      that can be drawn on the canvas.
+                \item The library needs to be able to apply transformations to the graphical
+                      primitives.
+                \item The library needs to be able to render the canvas and the graphical
+                      primitives to an image or animation.
+            \end{itemize}
+            Given these requirements, we can split the library into four modules:
+            \begin{itemize}
+                \item \verb|Canvas|, to provide the functionality for creating and modifying
+                      the canvas.
+                \item \verb|Shape|, to provide the functionality for creating and modifying
+                      graphical primitives.
+                \item \verb|Maths|, to provide various mathematical functions and types, such
+                      as vectors and angles.
+                \item \verb|Color|, to provide several representations for colours.
+            \end{itemize}
+            The following sections will provide an overview of each of these modules,
+                working from the bottom up, starting with the \verb|Color| module.
+            This is because the \verb|Color| and \verb|Maths| modules are the simplest, and
+                are used by the \verb|Shape| and \verb|Canvas| modules.
+
+            For safety reasons, this library should not depend on anything other than
+                Haskell's standard library, as it is designed to be used in a web browser,
+                where the user should not be able to access the file system, or any other
+                potentially harmful functionality.
+            As such, modules like Haskell's \verb|System| module, are not available for use
+                in this library, but anything defined in the \verb|Prelude| module is fine.
+
+    \section{The Color Module}
+        The \verb|Color| module is the simplest of the four modules, as it only needs
+            to provide a way to represent colours.
+
+        \subsection{Common Digital Colour Representations}
+            There are several ways to represent colours in a graphics library, each with
+                its own advantages and disadvantages.
+            Some common representations are hexadecimal, RGB, HSL and HSV.
+
+            \subsubsection{RGB and Hexadecimal}
+                The hexadecimal and RGB (which stands for red, green, blue) representations are
+                    two ways of representing the same thing, with the former being more concise,
+                    and the latter being more readable.
+                They both represent the colour as a combination of red, green and blue, with
+                    each component being an integer between 0 and 255, so are naturally suited to
+                    digital displays, which use red, green and blue light to create colours.
+                Hexadecimal colours are represented as a string, starting with a hash symbol,
+                    followed by three pairs of hexadecimal digits, representing the red, green and
+                    blue components, respectively.
+                If the red, green and blue components all consist of double digits, e.g.
+                    \#FFEEDD, the colour be represented as three digits, e.g. \#FED, as a
+                    shorthand.
+                These representations can be visualised as a cube, with the x, y and z axes
+                    representing the red, green and blue components, respectively, as shown in
+                    Figure~\ref{fig:rgb}.
+
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.45\linewidth]{rgb.png}
+                        \caption{The RGB colour space.
+                            Image taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
+                                    HSL and HSV}.
+                        }
+                        \label{fig:rgb}
+                \end{figure}
+
+                Both RGB and hexadecimal colours can be extended to support an alpha channel,
+                    allowing for transparency.
+                For RGBA and hexadecimal colours, the alpha channel is represented as a
+                    floating point number between 0.0 and 1.0, with 0.0 being fully transparent,
+                    and 1.0 being fully opaque.
+                The alpha channel in hexadecimal colours is represented as a pair of
+                    hexadecimal digits, with 00 being fully transparent, and FF being fully opaque.
+                Just as with the three-digit hexadecimal colours, if the alpha channel consists
+                    of double digits, e.g. \#FFFFFFDD, the colour can be represented as four
+                    digits, e.g. \#FFFD, as a shorthand.
+
+            \subsubsection{HSL and HSV}
+                HSL and HSV are very similar representations, with HSL representing the colour
+                    as a hue, saturation and lightness, and HSV (also known as HSB) representing
+                    the colour as a hue, saturation and value (or brightness).
+                These representations are visualised as a cylinder, with the hue, saturation
+                    and lightness/value components representing the angle, radius and height,
+                    respectively, as shown in Figure~\ref{fig:hsl}.
+
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=0.45\linewidth]{hsl.png}
+                    \includegraphics[width=0.45\linewidth]{hsv.png}
+                        \caption{The HSL and HSV colour spaces.
+                            Images taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
+                                    HSL and HSV}.
+                        }
+                        \label{fig:hsl}
+                \end{figure}
+
+                The hue component is an angle between 0 and 360 degrees, with 0 and 360
+                    representing red, 120 representing green, 240 representing blue.
+                The saturation component is a percentage between 0\% and 100\%, with 0\%
+                    representing a shade of grey, and 100\% representing a fully saturated colour.
+                The lightness/value component is also a percentage between 0\% and 100\%.
+                For HSL, 0\% represents black, 100\% represents white, and 50\% represents the
+                    colour itself.
+                For HSV, 0\% represents black, 100\% represents the colour itself, and 50\%
+                    represents white.
+
+                As with RGB and hexadecimal colours, HSL and HSV can also be extended to
+                    support an alpha channel, with the alpha channel being represented in the same
+                    way as for RGBA colours.
+
+        \subsection{The Color Type}
+            For the purposes of this library, it made sense to consider what other
+                libraries used for colour representation.
+            CodeWorld offered both RGB and HSL, as well as a limited selection of named
+                colours.
+            Meanwhile, P5.js, as a JavaScript library, used any representation supported by
+                CSS.
+            Given that this library is designed to be used in a web browser, it made sense
+                to follow P5.js's lead, and support all the colour representations that CSS
+                supports: hexadecimal, RGB, RGBA, HSL and HSLA, as well as a selection of named
+                colours~\citep{cssColours}.
+
+            As such, the \verb|Color| type has 153 constructors.
+            Named colours comprise 148 of these constructors, with the remaining five
+                constructors representing the other colour representations supported by CSS.
+
+            \begin{lstlisting}[language=haskell, label={lst:color}, caption={The Color type definition.
+                Named colours have been omitted for brevity, but are included in the actual
+                implementation, as seen in Appendix~\ref{app:code}.}]
+data Color
+    = RGB Int Int Int -- Red, Green, Blue (0-255)
+    | RGBA Int Int Int Float -- Red, Green, Blue (0-255), Alpha (0.0-1.0)
+    | Hex String -- 3, 4, 6 or 8 digit hexadecimal (0-f), with or without #, upper or lower case
+    | HSL Int Int Int -- Hue (0-360), Saturation, Lightness (0-100)
+    | HSLA Int Int Int Float -- Hue (0-360), Saturation, Lightness (0-100), Alpha (0.0-1.0)
+    | ...
+            \end{lstlisting}
+
+    \section{The Maths Module}
+        The \verb|Maths| module is the next simplest module, as the majority of the
+            mathematical functions a user would need are provided by Haskell's standard
+            library.
+        However, there are a few types and functions that are not provided by the
+            standard library, but are useful for a graphics library.
+
+        \subsection{The Length Type}
+            The first of these is the \verb|Length| type, which is used to represent
+                lengths, such as the width and height of the canvas, the radius of a circle,
+                the side length of a square.
+            It is simple a type alias for \verb|Float|, so provides no additional type
+                safety, but does provide a level of semantic clarity, particularly in the
+                documentation.
+
+        \subsection{The Vector Type}
+            Vectors are a fundamental part of any graphics library, as they can be used to
+                represent points, directions, velocities, forces, etc. As this library works
+                with just two dimensions, our vectors only need to have two components, an x
+                and a y.
+            The \verb|Vector| type therefore has a single constructor, with two type
+                parameters, both of type \verb|Float|.
+            Note the use of the \verb|Float| type over the \verb|Length| type, once again
+                for semantic clarity, as vectors are often used to represent several concepts,
+                as mentioned above.
+            An alternative to using a custom \verb|Vector| type would be to use a tuple of
+                \verb|Float|s, but this would not provide the same level of type safety.
+            For example, a function that takes a \verb|Vector| as an argument would not
+                accept a tuple of \verb|Float|s, even though they are semantically the same.
+
+            \begin{lstlisting}[language=Haskell, label={lst:vector}, caption={The Vector type definition.}]
+data Vector = Vector Float Float
+            \end{lstlisting}
+
+            \subsubsection{Vector Operations}
+                Alongside the \verb|Vector| type, it is useful to provide a simple set of
+                    functions for working with vectors.
+                These functions include addition, subtraction, scalar multiplication, scalar
+                    division, dot product, cross product, magnitude, argument and normalisation.
+                For the first four functions, make \verb|Vector| an instance of the \verb|Num|
+                    type class, but this would require us to define all the functions in
+                    \verb|Num|, which is unnecessary, as we only need a subset of them.
+                Moreover, there is no defined division or multiplication for vectors, so it
+                    would be misleading to make \verb|Vector| an instance of \verb|Num|.
+                We can instead define the operators \verb|^+^|, \verb|^-^|, \verb|^*^| and
+                    \verb|^/^|.
+                These names reflect the standard \verb|+|, \verb|-|, \verb|*| and \verb|/|
+                    operators, but with a caret (\verb|^|) to indicate that they are for vectors,
+                    based on the standard mathematical notation for vectors, which uses a caret
+                    above the vector symbol.
+
+                \begin{lstlisting}[language=Haskell, label={lst:vectorOps}, morekeywords={Vector},
+                caption={The vector operators.}]
+(^+^) :: Vector -> Vector -> Vector
+(^+^) (Vector x1 y1) (Vector x2 y2) = Vector (x1 + x2) (y1 + y2)
+
+(^-^) :: Vector -> Vector -> Vector
+(^-^) (Vector x1 y1) (Vector x2 y2) = Vector (x1 - x2) (y1 - y2)
+
+(^*^) :: Vector -> Float -> Vector
+(^*^) (Vector x y) s = Vector (x * s) (y * s)
+
+(^/^) :: Vector -> Float -> Vector
+(^/^) (Vector x y) s = Vector (x / s) (y / s)
+            \end{lstlisting}
+
+                The remaining functions are equally simple to define, and make use of several
+                    functions from the \verb|Prelude| module.
+
+                \begin{lstlisting}[language=Haskell, label={lst:vectorFns}, morekeywords={Vector},
+                caption={The remaining vector functions.}]
+mag :: Vector -> Float
+mag (Vector x y) = sqrt (x ^ 2 + y ^ 2)
+
+arg :: Vector -> Float
+arg (Vector x y) = atan2 y x
+
+norm :: Vector -> Vector
+norm v = v ^/^ mag v
+
+dot :: Vector -> Vector -> Float
+dot (Vector x1 y1) (Vector x2 y2) = x1 * x2 + y1 * y2
+
+cross :: Vector -> Vector -> Float
+cross a b = mag a * mag b * sin (acos (dot a b))
+            \end{lstlisting}
+
+        \subsection{Angles}
+            Angles are another fundamental part of any graphics library, as they are
+                essential for rotations.
+            There are several units for measuring angles, including degrees, radians,
+                gradians and turns.
+            The two most common units are degrees and radians, with degrees dividing a
+                circle into 360 parts, and radians dividing a circle into $2\pi$ parts.
+            Given that, it makes sense to provide users with the ability to work with both
+                of these, and functions for converting between them.
+
+            We can define two more type aliases for \verb|Float|, \verb|Degrees| and
+                \verb|Radians|, to provide a level of semantic clarity, as with the
+                \verb|Length| type.
+            We can then define functions for converting between degrees and radians.
+
+            \begin{lstlisting}[language=Haskell, label={lst:angleFns}, morekeywords={Degrees, Radians},
+                caption={The angle functions.}]  
+radians :: Degrees -> Radians
+radians degrees = degrees * pi / 180
+
+degrees :: Radians -> Degrees
+degrees radians = radians * 180 / pi
+            \end{lstlisting}
+
+        \subsection{Random Numbers}
+            The final set of functions to provide in the \verb|Maths| module are those for
+                generating random numbers.
+            This can be very useful for creating more interesting animations, as it allows
+                for a level of unpredictability.
+            However, as this library is designed to not use Haskell's \verb|System| module,
+                we cannot use the \verb|System.Random| functions for generating random numbers.
+            Instead, we can create a simple pseudo-random number generator, using a linear
+                congruential generator, which is a simple algorithm for generating
+                pseudo-random numbers.
+            This algorithm is defined by the recurrence relation $$X_{n+1} = (aX_n + c)
+                    \text{ mod } m$$ where $X_0$ is the seed, $a$ is the multiplier, $c$ is the
+                increment, and $m$ is the modulus.
+
+            \begin{lstlisting}[language=Haskell, label={lst:random}, caption={The random number
+                generator, which uses a linear congruential generator to generate an infinite
+                list of pseudo-random numbers, mapped to the range [0, 1].}]
+randoms :: Int -> [Double]
+randoms seed = map fst (iterate (lcg . snd) (lcg seed))
+    where
+        lcg :: Int -> (Double, Int)
+        lcg seed = (fromIntegral newSeed / fromIntegral (2 ^ 32), newSeed)
+            where
+                newSeed = (1664525 * seed + 1013904223) `mod` 2 ^ 32
+            \end{lstlisting}
+
+            The values of $a$ (1664525), $c$ (1013904223) and $m$ ($2^32$) are taken from
+                Equation~7.1.6, An Even Quicker Generator, in Chapter~7.1 of Numerical
+                Recipes~\citep{numericalRecipes}.
+
+            We can also provide a simple function to generate a seed, based on the current
+                time, using the \verb|Data.Time.Clock.POSIX| module's \verb|getPOSIXTime|
+                function.
+
+            \begin{lstlisting}[language=Haskell, label={lst:seed}, caption={The seed function.}]
+seed :: IO Int
+seed = do
+    time <- getPOSIXTime
+    return (floor (time * 1000000))
+            \end{lstlisting}
+
+            The seed function returns an \verb|IO Int|, as it requires the current time to
+                generate the seed, which is not known until runtime, so the function must be
+                wrapped in the \verb|IO| monad.
+
+    \section{The Shape Module}
+        At the core of a graphics library are the graphical primitives, which are the
+            basic building blocks for creating images and animations.
+        Once again, it made sense to use a similar set of primitives to those found in
+            P5.js and CodeWorld, as they are simple and easy to use, making them accessible
+            for beginners.
+
+        Ultimately, I settled on a \verb|Shape| type, with eight constructors:
+
+        \begin{itemize}
+            \item \verb|Empty|, which represents the empty shape, so has no type
+                  parameters.
+                  Drawing an empty shape has no effect.
+            \item \verb|Group|, which represents a group of shapes, so has a single type
+                  parameter — a list of shapes.
+            \item \verb|Line|, which represents a straight line, so has just one type
+                  parameter, of type \verb|Length|, representing the line's length.
+            \item \verb|Ellipse|, which represents an ellipse, so has two type parameters,
+                  both of type \verb|Length|, representing the ellipse's horizontal and vertical
+                  radii.
+            \item \verb|Rect|, which represents a rectangle, so has two type parameters, both
+                  of type \verb|Length|, representing the rectangle's width and height.
+            \item \verb|Polygon|, which represents any polygon, so has one type parameter, of
+                  type \verb|[Vector]|, representing the polygon's vertices.
+            \item \verb|Curve|, which represents both quadratic and cubic Bézier curves, so has
+                  one type parameter, of type \verb|[Vector]|, representing the curve's control
+                  points.
+            \item \verb|Arc|, which represents an arc, so has five type parameters.
+                  Two of type \verb|Length|, representing the horizontal and vertical radii of
+                      the arc, two of type \verb|Radians|, representing the start and end angles of
+                      the arc, and one of type \verb|Connection|, representing how the arc closes
+                      (either \verb|Open|, \verb|Chord| or \verb|Pie|).
+        \end{itemize}
+
+        All of these constructors, except for \verb|Empty| and \verb|Group|, take an
+            extra type parameter of type \verb|ShapeOptions|.
+        This stores the position (\verb|Vector|), angle (\verb|Radians|), fill colour
+            (\verb|Color|), stroke colour (\verb|Color|) and stroke weight (\verb|Float|).
+
+        While the \verb|Shape| type is exposed to the user, the constructors are not.
+        Instead, the user interacts with the library through a set of functions, such
+            as \verb|line|, \verb|ellipse| and \verb|rect|, which construct the shapes for
+            the user.
+        This allows the user to create shapes with default options, and then modify
+            them as needed.
+
+    \section{The Canvas Module}
+        The canvas module is responsible for creating and modifying the canvas, which
+            is the two-dimensional space on which the user can draw shapes.
+        The canvas itself can be represented by a simple \verb|Canvas| type, with five type parameters:
+        \begin{enumerate}
+            \item Two \verb|Length|s to represent the width and height of the canvas.
+            \item An \verb|Int| to represent the frame rate at which to render the animation.
+            \item A \verb|Color| to represent the background colour to apply to each frame.
+                  There is an argument for omitting this parameter, requiring users to instead
+                      draw a rectangle filling the whole canvas, and applying the background colour
+                      there.
+                  However, as most animations are likely to use the same background colour for
+                      each frame, this provides a more elegant, less repetitive solution.
+            \item A \verb|[Shape]| to represent the frames of the animation.
+        \end{enumerate}
+
+        \begin{lstlisting}[language=Haskell, label={lst:canvas}, caption={The Canvas type definition.
+            We use the field labels for internal use only. These are not exposed to the user, and are
+            prefixed with \_ to indicate such, as well as to avoid polluting the namespace.}]
+data Canvas = Canvas
+    { _width :: Length
+    , _height :: Length
+    , _fps :: Int
+    , _backgroundColor :: Color
+    , _frames :: [Shape]
+    }
+        \end{lstlisting}
+
+        Now that we have our \verb|Canvas| type, we need to provide an interface for
+            users to interact with it.
+        First, we need a function to create a new canvas.
+        One option for this function is to take all the canvas parameters as arguments.
+        However, this would require the user to write out each parameter in every
+            program they write, even if these values are not important to them.
+        To provide a more user-friendly interface, the function should provide default
+            values for some parameters, requiring the user to only specify the width and
+            height.
+
+        \begin{lstlisting}[language=Haskell, label={lst:createCanvas}, caption={The createCanvas function.
+            Default values are provided for the frame rate, background colour and frames.}]
+createCanvas :: Length -> Length -> Canvas
+createCanvas width height = Canvas width height 24 Transparent []
+        \end{lstlisting}
+
+        To modify the frame rate and background colour, the user can use the \verb|fps|
+            and \verb|background| functions, respectively.
+
+        \begin{lstlisting}[language=Haskell, label={lst:fps}, caption={The fps function.}]
+fps :: Int -> Canvas -> Canvas
+fps fps canvas = canvas{_fps = fps}
+        \end{lstlisting}
+
+        \begin{lstlisting}[language=Haskell, label={lst:background}, caption={The background function.}]
+background :: Color -> Canvas -> Canvas
+background color canvas = canvas{_backgroundColor = color}
+        \end{lstlisting}
+
+        The final interaction the user has with the canvas is to draw shapes on it.
+        This is handled by two operators, \verb|(<<<)|, which adds a single
+            \verb|Shape|, and \verb|(<<<:)|, which appends a list of \verb|Shape|s.
+
+        \begin{lstlisting}[language=Haskell, label={lst:<<<}, caption={The operator to append a single
+            frame to the canvas.}]
+(<<<) :: Canvas -> Shape -> Canvas
+(<<<) canvas shape = canvas{_frames = _frames canvas ++ [shape]}
+        \end{lstlisting}
+
+        \begin{lstlisting}[language=Haskell, label={lst:<<<:}, caption={The operator to append an
+            entire list of frames to the canvas.}]
+(<<<:) :: Canvas -> [Shape] -> Canvas
+(<<<:) canvas shapes = canvas{_frames = _frames canvas ++ shapes}
+        \end{lstlisting}
+
+        With these functions, the user can create a canvas, set the frame rate and
+            background colour, and draw shapes on it.
+        The \verb|(<<<:)| operator was not strictly necessary, as users could instead
+            use \verb|foldl (<<<) canvas shapes|, but it provides a more elegant solution.
+        Using \verb|foldl| with \verb|(<<<)| would not allow the user to take advantage
+            of Haskell's lazy evaluation, as the list of shapes would be fully evaluated
+            due to the tail-recursive nature of \verb|foldl|.
+
+\end{document}
