@@ -222,8 +222,6 @@ export function ColorsRoot({ list }: { list: (elems: ReactNode[]) => ReactNode; 
             setDoc(window.document);
     }, [doc]);
 
-    console.log(sortByColour, Number(sortByColour));
-
     return (
         <div>
             Colors are represented using the <code>Color</code> data type, which has the following constructors:

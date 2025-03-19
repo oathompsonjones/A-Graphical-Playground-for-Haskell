@@ -9,7 +9,7 @@ import { Canvas } from "components/pages/reference/sections/canvas";
 import { Center } from "components/pages/reference/sections/transformations/shorthands/center";
 import { ChainingTransformations } from "components/pages/reference/sections/transformations/chainingTransformations";
 import { Circle } from "components/pages/reference/sections/shapes/nonPrimitives/circle";
-import { ColorsRoot } from "components/pages/reference/sections/colors/root";
+import { ColorsRoot } from "components/pages/reference/sections/colors";
 import { CombiningShapes } from "components/pages/reference/sections/shapes/combiningShapes";
 import { Contents } from "components/pages/reference/contents";
 import { Controls } from "components/pages/reference/controls";
