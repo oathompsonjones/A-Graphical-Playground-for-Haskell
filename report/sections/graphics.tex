@@ -42,14 +42,14 @@
             Deciding which modules would be needed, proved to be relatively simple, as the
                 library is not overly complex.
             The first and most obvious module required is the main module, which exports
-                the public API for the library — the \verb|Lib| module.
-            This module includes one function, \verb|render|, which takes a \verb|Canvas|
-                and prints its JSON representation to the standard output.
+                the public API for the library — the \texttt{Lib} module.
+            This module includes one function, \texttt{render}, which takes a
+                \texttt{Canvas} and prints its JSON representation to the standard output.
 
-            \begin{lstlisting}[label={lst:lib}, caption={The render function.}]
+            \begin{lstlisting}[label={lst:lib}, caption={The \texttt{render} function.}]
 render :: Canvas -> IO ()\end{lstlisting}
 
-            The second is the \verb|Internal| module, which simply contains the internal
+            The second is the \texttt{Internal} module, which simply contains the internal
                 types and functions used by the library, which are not exposed to the user, but
                 are used throughout the library.
             This module includes the necessary functions to convert each of the types
@@ -68,29 +68,30 @@ render :: Canvas -> IO ()\end{lstlisting}
             \end{itemize}
             Given these requirements, we can split the library into four modules:
             \begin{itemize}
-                \item \verb|Canvas|, to provide the functionality for creating and modifying
+                \item \texttt{Canvas}, to provide the functionality for creating and modifying
                       the canvas.
-                \item \verb|Shape|, to provide the functionality for creating and modifying
+                \item \texttt{Shape}, to provide the functionality for creating and modifying
                       graphical primitives.
-                \item \verb|Maths|, to provide various mathematical functions and types, such
+                \item \texttt{Maths}, to provide various mathematical functions and types, such
                       as vectors and angles.
-                \item \verb|Color|, to provide several representations for colours.
+                \item \texttt{Color}, to provide several representations for colours.
             \end{itemize}
             The following sections will provide an overview of each of these modules,
-                working from the bottom up, starting with the \verb|Color| module.
-            This is because the \verb|Color| and \verb|Maths| modules are the simplest, and
-                are used by the \verb|Shape| and \verb|Canvas| modules.
+                working from the bottom up, starting with the \texttt{Color} module.
+            This is because the \texttt{Color} and \texttt{Maths} modules are the simplest,
+                and are used by the \texttt{Shape} and \texttt{Canvas} modules.
 
             For safety reasons, this library should not depend on anything other than
                 Haskell's standard library, as it is designed to be used in a web browser,
                 where the user should not be able to access the file system, or any other
                 potentially harmful functionality.
-            As such, modules like Haskell's \verb|System| module, are not available for use
-                in this library, but anything defined in the \verb|Prelude| module is fine.
+            As such, modules like Haskell's \texttt{System} module, are not available for
+                use in this library, but anything defined in the \texttt{Prelude} module is
+                fine.
 
-    \section{The Color Module}
-        The \verb|Color| module is the simplest of the four modules, as it only needs
-            to provide a way to represent colours.
+    \section{The \texttt{Color}
+        Module} The \texttt{Color} module is the simplest of the four modules, as it
+            only needs to provide a way to represent colours.
 
         \subsection{Common Digital Colour Representations}
             There are several ways to represent colours in a graphics library, each with
@@ -180,11 +181,11 @@ render :: Canvas -> IO ()\end{lstlisting}
                 supports: hexadecimal, RGB, RGBA, HSL and HSLA, as well as a selection of named
                 colours~\citep{cssColours}.
 
-            As such, the \verb|Color| type has 153 constructors.
+            As such, the \texttt{Color} type has 153 constructors.
             Named colours comprise 148 of these constructors, with the remaining five
                 constructors representing the other colour representations supported by CSS.
 
-            \begin{lstlisting}[language=haskell, label={lst:color}, caption={The Color type definition.
+            \begin{lstlisting}[label={lst:color}, caption={The \texttt{Color} type definition.
                 Named colours have been omitted, but are included in the actual implementation, as seen 
                 in Appendix~\ref{app:code}.}]
 data Color
@@ -195,55 +196,55 @@ data Color
     | HSLA Int Int Int Float -- HSL + Alpha (0.0-1.0)
     | ...\end{lstlisting}
 
-    \section{The Maths Module}
-        The \verb|Maths| module is the next simplest module, as the majority of the
-            mathematical functions a user would need are provided by Haskell's standard
-            library.
+    \section{The \texttt{Maths}
+        Module} The \texttt{Maths} module is the next simplest module, as the majority
+            of the mathematical functions a user would need are provided by Haskell's
+            standard library.
         However, there are a few types and functions that are not provided by the
             standard library, but are useful for a graphics library.
 
-        \subsection{The Length Type}
-            The first of these is the \verb|Length| type, which is used to represent
-                lengths, such as the width and height of the canvas, the radius of a circle,
-                the side length of a square.
-            It is simple a type alias for \verb|Float|, so provides no additional type
+        \subsection{The \texttt{Length}
+            Type} The first of these is the \texttt{Length} type, which is used to
+                represent lengths, such as the width and height of the canvas, the radius of a
+                circle, the side length of a square.
+            It is simple a type alias for \texttt{Float}, so provides no additional type
                 safety, but does provide a level of semantic clarity, particularly in the
                 documentation.
-            \begin{lstlisting}[label={lst:length}, caption={The Length type definition.}]
+            \begin{lstlisting}[label={lst:length}, caption={The \texttt{Length} type definition.}]
 type Length = Float\end{lstlisting}
 
-        \subsection{The Vector Type}
-            Vectors are a fundamental part of any graphics library, as they can be used to
-                represent points, directions, velocities, forces, etc. As this library works
-                with just two dimensions, our vectors only need to have two components, an x
-                and a y.
-            Both P5.js and CodeWorld provide a \verb|Vector| type, with the latter also
-                providing a \verb|Point| type, which is identical to a \verb|Vector|.
-            For the sake of simplicity, we will use a single \verb|Vector| type, which can
-                represent points, directions and anything else the user may need.
-            The \verb|Vector| type therefore has a single constructor, with two type
-                parameters, both of type \verb|Float|.
-            Note the use of the \verb|Float| type over the \verb|Length| type, once again
-                for semantic clarity, as vectors are often used to represent several concepts,
-                as mentioned above.
-            An alternative to using a custom \verb|Vector| type would be to use a tuple of
-                \verb|Float|s, but this would not provide the same level of type safety.
-            For example, a function that takes a \verb|Vector| as an argument would not
-                accept a tuple of \verb|Float|s, even though they are semantically the same.
+        \subsection{The \texttt{Vector}
+            Type} Vectors are a fundamental part of any graphics library, as they can be
+                used to represent points, directions, velocities, forces, etc. As this library
+                works with just two dimensions, our vectors only need to have two components,
+                an x and a y.
+            Both P5.js and CodeWorld provide a \texttt{Vector} type, with the latter also
+                providing a \texttt{Point} type, which is identical to a \texttt{Vector}.
+            For the sake of simplicity, we will use a single \texttt{Vector} type, which
+                can represent points, directions and anything else the user may need.
+            The \texttt{Vector} type therefore has a single constructor, with two type
+                parameters, both of type \texttt{Float}.
+            Note the use of the \texttt{Float} type over the \texttt{Length} type, once
+                again for semantic clarity, as vectors are often used to represent several
+                concepts, as mentioned above.
+            An alternative to using a custom \texttt{Vector} type would be to use a tuple
+                of \texttt{Float}s, but this would not provide the same level of type safety.
+            For example, a function that takes a \texttt{Vector} as an argument would not
+                accept a tuple of \texttt{Float}s, even though they are semantically the same.
 
-            \begin{lstlisting}[label={lst:vector}, caption={The Vector type definition.}]
+            \begin{lstlisting}[label={lst:vector}, caption={The \texttt{Vector} type definition.}]
 data Vector = Vector Float Float\end{lstlisting}
 
             \subsubsection{Vector Operations}
-                Alongside the \verb|Vector| type, it is useful to provide a simple set of
+                Alongside the \texttt{Vector} type, it is useful to provide a simple set of
                     functions for working with vectors.
                 These functions include addition, subtraction, scalar multiplication, scalar
                     division, dot product, cross product, magnitude, argument and normalisation.
-                For the first four functions, make \verb|Vector| an instance of the \verb|Num|
-                    type class, but this would require us to define all the functions in
-                    \verb|Num|, which is unnecessary, as we only need a subset of them.
+                For the first four functions, make \texttt{Vector} an instance of the
+                    \texttt{Num} type class, but this would require us to define all the functions
+                    in \texttt{Num}, which is unnecessary, as we only need a subset of them.
                 Moreover, there is no defined division or multiplication for vectors, so it
-                    would be misleading to make \verb|Vector| an instance of \verb|Num|.
+                    would be misleading to make \texttt{Vector} an instance of \texttt{Num}.
                 We can instead define the operators \verb|^+^|, \verb|^-^|, \verb|^*^| and
                     \verb|^/^|.
                 These names reflect the standard \verb|+|, \verb|-|, \verb|*| and \verb|/|
@@ -258,7 +259,7 @@ data Vector = Vector Float Float\end{lstlisting}
 (^/^) :: Vector -> Float -> Vector\end{lstlisting}
 
                 The remaining functions are equally simple to define, and make use of several
-                    functions from the \verb|Prelude| module.
+                    functions from the \texttt{Prelude} module.
 
                 \begin{lstlisting}[label={lst:vectorFns}, caption={The remaining vector functions.}]
 mag :: Vector -> Float
@@ -277,9 +278,9 @@ cross :: Vector -> Vector -> Float\end{lstlisting}
             Given that, it makes sense to provide users with the ability to work with both
                 of these, and functions for converting between them.
 
-            We can define two more type aliases for \verb|Float|, \verb|Degrees| and
-                \verb|Radians|, to provide a level of semantic clarity, as with the
-                \verb|Length| type.
+            We can define two more type aliases for \texttt{Float}, \texttt{Degrees} and
+                \texttt{Radians}, to provide a level of semantic clarity, as with the
+                \texttt{Length} type.
             We can then define functions for converting between degrees and radians.
 
             \begin{lstlisting}[label={lst:angleFns}, caption={The angle functions.}]  
@@ -289,12 +290,13 @@ radians :: Degrees -> Radians
 degrees :: Radians -> Degrees\end{lstlisting}
 
         \subsection{Random Numbers}
-            The final set of functions to provide in the \verb|Maths| module are those for
-                generating random numbers.
+            The final set of functions to provide in the \texttt{Maths} module are those
+                for generating random numbers.
             This can be very useful for creating more interesting animations, as it allows
                 for a level of unpredictability.
-            However, as this library is designed to not use Haskell's \verb|System| module,
-                we cannot use the \verb|System.Random| functions for generating random numbers.
+            However, as this library is designed to not use Haskell's \texttt{System}
+                module, we cannot use the \texttt{System.Random} functions for generating
+                random numbers.
             Instead, we can create a simple pseudo-random number generator, using a linear
                 congruential generator, which is a simple algorithm for generating
                 pseudo-random numbers.
@@ -302,9 +304,9 @@ degrees :: Radians -> Degrees\end{lstlisting}
                     \text{ mod } m$$ where $X_0$ is the seed, $a$ is the multiplier, $c$ is the
                 increment, and $m$ is the modulus.
 
-            \begin{lstlisting}[label={lst:random}, caption={The random number
-                generator, which uses a linear congruential generator to generate an infinite
-                list of pseudo-random numbers, mapped to the range [0, 1].}]
+            \begin{lstlisting}[label={lst:random}, caption={The random number generator, 
+                (\texttt{randoms}) which uses a linear congruential generator to generate an 
+                infinite list of pseudo-random numbers, mapped to the range [0, 1].}]
 randoms :: Int -> [Double]
 randoms seed = map fst (iterate (lcg . snd) (lcg seed))
   where
@@ -318,22 +320,22 @@ randoms seed = map fst (iterate (lcg . snd) (lcg seed))
                 Recipes~\citep{numericalRecipes}.
 
             We can also provide a simple function to generate a seed, based on the current
-                time, using the \verb|Data.Time.Clock.POSIX| module's \verb|getPOSIXTime|
+                time, using the \texttt{Data.Time.Clock.POSIX} module's \texttt{getPOSIXTime}
                 function.
 
-            \begin{lstlisting}[label={lst:seed}, caption={The seed function.}]
+            \begin{lstlisting}[label={lst:seed}, caption={The \texttt{seed} function.}]
 seed :: IO Int
 seed = do
   time <- getPOSIXTime
   return (floor (time * 1000000))\end{lstlisting}
 
-            The seed function returns an \verb|IO Int|, as it requires the current time to
-                generate the seed, which is not known until runtime, so the function must be
-                wrapped in the \verb|IO| monad.
+            The seed function returns an \texttt{IO Int}, as it requires the current time
+                to generate the seed, which is not known until runtime, so the function must be
+                wrapped in the \texttt{IO} monad.
 
-    \section{The Shape Module}
-        This \verb|Shape| module is the most complex, and most important, of the four
-            modules, as it is responsible for creating and modifying the graphical
+    \section{The \texttt{Shape}
+        Module} This \texttt{Shape} module is the most complex, and most important, of
+            the four modules, as it is responsible for creating and modifying the graphical
             primitives that can be drawn on the canvas.
         The module is split into two parts: the graphical primitives, and the
             transformations.
@@ -353,54 +355,56 @@ seed = do
                     but alter their parameters, and in some cases behaviours, to better suit our
                     library.
 
-                P5.js provides nine primitives: \verb|point|, \verb|line|, \verb|triangle|,
-                    \verb|quad|, \verb|rect|, \verb|square|, \verb|ellipse|, \verb|circle| and
-                    \verb|arc|.
+                P5.js provides nine primitives: \texttt{point}, \texttt{line},
+                    \texttt{triangle}, \texttt{quad}, \texttt{rect}, \texttt{square},
+                    \texttt{ellipse}, \texttt{circle} and \texttt{arc}.
                 It also provides two functions for creating curves, which is does not describe
-                    as primitives: \verb|bezier| and \verb|curve|, the former for both quadratic
-                    and cubic Bézier curves, and the latter for Catmull-Rom spline curves.
+                    as primitives: \texttt{bezier} and \texttt{curve}, the former for both
+                    quadratic and cubic Bézier curves, and the latter for Catmull-Rom spline
+                    curves.
                 CodeWorld also provides nine primitives, along with variations to differentiate
                     between certain properties such as filled and outlined shapes, which are
-                    omitted here: \verb|blank|, \verb|polyline|, \verb|polygon|, \verb|curve|,
-                    \verb|rectangle|, \verb|circle|, \verb|arc|, \verb|sector| and
-                    \verb|lettering|.
+                    omitted here: \texttt{blank}, \texttt{polyline}, \texttt{polygon},
+                    \texttt{curve}, \texttt{rectangle}, \texttt{circle}, \texttt{arc},
+                    \texttt{sector} and \texttt{lettering}.
 
             \subsubsection{Our Primitives}
                 Having explored the primitives provided by P5.js and CodeWorld, we can now
                     consider what primitives to provide in our library.
                 The primitives we provide should be simple, easy to use, and cover a wide range
                     of use cases.
-                All of our primitives will be represented by one \verb|Shape| type, with eight constructors:
+                All of our primitives will be represented by one \texttt{Shape} type, with eight constructors:
 
                 \begin{itemize}
-                    \item \verb|Empty|, represents the empty shape, so has no type parameters.
+                    \item \texttt{Empty}, represents the empty shape, so has no type parameters.
                           Drawing an empty shape has no effect.
-                    \item \verb|Group|, represents a group of shapes, so has a single type
-                          parameter of type \verb|[Shape]|.
-                    \item \verb|Line|, represents a straight line, so has just one type
-                          parameter, of type \verb|Length|, representing the line's length.
-                    \item \verb|Ellipse|, represents an ellipse, so has two type parameters, both of
-                          type \verb|Length|, representing the ellipse's horizontal and vertical radii.
-                    \item \verb|Rect|, represents a rectangle, so has two type parameters, both of type
-                          \verb|Length|, representing the rectangle's width and height.
-                    \item \verb|Polygon|, represents any polygon, so has one type parameter, of type
-                          \verb|[Vector]|, representing the polygon's vertices.
-                    \item \verb|Curve|, represents both quadratic and cubic Bézier curves, so has
-                          one type parameter, of type \verb|[Vector]|, representing the curve's control
+                    \item \texttt{Group}, represents a group of shapes, so has a single type
+                          parameter of type \texttt{[Shape]}.
+                    \item \texttt{Line}, represents a straight line, so has just one type
+                          parameter, of type \texttt{Length}, representing the line's length.
+                    \item \texttt{Ellipse}, represents an ellipse, so has two type parameters, both of
+                          type \texttt{Length}, representing the ellipse's horizontal and vertical radii.
+                    \item \texttt{Rect}, represents a rectangle, so has two type parameters, both of type
+                          \texttt{Length}, representing the rectangle's width and height.
+                    \item \texttt{Polygon}, represents any polygon, so has one type parameter, of type
+                          \texttt{[Vector]}, representing the polygon's vertices.
+                    \item \texttt{Curve}, represents both quadratic and cubic Bézier curves, so has
+                          one type parameter, of type \texttt{[Vector]}, representing the curve's control
                           points.
-                    \item \verb|Arc|, represents an arc, so has five type parameters.
-                          Two of type \verb|Length|, representing the horizontal and vertical radii of
-                              the arc, two of type \verb|Radians|, representing the start and end angles of
-                              the arc, and one of type \verb|Connection|, representing how the arc closes
-                              (either \verb|Open|, \verb|Chord| or \verb|Pie|).
+                    \item \texttt{Arc}, represents an arc, so has five type parameters.
+                          Two of type \texttt{Length}, representing the horizontal and vertical radii of
+                              the arc, two of type \texttt{Radians}, representing the start and end angles of
+                              the arc, and one of type \texttt{Connection}, representing how the arc closes
+                              (either \texttt{Open}, \texttt{Chord} or \texttt{Pie}).
                 \end{itemize}
 
-                All of these constructors, except for \verb|Empty| and \verb|Group|, take an
-                    extra type parameter of type \verb|ShapeOptions|.
-                This stores the position (\verb|Vector|), angle (\verb|Radians|), fill colour
-                    (\verb|Color|), stroke colour (\verb|Color|) and stroke weight (\verb|Float|).
+                All of these constructors, except for \texttt{Empty} and \texttt{Group}, take
+                    an extra type parameter of type \texttt{ShapeOptions}.
+                This stores the position (\texttt{Vector}), angle (\texttt{Radians}), fill
+                    colour (\texttt{Color}), stroke colour (\texttt{Color}) and stroke weight
+                    (\texttt{Float}).
 
-                \begin{lstlisting}[label={lst:shape}, caption={The Shape type definition.}]
+                \begin{lstlisting}[label={lst:shape}, caption={The \texttt{Shape} type definition.}]
 data Connection = Open | Chord | Pie
 data ShapeOptions = ShapeOptions { ... }
 data Shape
@@ -413,17 +417,17 @@ data Shape
   | Curve { ... }
   | Arc { ... }\end{lstlisting}
 
-                While the \verb|Shape| type is exposed to the user, the constructors are not.
+                While the \texttt{Shape} type is exposed to the user, the constructors are not.
                 Instead, the user interacts with the library through the following functions,
                     which construct the required shapes.
                 This allows the user to create shapes with default options, and then modify
                     them as needed.
                 For every shape, the default options are as follows:
                 \begin{itemize}
-                    \item The position is the origin, i.e. \verb|Vector 0 0|.
+                    \item The position is the origin, i.e. \texttt{Vector 0 0}.
                     \item The angle is 0 radians.
-                    \item The fill colour is \verb|Transparent|.
-                    \item The stroke colour is \verb|Black|.
+                    \item The fill colour is \texttt{Transparent}.
+                    \item The stroke colour is \texttt{Black}.
                     \item The stroke weight is 1.
                 \end{itemize}
 
@@ -443,21 +447,21 @@ segment :: Length -> Length -> Radians -> Radians -> Shape
 pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
 
                 Many of these functions directly correspond to the constructors of the
-                    \verb|Shape| type.
-                The \verb|circle| and \verb|square| functions are simply special cases of the
-                    \verb|ellipse| and \verb|rect| functions, respectively.
-                The \verb|regular| function is used to create regular polygons, and takes two
+                    \texttt{Shape} type.
+                The \texttt{circle} and \texttt{square} functions are simply special cases of
+                    the \texttt{ellipse} and \texttt{rect} functions, respectively.
+                The \texttt{regular} function is used to create regular polygons, and takes two
                     arguments: the number of sides, and the radius of the circumcircle.
-                The \verb|bezier2| and \verb|bezier3| functions are used to create quadratic
-                    and cubic Bézier curves, respectively, and take two and three control points,
-                    respectively.
-                They use the \verb|Curve| constructor, but with a different number of control
+                The \texttt{bezier2} and \texttt{bezier3} functions are used to create
+                    quadratic and cubic Bézier curves, respectively, and take two and three control
+                    points, respectively.
+                They use the \texttt{Curve} constructor, but with a different number of control
                     points.
-                The \verb|arc|, \verb|segment| and \verb|pie| functions all use the \verb|Arc|
-                    constructor, but with different values for the \verb|Connection| parameter;
-                    \verb|Open|, \verb|Chord| and \verb|Pie|, respectively.
+                The \texttt{arc}, \texttt{segment} and \texttt{pie} functions all use the
+                    \texttt{Arc} constructor, but with different values for the \texttt{Connection}
+                    parameter; \texttt{Open}, \texttt{Chord} and \texttt{Pie}, respectively.
 
-                The final constructor is the \verb|Group| constructor, which is used to group
+                The final constructor is the \texttt{Group} constructor, which is used to group
                     shapes together.
                 This is useful for creating more complex shapes, as well as for applying
                     transformations to multiple shapes at once.
@@ -467,7 +471,7 @@ pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
                 The name of the operator is taken directly from CodeWorld, where it is also
                     used to group shapes together.
 
-                \begin{lstlisting}[label={lst:group}, caption={The group operator.}]
+                \begin{lstlisting}[label={lst:group}, caption={The group (\texttt{\&}) operator.}]
 (&) :: Shape -> Shape -> Shape\end{lstlisting}
 
         \subsection{Transformations}
@@ -481,14 +485,14 @@ pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
                 There are several colour transformations that are commonly used in graphics
                     libraries, including setting the fill colour, setting the outline (or stroke)
                     colour, and setting the outline thickness (or stroke weight).
-                In P5.js, this is done using the \verb|fill|, \verb|stroke| and
-                    \verb|strokeWeight| functions, respectively, which alter a global state, so
+                In P5.js, this is done using the \texttt{fill}, \texttt{stroke} and
+                    \texttt{strokeWeight} functions, respectively, which alter a global state, so
                     that all subsequent shapes are drawn with the specified fill, stroke and stroke
                     weight.
-                In CodeWorld, setting the fill colour is done using the \verb|colored| function
-                    and the solid variant of the shape function, while setting the stroke colour is
-                    done using the \verb|colored| function and the regular variant of the shape
-                    function.
+                In CodeWorld, setting the fill colour is done using the \texttt{colored}
+                    function and the solid variant of the shape function, while setting the stroke
+                    colour is done using the \texttt{colored} function and the regular variant of
+                    the shape function.
                 The stroke weight can be increased by using the thick variant of the shape
                     function.
 
@@ -502,11 +506,11 @@ fill :: Color -> Shape -> Shape
 stroke :: Color -> Shape -> Shape
 strokeWeight :: Float -> Shape -> Shape\end{lstlisting}
 
-                The \verb|fill| function is used to set the fill colour of a shape, the
-                    \verb|stroke| function is used to set the stroke colour of a shape, and the
-                    \verb|strokeWeight| function is used to set the stroke weight of a shape.
+                The \texttt{fill} function is used to set the fill colour of a shape, the
+                    \texttt{stroke} function is used to set the stroke colour of a shape, and the
+                    \texttt{strokeWeight} function is used to set the stroke weight of a shape.
                 We can also provide a shorthand function for setting the fill or stroke colours
-                    of a shape to \verb|Transparent|.
+                    of a shape to \texttt{Transparent}.
 
                 \begin{lstlisting}[label={lst:shorthandColour}, caption={The shorthand colour transformation functions.}]
 noFill :: Shape -> Shape
@@ -519,11 +523,11 @@ noStroke :: Shape -> Shape\end{lstlisting}
                     libraries, including translations, rotations and scaling.
                 In P5.js, individual shapes do not need to be translated, as the user specifies
                     the position of each shape when creating it.
-                Instead, P5.js' \verb|translate| function is used to move the canvas' origin,
+                Instead, P5.js' \texttt{translate} function is used to move the canvas' origin,
                     so that all subsequent shapes are drawn relative to the new origin.
                 This can be very useful, but can also be confusing, particularly for beginners.
-                The \verb|rotate| and \verb|scale| functions behave similarly, acting on the
-                    canvas coordinates rather than individual shapes.
+                The \texttt{rotate} and \texttt{scale} functions behave similarly, acting on
+                    the canvas coordinates rather than individual shapes.
                 CodeWorld, on the other hand, provides functions for translating, rotating and
                     scaling individual shapes, which is a more intuitive approach.
                 Here, we follow CodeWorld's approach, as it fits better with the functional
@@ -534,9 +538,9 @@ translate :: Vector -> Shape -> Shape
 rotate :: Radians -> Shape -> Shape
 scale :: Float -> Shape -> Shape\end{lstlisting}
 
-                The \verb|translate| function is used to move a shape to a new position, the
-                    \verb|rotate| function is used to rotate a shape by a given angle, and the
-                    \verb|scale| function is used to scale a shape by a given factor.
+                The \texttt{translate} function is used to move a shape to a new position, the
+                    \texttt{rotate} function is used to rotate a shape by a given angle, and the
+                    \texttt{scale} function is used to scale a shape by a given factor.
                 We can also provide shorthand functions for translating a shape by a given
                     distance in the x and y directions.
 
@@ -569,7 +573,7 @@ transformation(rect 100 100)\end{lstlisting}
                 To solve this issue, we can provide an operator specifically for applying
                     transformations to shapes.
 
-                \begin{lstlisting}[label={lst:transform}, caption={The transformation operator.}]
+                \begin{lstlisting}[label={lst:transform}, caption={The transformation application (\texttt{>>>}) operator.}]
 (>>>) :: Shape -> (Shape -> Shape) -> Shape\end{lstlisting}
 
                 Now, the user can apply transformations to shapes in a readable and intuitive
@@ -580,26 +584,26 @@ rect 100 100 >>> scale 2
              >>> rotate (radians 45)
              >>> translate (Vector 10 10)\end{lstlisting}
 
-    \section{The Canvas Module}
-        The final module is the \verb|Canvas| module, which is responsible for creating
-            and modifying the canvas.
-        The canvas itself can be represented by a simple \verb|Canvas| type, with five type parameters:
+    \section{The \texttt{Canvas}
+        Module} The final module is the \texttt{Canvas} module, which is responsible
+            for creating and modifying the canvas.
+        The canvas itself can be represented by a simple \texttt{Canvas} type, with five type parameters:
         \begin{enumerate}
-            \item Two \verb|Length|s to represent the width and height of the canvas.
-            \item An \verb|Int| to represent the frame rate at which to render the animation.
-            \item A \verb|Color| to represent the background colour to apply to each frame.
+            \item Two \texttt{Length}s to represent the width and height of the canvas.
+            \item An \texttt{Int} to represent the frame rate at which to render the animation.
+            \item A \texttt{Color} to represent the background colour to apply to each frame.
                   There is an argument for omitting this parameter, requiring users to instead
                       draw a rectangle filling the whole canvas, and applying the background colour
                       there.
                   However, as most animations are likely to use the same background colour for
                       each frame, this provides a more elegant, less repetitive solution.
-            \item A \verb|[Shape]| to represent the frames of the animation.
+            \item A \texttt{[Shape]} to represent the frames of the animation.
         \end{enumerate}
 
-        \begin{lstlisting}[label={lst:canvas}, caption={The Canvas type definition.}]
+        \begin{lstlisting}[label={lst:canvas}, caption={The \texttt{Canvas} type definition.}]
 data Canvas = Canvas { ... }\end{lstlisting}
 
-        Now that we have our \verb|Canvas| type, we need to provide an interface for
+        Now that we have our \texttt{Canvas} type, we need to provide an interface for
             users to interact with it.
         We need a function to create a new canvas.
         One option for this function is to take all the canvas parameters as arguments.
@@ -609,20 +613,20 @@ data Canvas = Canvas { ... }\end{lstlisting}
             values for certain parameters, requiring the user to only specify the width and
             height.
         Specifically, the default values for the frame rate and background colour
-            should be 24 and \verb|Transparent|, respectively, while the default value for
-            the frames should be an empty list.
+            should be 24 and \texttt{Transparent}, respectively, while the default value
+            for the frames should be an empty list.
         To modify the frame rate and background colour, the user can then use the
-            \verb|fps| and \verb|background| functions, respectively.
+            \texttt{fps} and \texttt{background} functions, respectively.
 
-        \begin{lstlisting}[label={lst:fps}, caption={The createCanvas, fps and backgrounds function.}]
+        \begin{lstlisting}[label={lst:fps}, caption={The \texttt{createCanvas}, \texttt{fps} and \texttt{backgrounds} functions.}]
 createCanvas :: Length -> Length -> Canvas
 fps :: Int -> Canvas -> Canvas
 background :: Color -> Canvas -> Canvas\end{lstlisting}
 
         The only remaining interaction the user has with the canvas is to draw shapes
             on it.
-        This can be handled by two operators, \verb|(<<<)|, which adds a single
-            \verb|Shape|, and \verb|(<<<:)|, which appends a list of \verb|Shape|s.
+        This can be handled by two operators, \texttt{(<<<)}, which adds a single
+            \texttt{Shape}, and \texttt{(<<<:)}, which appends a list of \texttt{Shape}s.
 
         \begin{lstlisting}[label={lst:<<<}, caption={The operators to append a frame to the canvas.}]
 (<<<) :: Canvas -> Shape -> Canvas
@@ -630,20 +634,21 @@ background :: Color -> Canvas -> Canvas\end{lstlisting}
 
         With these functions, the user can create a canvas, set the frame rate and
             background colour, and draw shapes on it.
-        The \verb|(<<<:)| operator was not strictly necessary, as users could instead
-            use \verb|foldl (<<<) canvas shapes|, but it provides a more elegant solution.
-        Using \verb|foldl| with \verb|(<<<)| would not allow the user to take advantage
-            of Haskell's lazy evaluation, as the list of shapes would be fully evaluated
-            due to the tail-recursive nature of \verb|foldl|.
+        The \texttt{(<<<:)} operator was not strictly necessary, as users could instead
+            use \texttt{foldl (<<<) canvas shapes}, but it provides a more elegant
+            solution.
+        Using \texttt{foldl} with \texttt{(<<<)} would not allow the user to take
+            advantage of Haskell's lazy evaluation, as the list of shapes would be fully
+            evaluated due to the tail-recursive nature of \texttt{foldl}.
 
-        There is one extra function defined within the \verb|Canvas| module, which is
+        There is one extra function defined within the \texttt{Canvas} module, which is
             used to translate the canvas to the centre of the screen.
-        This is defined in the \verb|Canvas| module, as it requires the canvas as an
-            argument, as well as the shape, and defining it in the \verb|Shape| module
-            would require importing the \verb|Canvas| module, which would create a circular
-            dependency.
+        This is defined in the \texttt{Canvas} module, as it requires the canvas as an
+            argument, as well as the shape, and defining it in the \texttt{Shape} module
+            would require importing the \texttt{Canvas} module, which would create a
+            circular dependency.
 
-        \begin{lstlisting}[label={lst:centre}, caption={The centre function.}]
+        \begin{lstlisting}[label={lst:centre}, caption={The \texttt{centre} function.}]
 center :: Canvas -> Shape -> Shape\end{lstlisting}
 
         How this translation is done depends on the shape being translated.
