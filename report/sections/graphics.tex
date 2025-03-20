@@ -470,30 +470,106 @@ pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
             \subsubsection{Colour Transformations}
                 Colour transformations are used to change the colour of a shape.
                 There are several colour transformations that are commonly used in graphics
-                    libraries, including \verb|fill|, \verb|stroke| and \verb|strokeWeight|.
-                The \verb|fill| function is used to set the fill colour of a shape, the
-                    \verb|stroke| function is used to set the stroke colour of a shape, and the
-                    \verb|strokeWeight| function is used to set the stroke weight of a shape.
-                The stroke weight is the thickness of the stroke, and is measured in pixels.
+                    libraries, including setting the fill colour, setting the outline (or stroke)
+                    colour, and setting the outline thickness (or stroke weight).
+                In P5.js, this is done using the \verb|fill|, \verb|stroke| and
+                    \verb|strokeWeight| functions, respectively, which alter a global state, so
+                    that all subsequent shapes are drawn with the specified fill, stroke and stroke
+                    weight.
+                In CodeWorld, setting the fill colour is done using the \verb|colored| function
+                    and the solid variant of the shape function, while setting the stroke colour is
+                    done using the \verb|colored| function and the regular variant of the shape
+                    function.
+                The stroke weight can be increased by using the thick variant of the shape
+                    function.
+
+                P5.js' approach is more user-friendly, as it allows the user to set the fill,
+                    stroke and stroke weight for each shape more easily, but CodeWorld's approach
+                    is more functional, as it avoids global state.
+                The best approach for this library is therefore to take the best of both.
 
                 \begin{lstlisting}[label={lst:colour}, caption={The colour transformation functions.}]
 fill :: Color -> Shape -> Shape
 stroke :: Color -> Shape -> Shape
 strokeWeight :: Float -> Shape -> Shape\end{lstlisting}
 
+                The \verb|fill| function is used to set the fill colour of a shape, the
+                    \verb|stroke| function is used to set the stroke colour of a shape, and the
+                    \verb|strokeWeight| function is used to set the stroke weight of a shape.
+                We can also provide a shorthand function for setting the fill or stroke colours
+                    of a shape to \verb|Transparent|.
+
+                \begin{lstlisting}[label={lst:shorthandColour}, caption={The shorthand colour transformation functions.}]
+noFill :: Shape -> Shape
+noStroke :: Shape -> Shape\end{lstlisting}
+
             \subsubsection{Geometric Transformations}
                 Geometric transformations are used to change the position, size and orientation
                     of a shape.
                 There are several geometric transformations that are commonly used in graphics
-                    libraries, including \verb|translate|, \verb|rotate| and \verb|scale|.
-                The \verb|translate| function is used to move a shape, the \verb|rotate|
-                    function is used to rotate a shape, and the \verb|scale| function is used to
-                    resize a shape.
+                    libraries, including translations, rotations and scaling.
+                In P5.js, individual shapes do not need to be translated, as the user specifies
+                    the position of each shape when creating it.
+                Instead, P5.js' \verb|translate| function is used to move the canvas' origin,
+                    so that all subsequent shapes are drawn relative to the new origin.
+                This can be very useful, but can also be confusing, particularly for beginners.
+                The \verb|rotate| and \verb|scale| functions behave similarly, acting on the
+                    canvas coordinates rather than individual shapes.
+                CodeWorld, on the other hand, provides functions for translating, rotating and
+                    scaling individual shapes, which is a more intuitive approach.
+                Here, we follow CodeWorld's approach, as it fits better with the functional
+                    programming paradigm, and is more intuitive for beginners.
 
                 \begin{lstlisting}[label={lst:geometric}, caption={The geometric transformation functions.}]
 translate :: Vector -> Shape -> Shape
 rotate :: Radians -> Shape -> Shape
 scale :: Float -> Shape -> Shape\end{lstlisting}
+
+                The \verb|translate| function is used to move a shape to a new position, the
+                    \verb|rotate| function is used to rotate a shape by a given angle, and the
+                    \verb|scale| function is used to scale a shape by a given factor.
+                We can also provide shorthand functions for translating a shape by a given
+                    distance in the x and y directions.
+
+                \begin{lstlisting}[label={lst:shorthandTransform}, caption={The shorthand translation functions.}]
+translateX :: Length -> Shape -> Shape
+translateY :: Length -> Shape -> Shape\end{lstlisting}
+
+            \subsubsection{Applying Transformations}
+                Each of these transformations can be applied to a shape by directly calling the
+                    appropriate function.
+
+                \begin{lstlisting}
+translate (Vector 10 10) (rotate (radians 45) (scale 2 (rect 100 100)))\end{lstlisting}
+
+                However, this can be cumbersome, particularly when applying multiple
+                    transformations to a shape.
+                Another approach would be to compose the functions, then apply the resulting
+                    function to the shape.
+
+                \begin{lstlisting}
+transformation = translate (Vector 10 10)
+               . rotate (radians 45)
+               . scale 2
+transformation(rect 100 100)\end{lstlisting}
+
+                This has the benefit of making that specific combination of transformations
+                    reusable, and more readable.
+                However, it is still not as readable as it could be, particularly for
+                    beginners, especially as the order of the transformations is reversed.
+                To solve this issue, we can provide an operator specifically for applying
+                    transformations to shapes.
+
+                \begin{lstlisting}[label={lst:transform}, caption={The transformation operator.}]
+(>>>) :: Shape -> (Shape -> Shape) -> Shape\end{lstlisting}
+
+                Now, the user can apply transformations to shapes in a readable and intuitive
+                    fashion.
+
+                \begin{lstlisting}
+rect 100 100 >>> scale 2
+             >>> rotate (radians 45)
+             >>> translate (Vector 10 10)\end{lstlisting}
 
     \section{The Canvas Module}
         The canvas module is responsible for creating and modifying the canvas, which
@@ -540,7 +616,7 @@ background :: Color -> Canvas -> Canvas\end{lstlisting}
 
         \begin{lstlisting}[label={lst:<<<}, caption={The operators to append a frame to the canvas.}]
 (<<<) :: Canvas -> Shape -> Canvas
-(<<<:) canvas shapes = canvas{_frames = _frames canvas ++ shapes}\end{lstlisting}
+(<<<:) :: Canvas -> [Shape] -> Canvas\end{lstlisting}
 
         With these functions, the user can create a canvas, set the frame rate and
             background colour, and draw shapes on it.
