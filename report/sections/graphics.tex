@@ -43,9 +43,18 @@
                 library is not overly complex.
             The first and most obvious module required is the main module, which exports
                 the public API for the library — the \verb|Lib| module.
+            This module includes one function, \verb|render|, which takes a \verb|Canvas|
+                and prints its JSON representation to the standard output.
+
+            \begin{lstlisting}[label={lst:lib}, caption={The render function.}]
+render :: Canvas -> IO ()\end{lstlisting}
+
             The second is the \verb|Internal| module, which simply contains the internal
                 types and functions used by the library, which are not exposed to the user, but
                 are used throughout the library.
+            This module includes the necessary functions to convert each of the types
+                defined in the library to their JSON representation.
+
             From there, we need to consider what a graphics library needs to be able to do.
             \begin{itemize}
                 \item The library needs to be able to represent the two-dimensional space
@@ -572,8 +581,8 @@ rect 100 100 >>> scale 2
              >>> translate (Vector 10 10)\end{lstlisting}
 
     \section{The Canvas Module}
-        The canvas module is responsible for creating and modifying the canvas, which
-            is the two-dimensional space on which the user can draw shapes.
+        The final module is the \verb|Canvas| module, which is responsible for creating
+            and modifying the canvas.
         The canvas itself can be represented by a simple \verb|Canvas| type, with five type parameters:
         \begin{enumerate}
             \item Two \verb|Length|s to represent the width and height of the canvas.
@@ -592,7 +601,7 @@ data Canvas = Canvas { ... }\end{lstlisting}
 
         Now that we have our \verb|Canvas| type, we need to provide an interface for
             users to interact with it.
-        First, we need a function to create a new canvas.
+        We need a function to create a new canvas.
         One option for this function is to take all the canvas parameters as arguments.
         However, this would require the user to write out each parameter in every
             program they write, even if these values are not important to them.
@@ -610,8 +619,9 @@ createCanvas :: Length -> Length -> Canvas
 fps :: Int -> Canvas -> Canvas
 background :: Color -> Canvas -> Canvas\end{lstlisting}
 
-        The final interaction the user has with the canvas is to draw shapes on it.
-        This is handled by two operators, \verb|(<<<)|, which adds a single
+        The only remaining interaction the user has with the canvas is to draw shapes
+            on it.
+        This can be handled by two operators, \verb|(<<<)|, which adds a single
             \verb|Shape|, and \verb|(<<<:)|, which appends a list of \verb|Shape|s.
 
         \begin{lstlisting}[label={lst:<<<}, caption={The operators to append a frame to the canvas.}]
@@ -625,5 +635,26 @@ background :: Color -> Canvas -> Canvas\end{lstlisting}
         Using \verb|foldl| with \verb|(<<<)| would not allow the user to take advantage
             of Haskell's lazy evaluation, as the list of shapes would be fully evaluated
             due to the tail-recursive nature of \verb|foldl|.
+
+        There is one extra function defined within the \verb|Canvas| module, which is
+            used to translate the canvas to the centre of the screen.
+        This is defined in the \verb|Canvas| module, as it requires the canvas as an
+            argument, as well as the shape, and defining it in the \verb|Shape| module
+            would require importing the \verb|Canvas| module, which would create a circular
+            dependency.
+
+        \begin{lstlisting}[label={lst:centre}, caption={The centre function.}]
+center :: Canvas -> Shape -> Shape\end{lstlisting}
+
+        How this translation is done depends on the shape being translated.
+        For shapes whose origin is at their centre, such as circles and ellipses,
+            centring the shape is as simple as translating it by half the width and height
+            of the canvas.
+        For shapes whose origin is at their top-left corner, such as rectangles and
+            polygons, centring the shape is more complex, as it requires translating the
+            shape by half the width and height of the canvas, then translating it by half
+            the width and height of the shape.
+        These shapes will also needed to be translated to account for their rotation,
+            as they are rotated around their origin, not the canvas' origin.
 
 \end{document}
