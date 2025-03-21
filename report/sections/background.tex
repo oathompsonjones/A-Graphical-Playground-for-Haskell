@@ -1,34 +1,9 @@
-% https://dl.acm.org/journal/pacmpl/author-guidelines
-% Be consice, don't use extra words where they are not needed.
-% ! Cite markers iff relevant.
-% Don't add *too* much background — Write for the audience of the paper.
-% ! More background wanted for graphics.
-% ! Add comparisions to other libraries.
-% Quite broad at the moment, narrow in, and compare options to then justify my choices.
-
-% Remember, we will have to go back to the background chapter later to narrow it down.
-% In the next 2 weeks, have an answer for "here's what I'm going to do, am I going to work with Sam or alone" (I'm going to work alone).
-
 % Define the document as a subfile and reference its root.
 \documentclass[../main.tex]{subfiles}
 
 % Begin the document.
 \begin{document}
 \chapter{Background} \label{ch:background}
-    % ? WHAT IS REQUIRED?
-    % * You should aim to produce around 5 pages of synopsis of the existing work that forms the context for your project.
-
-    % * You should give this to your supervisor by the end of week 5, and discuss it with them at your next meeting, jointly filling in and submitting this form.
-
-    % ! THINGS TO CONSIDER
-    % * Although typically published papers will be a substantial part of the background (see more below) this may differ for different projects. For example, your task may instead require you to get a strong understanding of an existing code-base, or critical software tools, or of an application domain. You will still need to DEMONSTRATE YOUR KNOWLEDGE and CRITICAL EVALUATION through writing a good SYNOPSIS OF THE RELEVANT EXISTING MATERIAL, to SET YOUR WORK IN CONTEXT, and JUSTIFY YOUR APPROACH.
-
-    % * A good background chapter is NOT JUST A SUMMARY of all the things you have read. Rather, it should be SELECTIVE AND WELL-ORGANISED, to tell the reader JUST WHAT THEY NEED TO KNOW to understand the work that follows.
-
-    % * It should be clear to the reader (and to you!) why you are including any information that you present. A lengthy, rambling and ‘padded’ background chapter is a common reason for lower marks on these criteria; or a chapter that omits critical material.
-
-    % * Probably the best guide to the expected content is to look at published papers in the same domain as your project, and how they put their new work in the context of previous work.
-
     \section{Functional Programming and Haskell}
         Functional programming is a programming paradigm built around the evaluation of
             mathematical functions \citep{fpPaulHudak}.
@@ -42,23 +17,24 @@
         Lambda calculus was proved to be equivalent to Turing machines by Alan
             \citet{lambdaTuringComplete}.
 
-        One of the most widely used functional programming languages is Haskell, a
-            statically typed, purely functional programming language, developed in the late
-            1980s, with the intention of consolidating features from existing functional
-            programming languages into a single, standardised language
+        One of the most widely used functional programming languages is Haskell,
+            placing 31st in the TIOBE index for March 2025 \citep{tiobeIndex}.
+        A statically typed, purely functional programming language, developed in the
+            late 1980s, with the intention of consolidating features from existing
+            functional programming languages into a single, standardised language
             \citep{haskellConference}.
         Haskell's namesake is Haskell Curry, who developed an equivalent system to
             lambda calculus, combinatory logic, alongside Moses Schönfinkel the 1920s and
             1930s \citep{combinatoryLogic}.
 
     \section{Graphics}
-        Computer graphics is a very wide field, encompassing the use of computers for
-            the creation, manipulation, and rendering of images, across both two and
+        Computer graphics is a wide field, encompassing the use of computers for the
+            creation, manipulation, and rendering of images, across both two and
             three-dimensional domains.
         Although rudimentary graphics have been around longer, making use of cathode
-            ray tube displays \citep{crtBraun}, the discipline of computer graphics was
-            first truly established in the 1950s and 60s, with the development of the first
-            viable interactive graphical displays.
+            ray tube displays as far back as \citet{crtBraun}, the discipline of computer
+            graphics was first truly established in the 1950s and 60s \citep{graphics},
+            with the development of the first viable interactive graphical displays.
         Since then, the field has grown rapidly, resulting in a plethora of techniques
             and technologies for creating and rendering graphics.
 
@@ -72,6 +48,11 @@
             pixels when rendered \citep{vectorGraphics}.
         This is a more ideal solution for images which need to be scaled, as the image
             will not change in quality when resized.
+        Both raster and vector graphics have their own advantages and disadvantages,
+            and are used in different contexts depending on the requirements of the image.
+        They are often used together, particular on websites, with raster graphics
+            being used for images which require fine detail, and vector graphics being used
+            for images which need to be scaled.
 
         \subsection{OpenGL}
             One of the most widely used graphics libraries is OpenGL, a cross-language,
@@ -95,12 +76,13 @@
                 As with many graphics libraries, Gloss uses OpenGL as its rendering engine, but
                     provides a more simple and high-level interface, making it ideal for beginners
                     or for quick sketches.
-                Due to the simplicity of Gloss, there are a very limited number of functions
+                Due to the simplicity of Gloss, there are a limited number of functions
                     available, which can make it difficult to create more complex graphics.
 
             \subsubsection{Diagrams}
                 Another popular Haskell graphics library is Diagrams \citep{hackageDiagrams},
-                    which also has a Hackage rating of 2.75, but has fewer downloads than Gloss.
+                    which also has a Hackage rating of 2.75, but has fewer downloads than Gloss, at
+                    34,898 compared Gloss' 69,490 \citep{hackageGloss, hackageDiagrams}.
                 This provides a more powerful and flexible interface than Gloss, by allowing
                     the user to choose from one of six backends, including Cairo \citep{cairo}.
                 Diagrams' larger API makes it less beginner-friendly but more versatile due to
@@ -111,7 +93,7 @@
         \subsection{Graphics in Web Browsers}
             The first web browser, originally named WorldWideWeb before becoming Nexus, was
                 developed by Sir Tim \citet{worldWideWeb}, alongside the first web server, and
-                a very basic version of HyperText Markup Language (HTML) \citep{html}.
+                a basic version of HyperText Markup Language (HTML) \citep{html}.
             Web browsers are inherently designed for rendering structured graphical
                 content, and while the first browsers were limited to displaying just HTML,
                 developments in the last three decades, including the introduction of Cascading
@@ -149,6 +131,13 @@
 
     \section{Existing Work}
         \subsection{Processing and P5.js}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{p5.png}
+                    \caption{The P5.js editor.}
+                    \label{fig:p5}
+            \end{figure}
+
             Processing is a programming language and integrated development environment
                 (IDE) based on Java (with bindings available for JavaScript, Python and Ruby),
                 allowing for the creation of graphics and animations \citep{processing}.
@@ -171,14 +160,21 @@
                 Haskell, using OpenGL as the backend, just as the original Processing does, but
                 does not support generating graphics in web browsers.
 
-        \subsection{Code World}
-            Code World is an educational website distributed by Google and created by Chris
+        \subsection{CodeWorld}
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.75\textwidth]{codeworld.png}
+                    \caption{The CodeWorld editor.}
+                    \label{fig:codeworld}
+            \end{figure}
+
+            CodeWorld is an educational website distributed by Google and created by Chris
                 \citet{codeWorldGitHub}, which provides an environment for creating simple
                 graphics using Haskell.
-            There are three versions of Code World available: one which uses an educational
+            There are three versions of CodeWorld available: one which uses an educational
                 version of Haskell 98; one which uses a full version of Haskell 2010; and one
                 which uses a block editor, designed for beginners.
-            While Code World is a useful tool for teaching Haskell, basic programming
+            While CodeWorld is a useful tool for teaching Haskell, basic programming
                 concepts, and simple graphics concepts, it lacks certain features which could
                 allow for more creativity from the programmer.
             For example, the ability to see the results of changes in real-time can be

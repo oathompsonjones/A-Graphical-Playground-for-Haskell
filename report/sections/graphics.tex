@@ -137,9 +137,9 @@ render :: Canvas -> IO ()\end{lstlisting}
                     digits, e.g. \#FFFD, as a shorthand.
 
             \subsubsection{HSL and HSV}
-                HSL and HSV are very similar representations, with HSL representing the colour
-                    as a hue, saturation and lightness, and HSV (also known as HSB) representing
-                    the colour as a hue, saturation and value (or brightness).
+                HSL and HSV are almost identical representations, with HSL representing the
+                    colour as a hue, saturation and lightness, and HSV (also known as HSB)
+                    representing the colour as a hue, saturation and value (or brightness).
                 These representations are visualised as a cylinder, with the hue, saturation
                     and lightness/value components representing the angle, radius and height,
                     respectively, as shown in Figure~\ref{fig:hsl}.
@@ -292,8 +292,8 @@ degrees :: Radians -> Degrees\end{lstlisting}
         \subsection{Random Numbers}
             The final set of functions to provide in the \texttt{Maths} module are those
                 for generating random numbers.
-            This can be very useful for creating more interesting animations, as it allows
-                for a level of unpredictability.
+            This can be useful for creating more interesting animations, as it allows for a
+                level of unpredictability.
             However, as this library is designed to not use Haskell's \texttt{System}
                 module, we cannot use the \texttt{System.Random} functions for generating
                 random numbers.
@@ -525,7 +525,7 @@ noStroke :: Shape -> Shape\end{lstlisting}
                     the position of each shape when creating it.
                 Instead, P5.js' \texttt{translate} function is used to move the canvas' origin,
                     so that all subsequent shapes are drawn relative to the new origin.
-                This can be very useful but also confusing, particularly for beginners.
+                This can be useful but also confusing, particularly for beginners.
                 The \texttt{rotate} and \texttt{scale} functions behave similarly, acting on
                     the canvas coordinates rather than individual shapes.
                 CodeWorld, on the other hand, provides functions for translating, rotating and
