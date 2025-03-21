@@ -15,12 +15,12 @@
         any device with a web browser.
     Additionally, a website would allow users to easily share their programs with
         others, by simply sending them a link to the website.
-    For these reasons, it was decided to implement the system as a website.
+    For these reasons, the system was implemented as a website.
 
     This website is the main interface for the user to interact with the system,
         and as such, it is important that the website is user-friendly and easy to use.
-    This chapter will discuss its design and implementation, as well as the
-        technologies used to build it.
+    This chapter discusses its design, implementation, and the technologies used to
+        build it.
 
     \section{Design Principles}
         Websites have been at the core of people's lives for the past two decades.
@@ -42,7 +42,7 @@
                 process.
             In the case of this project, the website is designed to allow users to write
                 and run programs in Haskell, integrating seamlessly with the graphics library
-                discusses in Chapter~\ref{ch:graphics}, and to view the results of their
+                discussed in Chapter~\ref{ch:graphics}, and to view the results of their
                 programs in both textual and graphical form.
 
             It would be easy to say that a Haskell editor, integrated with the graphics
@@ -213,7 +213,7 @@
                 \texttt{app/page.tsx}, the Haskell editor is represented by the file
                 \texttt{app/editor/page.tsx}, and so on.
 
-            The full structure of the website is as follows:
+            The website structure is as follows:
             \begin{itemize}
                 \item \texttt{public/} — Contains all the static files used by the website, such as
                       favicon, and in this case, the source code for the graphics library.
@@ -254,7 +254,7 @@
                 Web browsers are designed to do one thing, and do it well: display web pages.
                 This means they can display content formatted with HTML, style it with CSS, and
                     add interactivity with JavaScript.
-                However, they can not run Haskell code.
+                However, they cannot run Haskell code.
                 To run Haskell in the browser, there were two options: compile the Haskell code
                     to JavaScript using GHCJS, or run the Haskell code on a server and send the
                     output to the browser.
@@ -275,8 +275,8 @@
                         using Docker containers.
                     Docker is a tool that allows developers to package their applications into
                         containers, which can then be run on any machine that has Docker installed.
-                    Docker containers are isolated from the host machine, meaning that they cannot
-                        access the host machine's file system or network.
+                    Docker containers are isolated from the host, preventing access to its file
+                        system or network.
                     This makes them ideal for running untrusted code, as it prevents the code from
                         doing any harm to the host machine.
 
@@ -285,8 +285,8 @@
                     This was done using Next.js' server actions.
                     Server actions are functions which can be called by the client to perform
                         server-side tasks.
-                    In this case, the server action takes the user's Haskell code, runs it in the
-                        Docker container, and returns the output to the client.
+                    The server action executes the user's Haskell code in a Docker container and
+                        streams the output back to the client.
                     To do this, the server action uses the \texttt{exec} function from the
                         \texttt{child\_process} module in Node.js to run the Docker container with this
                         command: \begin{verbatim}
@@ -299,13 +299,12 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
                         running, the \texttt{-m 128m} flag limits the container to 128 MB of memory,
                         and the \texttt{--cpus=0.5} flag limits the container to half a CPU core.
                     The \texttt{bash -c "...
-                    "} part of the command runs the bash command
-                    inside the container.
+                    "} part executes a command inside the container.
 
                     The bash command is a simple script which writes the user's Haskell code to a
                         file, along with the graphics library, compiles the code using GHC, and runs
                         the resulting executable.
-                    The user's code is sent as a base64-encoded string, to prevent any special
+                    The user's code is sent as a base64-encoded string to prevent any special
                         characters from breaking the command.
 
                     As Haskell programs can print can produce an infinite amount of output, the
@@ -482,10 +481,10 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
                         the user's program, and the stop button stops the program if it is currently
                         running.
 
-        \subsection{Making the Components Resizeable}
-            Making the components resizeable was relatively straightforward.
+        \subsection{Making the Components Resizable}
+            Making the components resizable was relatively straightforward.
             By creating a component to handle a split view, and using this component twice
-                to create a three-way split view, the editor page was made resizeable.
+                to create a three-way split view, the editor page was made resizable.
             The split view component takes two child components, and allows the user to
                 drag the border between them to resize them.
             By laying out the editor page thus: \begin{lstlisting}[caption={A simplified version of the editor page layout.},
@@ -497,9 +496,9 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
     </SplitView>
     <GraphicsController />
 </SplitView>\end{lstlisting} the editor page was
-                made resizeable, with the code editor and console components contained in a
-                column on the left, with a resizeable border between them, and the graphics
-                controller component on the right, with a resizeable border between it and the
+                made resizable, with the code editor and console components contained in a
+                column on the left, with a resizable border between them, and the graphics
+                controller component on the right, with a resizable border between it and the
                 column on the left.
 
         \subsection{Making a Reference Page}

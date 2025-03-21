@@ -24,8 +24,8 @@
 
         There were several sources of inspiration for the graphics library, including
             CodeWorld and P5.js.
-        P5.js is a JavaScript library, and is therefore designed for imperative
-            programming, with a large reliance on side effects and global state.
+        P5.js, a JavaScript library, is inherently imperative, relying heavily on side
+            effects and global state.
         Despite that, P5.js provides a straightforward API, with a nice selection of
             well-named functions, many of which can be adapted to fit the functional
             programming paradigm.
@@ -220,9 +220,9 @@ type Length = Float\end{lstlisting}
                 an x and a y.
             Both P5.js and CodeWorld provide a \texttt{Vector} type, with the latter also
                 providing a \texttt{Point} type, which is identical to a \texttt{Vector}.
-            For the sake of simplicity, we will use a single \texttt{Vector} type, which
-                can represent points, directions and anything else the user may need.
-            The \texttt{Vector} type therefore has a single constructor, with two type
+            For simplicity, we use a single \texttt{Vector} type to represent points,
+                directions, and anything else the user may need.
+            The \texttt{Vector} type therefore has a single constructor with two type
                 parameters, both of type \texttt{Float}.
             Note the use of the \texttt{Float} type over the \texttt{Length} type, once
                 again for semantic clarity, as vectors are often used to represent several
@@ -358,7 +358,7 @@ seed = do
                 P5.js provides nine primitives: \texttt{point}, \texttt{line},
                     \texttt{triangle}, \texttt{quad}, \texttt{rect}, \texttt{square},
                     \texttt{ellipse}, \texttt{circle} and \texttt{arc}.
-                It also provides two functions for creating curves, which is does not describe
+                It also provides two functions for creating curves, which it does not describe
                     as primitives: \texttt{bezier} and \texttt{curve}, the former for both
                     quadratic and cubic Bézier curves, and the latter for Catmull-Rom spline
                     curves.
@@ -525,7 +525,7 @@ noStroke :: Shape -> Shape\end{lstlisting}
                     the position of each shape when creating it.
                 Instead, P5.js' \texttt{translate} function is used to move the canvas' origin,
                     so that all subsequent shapes are drawn relative to the new origin.
-                This can be very useful, but can also be confusing, particularly for beginners.
+                This can be very useful but also confusing, particularly for beginners.
                 The \texttt{rotate} and \texttt{scale} functions behave similarly, acting on
                     the canvas coordinates rather than individual shapes.
                 CodeWorld, on the other hand, provides functions for translating, rotating and
@@ -587,7 +587,7 @@ rect 100 100 >>> scale 2
     \section{The \texttt{Canvas}
         Module} The final module is the \texttt{Canvas} module, which is responsible
             for creating and modifying the canvas.
-        The canvas itself can be represented by a simple \texttt{Canvas} type, with five type parameters:
+        The \texttt{Canvas} type has five type parameters:
         \begin{enumerate}
             \item Two \texttt{Length}s to represent the width and height of the canvas.
             \item An \texttt{Int} to represent the frame rate at which to render the animation.
@@ -596,7 +596,8 @@ rect 100 100 >>> scale 2
                       draw a rectangle filling the whole canvas, and applying the background colour
                       there.
                   However, as most animations are likely to use the same background colour for
-                      each frame, this provides a more elegant, less repetitive solution.
+                      each frame.
+                  This provides a more elegant and less repetitive solution.
             \item A \texttt{[Shape]} to represent the frames of the animation.
         \end{enumerate}
 
