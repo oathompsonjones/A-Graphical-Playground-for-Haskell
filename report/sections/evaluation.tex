@@ -2,5 +2,381 @@
 
 \begin{document}
 \chapter{Testing and Evaluation} \label{ch:evaluation}
+    Testing a website is not quite as simple as testing other software.
+    Websites are not standalone applications, but rather a collection of files that
+        are interpreted by a web browser.
+    These browsers can vary greatly in their implementation of web standards, and
+        the same website can look and behave differently in different browsers.
+    In particular, CSS can be a source of many problems.
+    This chapter will discuss the testing methodology used to ensure that the
+        website is functional and accessible to all users.
+
+    \section{Testing Methodology}
+        \subsection{Browser and Device Compatibility}
+            To ensure compatibility between browsers, the website was tested in the
+            following browsers:
+            \begin{itemize}
+                \item Google Chrome
+                \item Mozilla Firefox
+                \item Safari
+            \end{itemize}
+            The website was also tested on devices with different screen sizes to ensure
+                that the website is responsive.
+            The website was tested on the following devices:
+            \begin{itemize}
+                \item 28-inch monitor
+                \item 14-inch laptop
+                \item 11-inch tablet
+                \item 6.7-inch smartphone
+                \item 5.85-inch smartphone
+            \end{itemize}
+            To test the transitions between these sizes, the website was tested using
+                ``Responsive Design Mode'' in Safari.
+
+        \subsection{CSS and JavaScript Robustness}
+            As CSS and JavaScript are the backbone of the website, it is important to
+                ensure that they are robust.
+            Fortunately, the Material UI library is well-tested and widely used, so many
+                components are already tested.
+            However, the custom CSS and JavaScript code must be tested.
+            Components which display variable amounts of data, such as the code editor and
+                the console output, were tested with different amounts of data to ensure that
+                they can handle large amounts of data without breaking.
+
+        \subsection{The Graphics Library}
+            The graphics library was tested by creating a series of programs, covering
+                every feature of the library.
+            These programs were then run on the website to ensure that they worked as
+                expected.
+            The programs were also run with different input values to ensure that the
+                library can handle a wide range of inputs.
+            The results of these tests were then compared to the expected behaviour, as
+                documented in the reference page, to ensure that these match.
+
+    \section{Testing Results}
+        On the whole, the website performed well in testing.
+        The website was responsive on all devices tested, and the transitions between
+            different screen sizes were smooth.
+        The majority of the web browsers tested, displayed the website correctly.
+
+        There were some exceptions, however.
+
+        \subsection{Resizeable Areas}
+            When the console output exceeds the size of the console, the console becomes
+                scrollable, and the page should not resize.
+            This worked as expected, until the content of the console area became taller
+                than the height of its parent container (that being the total height of both
+                the code editor and the console).
+            At this point, the entire page would resize to accommodate the console, which
+                was not the desired behaviour.
+
+            This was caused by an error in the calculation of the size of each area.
+            This calculation was done using pixel values, which are fixed, rather than
+                percentages, which are relative.
+            Changing the calculation to use percentages fixed this issue.
+
+        \subsection{Scrolling in Firefox}
+            The program examples on the homepage were designed to scroll to the middle
+                automatically when the page is loaded.
+            While this worked perfectly on other browsers, allowing users to scroll in both
+                directions, Firefox did not allow users to scroll left.
+            Instead, the contents of the scrollable area were correctly centred, but the
+                elements which were now off-screen to the left could not be accessed.
+            This particular error was rectified by using some extra JavaScript to set the
+                correct scroll position after the page had loaded.
+
+        \subsection{The Embedded Reference Page}
+            The embedded reference page on the editor page caused two issues, one in all
+                browsers, and one in Firefox.
+
+            The Firefox error was once again related to scrolling.
+            Switching to the reference tab would resize the page to accommodate the
+                reference page, instead of making just the right column scrollable.
+            This was fixed by adding a calculation in CSS to ensure that the reference page
+                could not exceed the height of the parent container.
+
+            The second issue allowed the components of the reference page to exceed the
+                width of their parent container.
+            A simple fix for this was to add a new \texttt{<div>} element around the
+                reference page, and set the width of this element to 100\%.
+
+        \subsection{The Graphics Library}
+            For the most part, the graphics library worked as expected.
+            One issue that was encountered, however, was a limitation of working with
+                infinite lists.
+            If the user tires to render an animation with an infinite number of frames, the
+                browser quickly drops in performance, becoming unresponsive unless refreshed.
+            This is a limitation of how the website is implemented, and not a limitation of
+                the graphics library itself.
+            This limitation was documented in the reference page.
+            The site will automatically loop the animation, so users can still create the
+                appearance of infinite animations by using a finite number of frames, and
+                having the first and last frames of the animation be the same.
+
+    \section{User Testing and Feedback}
+        A survey was created to test how users interacted with the website.
+        The survey asked users to complete a short series of tasks including:
+        \begin{itemize}
+            \item Writing and running a basic Haskell program, without graphics.
+            \item Learning how to produce a basic graphic by using the reference page.
+            \item Altering a pre-existing program to produce a different image.
+            \item Altering a pre-existing program to produce a different animation.
+        \end{itemize}
+
+        Participants were asked to rate the ease of each task from one to ten, with one
+            being very difficult and ten being very easy, and to state roughly how long
+            each task took.
+        They were also asked to provide any feedback they had on the website, both
+            positive and negative, and to identify any bugs they encountered.
+        Participants were kept anonymous, but were asked to describe their
+            qualifications in Computer Science, and their experience with Haskell.
+
+        \subsection{Survey Responses}
+            The survey was shared among Informatics students at the University of
+                Edinburgh, and was posted on the Haskell subreddit.
+            The survey received a total of 11 responses, alongside additional feedback from
+                members of the subreddit.
+
+            \subsubsection{User Experience and Qualifications}
+                Three of the participants have the equivalent of (or are currently studying
+                    for) an A-Level in Computer Science.
+                Two of these participants described their experience with Haskell as
+                    ``beginner'', while the third described their experience as ``intermediate''.
+
+                Five of the participants have the equivalent of (or are currently studying for)
+                    a bachelor's degree in Computer Science.
+                Four of these participants described their experience with Haskell as
+                    ``intermediate'', while the fifth described their experience as ``beginner''.
+
+                Two participants have the equivalent of (or are currently studying for) a
+                    postgraduate degree in Computer Science, both of whom described their
+                    experience with Haskell as ``advanced''.
+
+                The final participant described their Computer Science qualifications as
+                    ``other'', saying ``Every day is a school day'', and their experience with
+                    Haskell as ``intermediate''.
+
+                Fully tabulated results for all quantitative data can be found in
+                    Appendix~\ref{app:feedback}.
+                A summary of the results is as follows:
+
+            \subsubsection{Writing a Basic Haskell Program}
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{c|c|c}
+                        \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Time Taken} \\
+                        \hline
+                        A-Level           & 2                             & 12.67-16.67 minutes         \\
+                        Bachelor's        & 7.4                           & 2-6 minutes                 \\
+                        Postgraduate      & 10                            & less than a minute          \\
+                        Other             & 10                            & 1-5 minutes                 \\
+                        \hline
+                        Beginner          & 2.67                          & 11-15 minutes               \\
+                        Intermediate      & 7.5                           & 2.67-6.67 minutes           \\
+                        Advanced          & 10                            & less than a minute          \\
+                        \hline
+                        Overall           & 6.64                          & 4.45-7.72 minutes           \\
+                    \end{tabular}
+                    \caption{The average results of the first task.}
+                \end{table}
+
+                These results indicate show that the writing and executing a basic Haskell
+                    program through the website was very straightforward for those with experience
+                    in Haskell, but quite difficult for those without.
+                This indicates that the website is quite intuitive to use, but that it could
+                    provide more documentation for Haskell itself, rather than giving a brief
+                    summary, and linking to external resources.
+
+            \subsubsection{Producing a Simple Graphic Using the Reference Page}
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{c|c|c|c}
+                        \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Quality of Docs} & \textbf{Average Time Taken} \\
+                        \hline
+                        A-Level           & 2.33                          & 3.33                             & 9.33-13.33 minutes          \\
+                        Bachelor's        & 6                             & 6.6                              & 8-12 minutes                \\
+                        Postgraduate      & 7.5                           & 7.5                              & 6-10 minutes                \\
+                        Other             & 8                             & 7                                & 1-5 minutes                 \\
+                        \hline
+                        Beginner          & 3.33                          & 5                                & 11-15 minutes               \\
+                        Intermediate      & 5.83                          & 5.83                             & 6-10 minutes                \\
+                        Advanced          & 7.5                           & 7.5                              & 6-10 minutes                \\
+                        \hline
+                        Overall           & 5.45                          & 5.91                             & 7.36-11.36 minutes          \\
+                    \end{tabular}
+                    \caption{The average results of the second task.}
+                \end{table}
+
+                These results demonstrate that those with more experience both in the field of
+                    Computer Science and in Haskell found the documentation to be of reasonable
+                    high quality, while those with less experience did not.
+                This could be a result of participants with less experience having less
+                    experience with reading documentation in general, but would also suggest that,
+                    as before, the website could benefit from more detailed documentation for
+                    beginners.
+
+                As to be expected, more experienced users once again found this task easier
+                    than those with less experience.
+                Interestingly though, users with less experience found this task easier than
+                    the previous task, whereas more experienced users found this task harder.
+                As users should have learnt how to write basic Haskell programs in the previous
+                    task, they should no longer be at a disadvantage in this task.
+                This would suggest, that once users have worked out how to write a basic
+                    Haskell program, they are able to use the reference page to produce simple
+                    graphics with relative ease, albeit still with some difficulty.
+
+            \subsubsection{Altering a Pre-existing Program to Produce a Different Image}
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{c|c|c}
+                        \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Time Taken} \\
+                        \hline
+                        A-Level           & 9.67                          & 0.67-3.33 minutes           \\
+                        Bachelor's        & 9                             & 0.8-4 minutes               \\
+                        Postgraduate      & 5.33                          & 3.5-7.5 minutes             \\
+                        Other             & 10                            & 1-5 minutes                 \\
+                        \hline
+                        Beginner          & 9.67                          & 0.67-3.33 minutes           \\
+                        Intermediate      & 9.17                          & 0.83-4.17 minutes           \\
+                        Advanced          & 5.33                          & 3.5-7.5 minutes             \\
+                        \hline
+                        Overall           & 9.09                          & 1.27-4.54 minutes           \\
+                    \end{tabular}
+                    \caption{The average results of the third task.}
+                \end{table}
+
+                These results show that altering a pre-existing program to produce a different
+                    image was very easy for most users, regardless of their experience.
+                This suggests that the graphics library is easy to grasp, if provided with an
+                    example to work from.
+                Feedback from the postgraduate participant who gave a lower score for this task
+                    suggests that they accomplished the task to a degree, but were not happy with
+                    their result, as it did not match the provided example closely enough.
+
+            \subsubsection{Altering a Pre-existing Program to Produce a Different Animation}
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{c|c|c}
+                        \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Time Taken} \\
+                        \hline
+                        A-Level           & 0.67                          & 11+ minutes                 \\
+                        Bachelor's        & 7                             & 4-8 minutes                 \\
+                        Postgraduate      & 7.5                           & 3.5-7.5 minutes             \\
+                        Other             & 10                            & 1-5 minutes                 \\
+                        \hline
+                        Beginner          & 3                             & 12.67+ minutes              \\
+                        Intermediate      & 6.33                          & 2.67-6.67 minutes           \\
+                        Advanced          & 7.5                           & 3.5-7.5 minutes             \\
+                        \hline
+                        Overall           & 5.63                          & 5.55+ minutes               \\
+                    \end{tabular}
+                    \caption{The average results of the fourth task.}
+                \end{table}
+
+                The results for this task indicate a substantial leap in complexity from the
+                    previous task.
+                A-Level and beginner participants in particular found this task to be very
+                    difficult, with one A-Level participant taking over 21 minutes to complete the
+                    task.
+                This suggests that the website could benefit from more detailed documentation
+                    on how to move from images to animations.
+                For more experienced participants, this task was still more difficult than the
+                    previous task, but not to the same extent.
+                These participants were able to complete the task in a reasonable amount of
+                    time, and with a reasonable level of ease.
+
+            \subsubsection{Overall Ratings}
+                \begin{table}[H]
+                    \centering
+                    \begin{tabular}{c|c}
+                        \textbf{Category} & \textbf{Average Rating} \\
+                        \hline
+                        A-Level           & 3                       \\
+                        Bachelor's        & 4.4                     \\
+                        Postgraduate      & 4.5                     \\
+                        Other             & 5                       \\
+                        \hline
+                        Beginner          & 3.33                    \\
+                        Intermediate      & 4.33                    \\
+                        Advanced          & 4.5                     \\
+                        \hline
+                        Overall           & 4.09                    \\
+                    \end{tabular}
+                    \caption{The average overall ratings of the website, out of 5.}
+                \end{table}
+
+                The overall ratings for the website were generally positive, with the majority
+                    of participants rating the website as above average.
+                The website was rated most highly by those with more experience, and least
+                    highly by those with less experience.
+                This once again indicates that the website provides a better user experience
+                    for users with at least bachelor's level experience in Computer Science, and
+                    some experience with Haskell.
+
+            \subsubsection{Feedback}
+                The feedback received from participants was generally positive, however there
+                    were a few areas for improvement that were highlighted.
+                Several participants indicated initial difficulties due to their lack of
+                    experience with Haskell, but found the following tasks to be easier, once they
+                    had a better understanding of the language.
+                A few participants found the reference page lacked clear instructions for how
+                    to render a shape once it had been defined.
+                The documentation has since been updated to make this clearer.
+
+                Participants praised the website's clean design, ease-of-use and speed.
+                Many spoke highly of the graphics library, and the example image provided in
+                    the reference page, which helped them to understand how to use the library.
+                The examples on the homepage were described by multiple participants as
+                    ``interesting'', ``useful'', ``informative'', ``entertaining'' and even
+                    ``incredible'' by one participant.
+
+        \subsection{Other Feedback from Users}
+
+            Alongside the survey responses, feedback was also received from users on the
+                Haskell subreddit.
+            This feedback was very positive, with one user saying,
+            \begin{aquote}{u/mlitchard}
+                This an important step forward in the production of educational artefacts for
+                    Haskell.
+            \end{aquote}
+            and another saying of the reference page,
+            \begin{aquote}{u/CubOfJudahsLion}
+                This is the level of friendliness in API docs that would get coders to come
+                    back to Haskell.
+            \end{aquote}
+            This feedback is very encouraging, and suggests that users could find the
+                website to be a useful tool for learning Haskell.
+
+            One user compared this project to CodeWorld, which led to the creator of
+                CodeWorld commenting on the post.
+            His assessment of the project was as follows:
+            \begin{aquote}{u/cdsmith}
+                \begin{itemize}
+                    \item As far as overall goal, it looks like this is
+                          staking out a path that's solidly and consistently using simple but normal
+                          Haskell.
+                          This is different from CodeWorld, which offers both an educational dialect
+                              that's aggressively monomorphized, uncurried, and otherwise removes any
+                              overloading type features that cause problems for beginners, but then also
+                              offers a Haskell mode with a more conventional Haskell API.
+                    \item In terms of implementation, this project seems to run code on the server and
+                          stream frames of drawing instructions back to the client to be interpreted in
+                          TypeScript.
+                          CodeWorld, by contrast, compiles Haskell code into JavaScript that runs in the
+                              web browser directly.
+                    \item The API here is a bit less declarative in flavor than CodeWorld's.
+                          For instance, while CodeWorld works very hard to make its \texttt{Picture} type
+                              denotationally equivalent to \texttt{Point -> Color}, the analogous
+                              \texttt{Shape} type here appears to be rather more complex, including explicit
+                              notions of path, stroke, fill, etc. that mirror JavaScript's canvas API.
+                          That does give it some more flexibility, but at the cost of a more complex
+                              abstraction.
+                    \item There does not appear to be an API for interactive or stateful programs here.
+                          (Not surprising, since it's a much newer project).
+                \end{itemize}
+            \end{aquote}
+            This feedback is particularly useful, as it provides a comparison between this
+                project and CodeWorld from the creator of CodeWorld himself, and highlights
+                some key differences between the two projects.
 
 \end{document}

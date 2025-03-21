@@ -2,16 +2,20 @@
 \usepackage{ugcheck}
 
 \usepackage[final,nopatch=footnote]{microtype}
+\usepackage[hidelinks]{hyperref}
 \usepackage[style=apa,natbib]{biblatex}
     \addbibresource{references.bib}
+
 \usepackage{subfiles}
+
 \usepackage{float}
-\usepackage[hidelinks]{hyperref}
 \usepackage{pdfpages}
+
 \usepackage{courier}
 \usepackage{listings}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{amsmath}
+
 \usepackage{graphicx}
 \graphicspath{{./images/}}
 
@@ -66,6 +70,15 @@
     stringstyle=\color{Green},
     tabsize=2,
 }
+
+\def\signed #1{{\leavevmode\unskip\nobreak\hfil\penalty50\hskip2em
+  \hbox{}\nobreak\hfil(#1)%
+  \parfillskip=0pt \finalhyphendemerits=0 \endgraf}}
+
+\newsavebox\mybox
+\newenvironment{aquote}[1]
+  {\savebox\mybox{#1}\begin{quote}}
+  {\signed{\usebox\mybox}\end{quote}}
 
 \begin{document}
 
