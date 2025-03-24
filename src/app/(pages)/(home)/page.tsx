@@ -30,7 +30,7 @@ export default function Home(): ReactNode {
             name: "Star Spangled Banner",
         },
         {
-            code: "JYWwDg9gTgLgBAGWAIwFCuQGwK4FM4C8cAErgB5wBEAxAAy0CsAbAEICclqAnrpphAHdCJclWoAxcQBEAHPU6oQAQ2AA7OAC4NcAJIB5OAAoAlIpXqiUXKoAmuKHAAkcZEoDGAawDmUCNltwAJq8-EKGblZKMLgAwkqqAG5KAM5wbPRwTPTGcAA8%2BXBWbvDptHAAzBkAfDVwAGbAfHAsOPg1VXCqEADKML4euKhAA",
+            code: "JYWwDg9gTgLgBAGWAIwFCuQGwK4FM4C8cAErgB5wBEAxAAy0CsAbAEICclqAnrpphAHdCJclWoAxcQBEAHPU6oQAQ2AA7OAC4NcAJIB5OAAoAlIpXqiUXKoAmuKHAAkcZEoDGAawDmUCNltwPHyCRm5WSjC4AMJKqgBuSgDOcGz0cEz0xnAAPLlwVm7wqbRwAMxpAHxVcABmwHwuOPhVFXCqEADKML4euKhAA",
             image: ukrainianFlag,
             name: "Slava Ukraini",
         },
