@@ -280,7 +280,7 @@ export function ColorsRoot({ list }: { list: (elems: ReactNode[]) => ReactNode; 
                             <br />
                             {hex.toUpperCase()}
                         </>}>
-                        <span>
+                        <span style={{ lineHeight: "2em" }}>
                             <code style={{ background: name, color: contrast }}>{name}</code>
                             {" "}
                         </span>
