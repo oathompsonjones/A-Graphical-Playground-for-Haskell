@@ -213,6 +213,27 @@ data Color
             \begin{lstlisting}[label={lst:length}, caption={The \texttt{Length} type definition.}]
 type Length = Float\end{lstlisting}
 
+        \subsection{Angles}
+            Angles are another fundamental part of any graphics library, as they are
+                essential for rotations.
+            There are several units for measuring angles, including degrees, radians,
+                gradians and turns.
+            The two most common units are degrees and radians, with degrees dividing a
+                circle into 360 parts, and radians dividing a circle into $2\pi$ parts.
+            Given that, it makes sense to provide users with the ability to work with both
+                of these, and functions for converting between them.
+
+            We can define two more type aliases for \texttt{Float}, \texttt{Degrees} and
+                \texttt{Radians}, to provide a level of semantic clarity, as with the
+                \texttt{Length} type.
+            We can then define functions for converting between degrees and radians.
+
+            \begin{lstlisting}[label={lst:angleFns}, caption={The angle functions.}]  
+type Degrees = Float
+type Radians = Float                
+radians :: Degrees -> Radians
+degrees :: Radians -> Degrees\end{lstlisting}
+
         \subsection{The \texttt{Vector}
             Type} Vectors are a fundamental part of any graphics library, as they can be
                 used to represent points, directions, velocities, forces, etc. As this library
@@ -239,7 +260,7 @@ data Vector = Vector Float Float\end{lstlisting}
                 Alongside the \texttt{Vector} type, it is useful to provide a simple set of
                     functions for working with vectors.
                 These functions include addition, subtraction, scalar multiplication, scalar
-                    division, dot product, cross product, magnitude, argument and normalisation.
+                    division, dot product, magnitude, argument and normalisation.
                 For the first four functions, make \texttt{Vector} an instance of the
                     \texttt{Num} type class, but this would require us to define all the functions
                     in \texttt{Num}, which is unnecessary, as we only need a subset of them.
@@ -253,41 +274,29 @@ data Vector = Vector Float Float\end{lstlisting}
                     above the vector symbol.
 
                 \begin{lstlisting}[label={lst:vectorOps}, caption={The vector operators.}]
+-- Vector addition
 (^+^) :: Vector -> Vector -> Vector
+-- Vector subtraction
 (^-^) :: Vector -> Vector -> Vector
+-- Scalar multiplication
 (^*^) :: Vector -> Float -> Vector
+-- Scalar division
 (^/^) :: Vector -> Float -> Vector\end{lstlisting}
 
                 The remaining functions are equally simple to define, and make use of several
                     functions from the \texttt{Prelude} module.
+                Note that there is no cross product function, as this is only defined for
+                    three-dimensional vectors.
 
                 \begin{lstlisting}[label={lst:vectorFns}, caption={The remaining vector functions.}]
-mag :: Vector -> Float
-arg :: Vector -> Float
+-- Calculates the magnitude (length) of a vector
+mag :: Vector -> Length
+-- Calculates the argument (polar angle) of a vector
+arg :: Vector -> Radians
+-- Normalises a vector, i.e. returns a vector with the same direction, but a magnitude of 1
 norm :: Vector -> Vector
-dot :: Vector -> Vector -> Float
-cross :: Vector -> Vector -> Float\end{lstlisting}
-
-        \subsection{Angles}
-            Angles are another fundamental part of any graphics library, as they are
-                essential for rotations.
-            There are several units for measuring angles, including degrees, radians,
-                gradians and turns.
-            The two most common units are degrees and radians, with degrees dividing a
-                circle into 360 parts, and radians dividing a circle into $2\pi$ parts.
-            Given that, it makes sense to provide users with the ability to work with both
-                of these, and functions for converting between them.
-
-            We can define two more type aliases for \texttt{Float}, \texttt{Degrees} and
-                \texttt{Radians}, to provide a level of semantic clarity, as with the
-                \texttt{Length} type.
-            We can then define functions for converting between degrees and radians.
-
-            \begin{lstlisting}[label={lst:angleFns}, caption={The angle functions.}]  
-type Degrees = Float
-type Radians = Float                
-radians :: Degrees -> Radians
-degrees :: Radians -> Degrees\end{lstlisting}
+-- Calculates the dot product of two vectors
+dot :: Vector -> Vector -> Float\end{lstlisting}
 
         \subsection{Random Numbers}
             The final set of functions to provide in the \texttt{Maths} module are those

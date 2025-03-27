@@ -26,12 +26,10 @@ export function Vectors({ list }: { list: (elems: ReactNode[]) => ReactNode; }):
             ])}
             and the following functions:
             {list([
-                <><code>mag :: Vector -&gt; Float</code> — Calculates the magnitude (length) of the vector.</>,
-                <><code>arg :: Vector -&gt; Float</code> — Calculates the argument (angle) of the vector.</>,
+                <><code>mag :: Vector -&gt; Length</code> — Calculates the magnitude (length) of the vector.</>,
+                <><code>arg :: Vector -&gt; Radians</code> — Calculates the argument (angle) of the vector.</>,
                 <><code>norm :: Vector -&gt; Vector</code> — Calculates the normal (unit) vector.</>,
                 <><code>dot :: Vector -&gt; Vector -&gt; Float</code> — Calculates the dot product of the two
-                    vectors.</>,
-                <><code>cross :: Vector -&gt; Vector -&gt; Float</code> — Calculates the cross product of the two
                     vectors.</>,
             ])}
         </div>

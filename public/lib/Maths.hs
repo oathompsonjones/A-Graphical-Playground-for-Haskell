@@ -42,10 +42,10 @@ infixl 6 ^-^
 infixl 7 ^*^
 infixl 7 ^/^
 
-mag :: Vector -> Float
+mag :: Vector -> Length
 mag (Vector x y) = sqrt (x ^ 2 + y ^ 2)
 
-arg :: Vector -> Float
+arg :: Vector -> Radians
 arg (Vector x y) = atan2 y x
 
 norm :: Vector -> Vector
@@ -53,9 +53,6 @@ norm v = v ^/^ mag v
 
 dot :: Vector -> Vector -> Float
 dot (Vector x1 y1) (Vector x2 y2) = x1 * x2 + y1 * y2
-
-cross :: Vector -> Vector -> Float
-cross a b = mag a * mag b * sin (acos (dot a b))
 
 ----------------
 ---- Random ----
