@@ -20,12 +20,15 @@
         One of the most widely used functional programming languages is Haskell,
             placing 31st in the TIOBE index for March 2025 \citep{tiobeIndex}.
         A statically typed, purely functional programming language, developed in the
-            late 1980s, with the intention of consolidating features from existing
-            functional programming languages into a single, standardised language
-            \citep{haskellConference}.
+            late 1980s, with the intention of consolidating features from existing pure
+            lazy functional programming languages into a single, standardised language
+            \citep{haskellHistory}.
         Haskell's namesake is Haskell Curry, who developed an equivalent system to
             lambda calculus, combinatory logic, alongside Moses Schönfinkel the 1920s and
             1930s \citep{combinatoryLogic}.
+        Since its inception, there have been two major revisions of the Haskell
+            language, Haskell 98 and Haskell 2010, with the latter being the most recent
+            standard \citep{haskell2010}.
 
     \section{Graphics}
         Computer graphics is a wide field, encompassing the use of computers for the
@@ -38,8 +41,8 @@
         Since then, the field has grown rapidly, resulting in a plethora of techniques
             and technologies for creating and rendering graphics.
 
-        Two-dimensional graphics are typically stored as raster graphics, where images
-            are represented as a grid of pixels \citep{rasterGraphics}.
+        Two-dimensional graphics are typically represented as raster graphics, where
+            images are represented as a grid of pixels \citep{rasterGraphics}.
         This method of storage is simple, and reflects the same method that modern
             displays use to render images, but can result in loss of quality when images
             are scaled.
@@ -54,41 +57,50 @@
             being used for images which require fine detail, and vector graphics being used
             for images which need to be scaled.
 
-        \subsection{OpenGL}
-            One of the most widely used graphics libraries is OpenGL, a cross-language,
-                cross-platform library developed by Silicon Graphics in the early 1990s
-                \citep{openGL}.
-            It supports both 2D and 3D graphics, and is generally used to interact with the
-                graphics processing unit (GPU) to take advantage of hardware acceleration,
-                improving performance particularly for 3D graphics, but can also be used for
-                central processing unit (CPU) rendering.
-            With several hundred procedures available within the API, OpenGL is a both a
-                powerful and versatile library, making it ideal for a wide range of
-                applications, from video games to scientific visualisation.
+        \subsection{Backends for Graphics}
+            \subsubsection{OpenGL}
+                One of the most widely used graphics libraries is OpenGL, a cross-language,
+                    cross-platform library developed by Silicon Graphics in the early 1990s
+                    \citep{openGL}.
+                It supports both 2D and 3D graphics, and is generally used to interact with the
+                    graphics processing unit (GPU) to take advantage of hardware acceleration,
+                    improving performance particularly for 3D graphics, but can also be used for
+                    central processing unit (CPU) rendering.
+                With several hundred procedures available within the API, OpenGL is a both a
+                    powerful and versatile library, making it ideal for a wide range of
+                    applications, from video games to scientific visualisation.
+
+            \subsubsection{Cairo}
+                Cairo is a 2D graphics library, designed to be both fast and portable
+                    \citep{cairo}.
+                It is designed to produce consistent results across different platforms, and
+                    supports a wide range of output formats, including raster graphics, vector
+                    graphics, and PDFs.
+                Although implemented in C, Cairo has bindings available for a number of
+                    languages, including Haskell, making it a versatile library for generating
+                    graphics.
 
         \subsection{Graphics in Haskell}
             \subsubsection{Gloss}
                 There are a number of libraries and bindings available for Haskell which aid in
                     generating graphics.
-                One of the most popular of these, with a rating on Hackage of 2.75 out of 3, is
-                    the Gloss library, which provides a simple interface for creating graphics in
-                    Haskell \citep{hackageGloss}.
+                One of the most popular of these, with a rating on Hackage of 2.75 out of 3 and
+                    69,490 downloads, is the Gloss library, which provides a simple interface for
+                    creating graphics in Haskell \citep{hackageGloss}.
                 As with many graphics libraries, Gloss uses OpenGL as its rendering engine, but
-                    provides a more simple and high-level interface, making it ideal for beginners
-                    or for quick sketches.
+                    provides a simpler and higher-level interface, making it ideal for beginners or
+                    for quick sketches.
                 Due to the simplicity of Gloss, there are a limited number of functions
                     available, which can make it difficult to create more complex graphics.
 
             \subsubsection{Diagrams}
                 Another popular Haskell graphics library is Diagrams \citep{hackageDiagrams},
                     which also has a Hackage rating of 2.75, but has fewer downloads than Gloss, at
-                    34,898 compared Gloss' 69,490 \citep{hackageGloss, hackageDiagrams}.
+                    34,898 \citep{hackageDiagrams}.
                 This provides a more powerful and flexible interface than Gloss, by allowing
-                    the user to choose from one of six backends, including Cairo \citep{cairo}.
+                    the user to choose from one of six backends, including Cairo, but not OpenGL.
                 Diagrams' larger API makes it less beginner-friendly but more versatile due to
                     its multiple backends.
-
-                % TODO: Add comparison
 
         \subsection{Graphics in Web Browsers}
             The first web browser, originally named WorldWideWeb before becoming Nexus, was
@@ -130,6 +142,14 @@
                     \citep{openGLES}.
 
     \section{Existing Work}
+        This section will discuss two existing tools which provide web-based
+            environments for creating graphics.
+        The first, P5.js, is a JavaScript library which provides a simple interface for
+            creating graphics in web browsers, and has its own web-based editor.
+        The second, CodeWorld, is a tool which provides both a block-based and a
+            Haskell-like interface for creating graphics in Haskell.
+        These served as bases for the development of the tool described in this report.
+
         \subsection{Processing and P5.js}
             \begin{figure}[H]
                 \centering
@@ -171,17 +191,19 @@
             CodeWorld is an educational website distributed by Google and created by Chris
                 \citet{codeWorldGitHub}, which provides an environment for creating simple
                 graphics using Haskell.
-            There are three versions of CodeWorld available: one which uses an educational
-                version of Haskell 98; one which uses a full version of Haskell 2010; and one
-                which uses a block editor, designed for beginners.
-            While CodeWorld is a useful tool for teaching Haskell, basic programming
-                concepts, and simple graphics concepts, it lacks certain features which could
-                allow for more creativity from the programmer.
-            For example, the ability to see the results of changes in real-time can be
-                highly beneficial, as it allows the programmer to discover effects which they
-                may not have considered before \citep{inventingOnPrinciple}.
-            This can be achieved through the implementation of livelits, a feature which
-                allows programmers to alter the values of variables, and see the results in
-                real-time, without having to recompile the program \citep{livelits}.
+            It uses GHCJS, a Haskell to JavaScript compiler, to compile Haskell code into
+                JavaScript, which is then executed in the browser.
+
+            There are three variants of CodeWorld available:
+            \begin{itemize}
+                \item The first (\texttt{https://code.world}) uses an educational, simplified
+                      version of Haskell 98, with some features removed to make it easier for
+                      beginners to learn.
+                \item The second (\texttt{https://code.world/haskell}) uses a full version of
+                      Haskell 2010.
+                \item The third (\texttt{https://code.world/blocks}) uses a drag and drop block
+                      editor, designed for beginners who are not yet comfortable writing code.
+                      This version is not yet stable, and is not recommended for use.
+            \end{itemize}
 
 \end{document}
