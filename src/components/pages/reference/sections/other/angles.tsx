@@ -10,7 +10,7 @@ export function Angles({ list }: { list: (elems: ReactNode[]) => ReactNode; }): 
     return (
         <div>
             The following functions convert beetween degrees and radians (<code>Degrees</code> and <code>Radians
-                </code> are aliases for <code>Float</code>):
+            </code> are aliases for <code>Float</code>):
             {list([
                 <span key={0}><code>degrees :: Radians -&gt; Degrees</code> — Converts radians to degrees.</span>,
                 <span key={1}><code>radians :: Degrees -&gt; Radians</code> — Converts degrees to radians.</span>,

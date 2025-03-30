@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import type { SectionType } from "app/(pages)/reference/page";
 import { Typography } from "@mui/material";
-import type { Variant } from "@mui/material/styles/createTypography";
+import type { TypographyVariant } from "@mui/material";
 import styles from "styles/components/pages/reference/section.module.css";
 
 /**
@@ -26,7 +26,7 @@ export function Section({ title, content, depth, colored }: {
             <br />
             {title !== "root" &&
                 <Typography
-                    variant={`h${depth + 3}` as Variant}
+                    variant={`h${depth + 3}` as TypographyVariant}
                     id={title.toLowerCase().replace(/\s/g, "-")}
                     className={styles.title!}
                 >{title}<hr /></Typography>
