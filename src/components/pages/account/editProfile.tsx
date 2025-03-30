@@ -2,7 +2,7 @@
 
 "use client";
 
-import { Avatar, Button, FormControl, Grid2 as Grid, Paper, TextField, Typography } from "@mui/material";
+import { Avatar, Button, FormControl, Grid, Paper, TextField, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import { PasswordField } from "../auth/passwordField";
 import type { ReactNode } from "react";

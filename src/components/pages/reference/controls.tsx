@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid2, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { KeyboardCommandKey, KeyboardControlKey } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
@@ -23,10 +23,10 @@ export function Controls({ controls }: { controls: Array<[ReactNode, ReactNode]>
         <div>
             <Typography variant="h3">Editor Controls</Typography>
             {controls.map(([icon, text], i) => (
-                <Grid2 size={12} alignItems="center" container key={i}>
-                    <Grid2 size={2} component={Typography} variant="h4">{metaKey}{icon}</Grid2>
-                    <Grid2 size={10}>{text}</Grid2>
-                </Grid2>
+                <Grid size={12} alignItems="center" container key={i}>
+                    <Grid size={2} component={Typography} variant="h4">{metaKey}{icon}</Grid>
+                    <Grid size={10}>{text}</Grid>
+                </Grid>
             ))}
         </div>
     );
