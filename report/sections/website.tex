@@ -10,7 +10,7 @@
         application, and Haskell itself, which could alienate users who are not
         familiar or comfortable installing software.
     A website, on the other hand, would allow users to run their programs in the
-        browser, without needing to install anything.
+        browser, without need to install anything.
     This would make the system more accessible to users, as they could use it on
         any device with a web browser.
     Additionally, a website would allow users to easily share their programs with
@@ -24,8 +24,8 @@
 
     \section{Design Principles}
         Websites have been at the core of people's lives for the past two decades.
-        They are used for a wide variety of activities, from shopping, to socializing,
-            to filing taxes.
+        They are used for a wide variety of activities, from shopping to socialising to
+            filing taxes.
         It is therefore essential that websites meet certain design standards, to
             ensure that users can easily navigate them and find the information they need.
         It is also important that websites are visually appealing, to keep users
@@ -45,9 +45,9 @@
                 discussed in Chapter~\ref{ch:graphics}, and to view the results of their
                 programs in both textual and graphical form.
 
-            It would be easy to say that a Haskell editor, integrated with the graphics
-                library would be sufficient for the website, and to ignore any further
-                functionality.
+            It would be easy to say that an editor for Haskell, integrated with the
+                graphics library, and a way to execute Haskell programs would be sufficient for
+                the website, and to ignore any further functionality.
             However, this would be a mistake.
             The website should be designed to be as user-friendly as possible, and to
                 provide users with all the tools and information they need to achieve their
@@ -67,8 +67,11 @@
                       write and run programs.
                 \item A reference page, where users can learn about the graphics library
                       and how to use it.
-                \item An account page, where users can view and manage their saved programs.
+                \item An account page, where users can view and manage their saved programs,
+                      and manage their account settings.
             \end{itemize}
+            In reality, there are a few additional pages, such as a login page, a
+                registration page, and a privacy policy page.
 
         \subsection{Key Considerations}
             \subsubsection{User Experience — How can we make the website easy to use?}
@@ -79,9 +82,9 @@
                     containing the site's logo and navigation links, a main content area in the
                     centre of the page, and a footer at the bottom of the page containing
                     additional links and information.
-                It is also generally recommended limiting text to no more than 80 characters
+                It is also generally recommended limiting text to between 45 and 75 characters
                     wide, as longer or shorter lines can make it difficult for users to read the
-                    text.
+                    text \citep{lineLength}.
                 This layout, shown in Figure~\ref{fig:webLayout}, is familiar to users and
                     helps them navigate the site more easily.
 
@@ -123,7 +126,7 @@
             \subsubsection{Accessibility — How can we make the website accessible to all users?}
                 Accessibility is an important consideration when designing a website.
                 The website should be accessible to all users, including those with
-                    disabilities.
+                    disabilities, such as colour blindness or visual impairments.
                 This means that the website should be designed with accessibility in mind, with
                     features such as alt text for images, keyboard navigation, and high contrast
                     text.
@@ -170,8 +173,9 @@
                 Next.js is a framework built on top of React.
                 It is one of the most popular frameworks for building websites, and the
                     decision to use it here was based largely on familiarity with the framework.
-                Next.js provides numerous built-in optimizations for performance and SEO, and
-                    makes it easy to communicate between the client and server.
+                Next.js provides numerous built-in optimizations for performance and search
+                    engine optimisation, and makes it easy to communicate between the client and
+                    server.
                 It also provides a number of tools for handling routing, data fetching, and
                     other common tasks in web development.
 
@@ -199,11 +203,16 @@
                 Any database could have been used for this project, but as with Next.js,
                     MongoDB was chosen for its ease of use and familiarity.
 
+            \subsubsection{Docker}
+                Docker is a tool that allows developers to package their applications into
+                    containers, which can then be run on any machine that has Docker installed.
+                Docker containers are isolated from the host, preventing access to its file
+                    system or unauthorised network.
+
         \subsection{File Structure}
             As mentioned earlier, the website is designed to have four main pages: a
-                homepage, a Haskell editor, a reference page, and an account page.
-            In reality, there are a few additional pages, such as a login page, a
-                registration page, and a privacy policy page.
+                homepage, a Haskell editor, a reference page, and an account page, with a few
+                additional pages for logging in, registering, and viewing the privacy policy.
             The website uses Next.js App Router to handle routing between pages.
             As a file-system based router, Next.js uses the file structure of the project
                 directory to determine the routes of the website.
@@ -261,10 +270,7 @@
                 While the former would have kept the system more self-contained, GHCJS does not
                     currently support the latest version of Haskell.
                 At the time of writing, GHCJS only supports up to GHC 8.10, while the latest
-                    version of GHC is 9.12.1.
-                Relying on GHCJS would have meant that the system would be unable to take
-                    advantage of any new features or improvements in the language until GHCJS
-                    caught up.
+                    version of GHC is 9.12.1, suggesting that it is not actively maintained.
                 The latter option, running the Haskell code on a server, was chosen for this
                     reason.
 
@@ -273,33 +279,30 @@
                         allow users to execute malicious code.
                     To mitigate this risk, the Haskell code is run in a sandboxed environment,
                         using Docker containers.
-                    Docker is a tool that allows developers to package their applications into
-                        containers, which can then be run on any machine that has Docker installed.
-                    Docker containers are isolated from the host, preventing access to its file
-                        system or network.
-                    This makes them ideal for running untrusted code, as it prevents the code from
-                        doing any harm to the host machine.
+                    As an extra layer of security, the only Haskell libraries available to the user
+                        are the graphics library and Haskell's \texttt{Prelude} library.
 
-                    With a docker container set up to run Haskell code, the next step was to
-                        communicate between the client and server.
-                    This was done using Next.js' server actions.
+                    The next step was to communicate between the client and server.
+                    This was done using Next.js server actions.
                     Server actions are functions which can be called by the client to perform
                         server-side tasks.
                     The server action executes the user's Haskell code in a Docker container and
                         streams the output back to the client.
-                    To do this, the server action uses the \texttt{exec} function from the
-                        \texttt{child\_process} module in Node.js to run the Docker container with this
-                        command: \begin{verbatim}
-docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
 
-                        The command runs a Docker
-                        container with the \texttt{haskell:latest} image, which includes the Haskell
-                        compiler.
+                    To do this, the server action uses the \texttt{exec} function from the
+                        \texttt{child\_process} module in Node.js to spawn a shell and run the Docker
+                        container using the command shown in Listing~\ref{lst:dockerCommand}.
+                    The command runs a Docker container with the \texttt{haskell:latest} image,
+                        which includes the Haskell compiler.
                     The \texttt{--rm} flag ensures the container is properly disposed of after
                         running, the \texttt{-m 128m} flag limits the container to 128 MB of memory,
                         and the \texttt{--cpus=0.5} flag limits the container to half a CPU core.
-                    The \texttt{bash -c "...
-                    "} part executes a command inside the container.
+                    The \verb|bash -c "..."| part executes a command inside the container.
+
+                    \begin{lstlisting}[language={bash}, label={lst:dockerCommand}, caption={The command used to run the 
+                        Haskell code in a Docker container. The backslash is used to escape the newline character.}] 
+docker run --rm -m 128m --cpus=0.5 haskell:latest \
+bash -c "..."\end{lstlisting}
 
                     The bash command is a simple script which writes the user's Haskell code to a
                         file, along with the graphics library, compiles the code using GHC, and runs
@@ -312,9 +315,14 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
                         updated with new output as it is produced.
                     To prevent user programs from running indefinitely, both the listening time of
                         the stream and the execution time of the program are limited to five minutes.
-                    The stream's listener also has a timeout of two and half seconds, killing the
+                    The stream's listener also has a timeout of two and a half seconds, killing the
                         listener if it does not receive any data in that time, as the program is
                         presumed to have finished running.
+                    These numbers were chosen to suit the performance of the server being used.
+                    Initially, a timeout of one second was used, but this proved to be too short,
+                        leading to the stream being killed prematurely.
+                    Slower servers may require longer timeouts, while faster servers may be able to
+                        use shorter timeouts.
 
                 \paragraph{Reading the Stream}
                     To read the output stream on the client side, a custom React hook was created.
@@ -357,15 +365,19 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
                     \centering
                     \includegraphics[width=0.9\linewidth]{images/editor.png}
                         \caption{The editor page.
-                            The four components outlined can be seen, with the toolbar at the top, the code
-                                editor on the left, the graphics display on the right, and the console below
-                                the code editor.
+                            At the top is website's header, which contains the Haskell logo (the monochrome
+                                version to make it visible against the background), the website's name, and
+                                links to the homepage, editor page and reference page, as well as a sign in
+                                button.
+                            Below this, the four editor components outlined can be seen, with the toolbar
+                                at the top, the code editor on the left, the graphics display on the right, and
+                                the console below the code editor.
                         }
                         \label{fig:editor}
                 \end{figure}
 
                 \paragraph{The Code Editor}
-                    There is a wide variety of elements built-in to HTML.
+                    There are a wide variety of elements built-in to HTML.
                     One of these is the \texttt{<textarea>} element, which can be used to create a
                         multi-line text input field.
                     This element can be used to create a simple code editor, where users can write
@@ -485,21 +497,30 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
             Making the components resizable was relatively straightforward.
             By creating a component to handle a split view, and using this component twice
                 to create a three-way split view, the editor page was made resizable.
-            The split view component takes two child components, and allows the user to
-                drag the border between them to resize them.
-            By laying out the editor page thus: \begin{lstlisting}[caption={A simplified version of the editor page layout.},
-                label={lst:editorLayout}]
+            The \texttt{SplitView} component takes two child components, and allows the
+                user to drag the border between them to resize them.
+            A simplified version of the layout is shown in Listing~\ref{lst:editorLayout}.
+
+            \begin{lstlisting}[caption={A simplified version of the editor page  layout.}, label={lst:editorLayout}]
 <SplitView>
     <SplitView vertical>
         <CodeEditor />
         <Console />
     </SplitView>
     <GraphicsController />
-</SplitView>\end{lstlisting} the editor page was
-                made resizable, with the code editor and console components contained in a
-                column on the left, with a resizable border between them, and the graphics
-                controller component on the right, with a resizable border between it and the
-                column on the left.
+</SplitView>\end{lstlisting}
+
+            While React allows any HTML element to be marked as \texttt{draggable}, this
+                causes the element to be movable in both the x and y directions, which can
+                cause strangle visual artefacts when dragging the border.
+            To prevent this, we can instead create a React state variable to store whether
+                the user is currently dragging the border.
+            When the user clicks on the border, we set this variable to \texttt{true}, and
+                when the user releases the mouse button, we set it back to \texttt{false}.
+            We can then create an event listener to check for mouse movements, and if the
+                dragging variable is \texttt{true}, we can update the sizes of the two child
+                components based on the mouse position.
+            This allows the user to resize the components without any visual artefacts.
 
         \subsection{Making a Reference Page}
             The reference page was considerably simpler to implement than the editor page.
@@ -549,13 +570,6 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
                     }
                     \label{fig:colours}
             \end{figure}
-
-            In response to feedback from multiple users, the reference page can also be
-                accessed directly from the editor page, by clicking the ``Reference'' above the
-                canvas.
-            This replaces the graphics display with the reference page, allowing users to
-                quickly look up information about the graphics library without leaving the
-                editor page.
 
         \subsection{Creating a User Account System}
             User accounts are nothing new to the internet.
@@ -612,20 +626,27 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{verbatim}
                 issue tracker if they encounter any problems.
 
         \subsection{Quality-of-Life and Legal Requirements}
-            There are a few quality-of-life features that were added to the website to make
-                it more user-friendly.
+            There are a few features that were added to the website to make it more
+                user-friendly, and to comply with legal requirements.
             These include:
             \begin{itemize}
                 \item A notification banner which displays at the bottom corner of the screen
                       whenever a user carries out certain actions such as saving a program, copying
                       their program or URL via the share, etc.
-                      This also shows a notification informing the user that the website uses
-                          cookies, as is legally required by GDPR regulations.
                       The banner automatically fades after a few seconds, but does not disappear
                           entirely until the user dismisses it.
+                \item A notification informing the user that the website uses cookies, as is legally
+                      required by GDPR regulations.
+                      This makes use of the same notification banner as the other notifications, and
+                          includes a link to the privacy policy.
                 \item The footer includes links to this dissertation, the GitHub issue tracker,
                       the user testing and feedback form, and the privacy policy.
+                      The privacy policy is a legal requirement, and outlines how the website
+                          collects, stores and uses user data.
                       It also includes a copyright notice.
+                      While this is not strictly necessary, as UK copyright law protects the author's
+                          rights to their work, regardless of whether they include a copyright notice, it
+                          is a good practice to include one, as many users may not be aware of this.
                 \item A saved state indicator appears in the menu bar, informing a user of whether
                       they have an open program, and if it is saved.
                       Hovering over this indicator displays a tooltip with the name of the program.

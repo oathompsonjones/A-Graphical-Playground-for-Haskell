@@ -13,25 +13,22 @@
 
     \section{Testing Methodology}
         \subsection{Browser and Device Compatibility}
-            To ensure compatibility between browsers, the website was tested in the
-            following browsers:
-            \begin{itemize}
-                \item Google Chrome
-                \item Mozilla Firefox
-                \item Safari
-            \end{itemize}
+            To ensure compatibility between browsers, the website was tested in three of
+                the four most popular web browsers \citep{browsers}: Google Chrome, Safari and
+                Mozilla Firefox.
+            While Microsoft Edge is more popular web browser than Firefox, it is based on
+                Chromium, the same engine as Google Chrome, and so produces largely the same
+                results.
+
             The website was also tested on devices with different screen sizes to ensure
                 that the website is responsive.
-            The website was tested on the following devices:
-            \begin{itemize}
-                \item 28-inch monitor
-                \item 14-inch laptop
-                \item 11-inch tablet
-                \item 6.7-inch smartphone
-                \item 5.85-inch smartphone
-            \end{itemize}
+            A 28-inch monitor, a 14-inch laptop, an 11-inch tablet, a 6.7-inch smartphone
+                and a 5.85-inch smartphone.
             To test the transitions between these sizes, the website was tested using
-                ``Responsive Design Mode'' in Safari.
+                Safari's ``Responsive Design Mode''.
+            In particular, Safari and Chrome were tested on all devices, as these browsers
+                are the most popular on mobile devices, while Firefox was only tested on the
+                28-inch monitor and the 14-inch laptop.
 
         \subsection{CSS and JavaScript Robustness}
             As CSS and JavaScript are the backbone of the website, it is important to
@@ -40,12 +37,19 @@
                 components are already tested.
             However, the custom CSS and JavaScript code must be tested.
             Components which display variable amounts of data, such as the code editor and
-                the console output, were tested with different amounts of data to ensure that
-                they can handle large amounts of data without breaking.
+                the console output, were tested with a range of data to ensure that they behave
+                as expected.
+            This included short strings, long strings which exceeded the size of their
+                container, and strings with special characters.
 
         \subsection{The Graphics Library}
             The graphics library was tested by creating a series of programs, covering
                 every feature of the library.
+            This included testing every primitive shape, in combination with every
+                transformation function, to ensure that they all worked as expected.
+            This came to a total of 10 shapes and 7 transformations (including the
+                \texttt{center} function, which uses the \texttt{translate} function, but
+                behaves differently for different shapes) which resulted in 70 combinations.
             These programs were then run on the website to ensure that they worked as
                 expected.
             The programs were also run with different input values to ensure that the
@@ -166,16 +170,16 @@
                     \begin{tabular}{c|c|c}
                         \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Time Taken} \\
                         \hline
-                        A-Level           & 2                             & 12.67-16.67 minutes         \\
-                        Bachelor's        & 7.4                           & 2-6 minutes                 \\
+                        A-Level           & 2                             & 15 minutes                  \\
+                        Bachelor's        & 7.4                           & 4 minutes                   \\
                         Postgraduate      & 10                            & less than a minute          \\
-                        Other             & 10                            & 1-5 minutes                 \\
+                        Other             & 10                            & 3 minutes                   \\
                         \hline
-                        Beginner          & 2.67                          & 11-15 minutes               \\
-                        Intermediate      & 7.5                           & 2.67-6.67 minutes           \\
+                        Beginner          & 2.67                          & 13 minutes                  \\
+                        Intermediate      & 7.5                           & 5 minutes                   \\
                         Advanced          & 10                            & less than a minute          \\
                         \hline
-                        Overall           & 6.64                          & 4.45-7.72 minutes           \\
+                        Overall           & 6.64                          & 6 minutes                   \\
                     \end{tabular}
                     \caption{The average results of the first task.}
                 \end{table}
@@ -191,18 +195,20 @@
                 \begin{table}[H]
                     \centering
                     \begin{tabular}{c|c|c|c}
-                        \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Quality of Docs} & \textbf{Average Time Taken} \\
+                        \textbf{Category} & \makecell{\textbf{Average}                     \\ \textbf{Ease of Task}}
+                                          & \makecell{\textbf{Average}                     \\ \textbf{Quality of Docs}}
+                                          & \makecell{\textbf{Average}                     \\ \textbf{Time Taken}} \\
                         \hline
-                        A-Level           & 2.33                          & 3.33                             & 9.33-13.33 minutes          \\
-                        Bachelor's        & 6                             & 6.6                              & 8-12 minutes                \\
-                        Postgraduate      & 7.5                           & 7.5                              & 6-10 minutes                \\
-                        Other             & 8                             & 7                                & 1-5 minutes                 \\
+                        A-Level           & 2.33                       & 3.33 & 11 minutes \\
+                        Bachelor's        & 6                          & 6.6  & 10 minutes \\
+                        Postgraduate      & 7.5                        & 7.5  & 8 minutes  \\
+                        Other             & 8                          & 7    & 3 minutes  \\
                         \hline
-                        Beginner          & 3.33                          & 5                                & 11-15 minutes               \\
-                        Intermediate      & 5.83                          & 5.83                             & 6-10 minutes                \\
-                        Advanced          & 7.5                           & 7.5                              & 6-10 minutes                \\
+                        Beginner          & 3.33                       & 5    & 13 minutes \\
+                        Intermediate      & 5.83                       & 5.83 & 8 minutes  \\
+                        Advanced          & 7.5                        & 7.5  & 8 minutes  \\
                         \hline
-                        Overall           & 5.45                          & 5.91                             & 7.36-11.36 minutes          \\
+                        Overall           & 5.45                       & 5.91 & 9 minutes  \\
                     \end{tabular}
                     \caption{The average results of the second task.}
                 \end{table}
@@ -231,16 +237,16 @@
                     \begin{tabular}{c|c|c}
                         \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Time Taken} \\
                         \hline
-                        A-Level           & 9.67                          & 0.67-3.33 minutes           \\
-                        Bachelor's        & 9                             & 0.8-4 minutes               \\
-                        Postgraduate      & 5.33                          & 3.5-7.5 minutes             \\
-                        Other             & 10                            & 1-5 minutes                 \\
+                        A-Level           & 9.67                          & 2 minutes                   \\
+                        Bachelor's        & 9                             & 3 minutes                   \\
+                        Postgraduate      & 5.33                          & 6 minutes                   \\
+                        Other             & 10                            & 3 minutes                   \\
                         \hline
-                        Beginner          & 9.67                          & 0.67-3.33 minutes           \\
-                        Intermediate      & 9.17                          & 0.83-4.17 minutes           \\
-                        Advanced          & 5.33                          & 3.5-7.5 minutes             \\
+                        Beginner          & 9.67                          & 2 minutes                   \\
+                        Intermediate      & 9.17                          & 3 minutes                   \\
+                        Advanced          & 5.33                          & 6 minutes                   \\
                         \hline
-                        Overall           & 9.09                          & 1.27-4.54 minutes           \\
+                        Overall           & 9.09                          & 3 minutes                   \\
                     \end{tabular}
                     \caption{The average results of the third task.}
                 \end{table}
@@ -259,16 +265,16 @@
                     \begin{tabular}{c|c|c}
                         \textbf{Category} & \textbf{Average Ease of Task} & \textbf{Average Time Taken} \\
                         \hline
-                        A-Level           & 0.67                          & 11+ minutes                 \\
-                        Bachelor's        & 7                             & 4-8 minutes                 \\
-                        Postgraduate      & 7.5                           & 3.5-7.5 minutes             \\
-                        Other             & 10                            & 1-5 minutes                 \\
+                        A-Level           & 0.67                          & 13 minutes                  \\
+                        Bachelor's        & 7                             & 6 minutes                   \\
+                        Postgraduate      & 7.5                           & 6 minutes                   \\
+                        Other             & 10                            & 3 minutes                   \\
                         \hline
-                        Beginner          & 3                             & 12.67+ minutes              \\
-                        Intermediate      & 6.33                          & 2.67-6.67 minutes           \\
-                        Advanced          & 7.5                           & 3.5-7.5 minutes             \\
+                        Beginner          & 3                             & 15 minutes                  \\
+                        Intermediate      & 6.33                          & 5 minutes                   \\
+                        Advanced          & 7.5                           & 8 minutes                   \\
                         \hline
-                        Overall           & 5.63                          & 5.55+ minutes               \\
+                        Overall           & 5.63                          & 6 minutes                   \\
                     \end{tabular}
                     \caption{The average results of the fourth task.}
                 \end{table}
@@ -323,6 +329,12 @@
                     to render a shape once it had been defined.
                 The documentation has since been updated to make this clearer.
 
+                Multiple users requested some way to view the reference page while editing
+                    their program, as they found it irritating to switch between the two pages.
+                This has been implemented by embedding the reference page in the editor page.
+                Users can switch between the canvas and the reference page by clicking on the
+                    tabs at the top of the right column.
+
                 Participants praised the website's clean design, ease-of-use and speed.
                 Many spoke highly of the graphics library, and the example image provided in
                     the reference page, which helped them to understand how to use the library.
@@ -349,10 +361,10 @@
 
             Several users drew comparisons to other Haskell graphics tools, including
                 Diagrams and Haskell for Mac.
-            One user compared this project to CodeWorld, which led to the creator of
-                CodeWorld commenting on the post.
+            One user compared this project to CodeWorld, which led to its creator, Chris
+                Smith, commenting on the post.
             His assessment of the project was as follows:
-            \begin{aquote}{u/cdsmith}
+            \begin{aquote}{u/cdsmith (Chris Smith)}
                 \begin{itemize}
                     \item As far as overall goal, it looks like this is
                           staking out a path that's solidly and consistently using simple but normal

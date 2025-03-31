@@ -3,7 +3,6 @@
 
 % Begin the document.
 \begin{document}
-% You may delete everything from \appendix up to \end{document} if you don't need it.
 \appendix
     \chapter{Participants' Information Sheet \& Consent Form} \label{app:consent}
         The following pages contain the participants' information sheet and consent
@@ -41,19 +40,22 @@
             \begin{table}[H]
                 \centering
                 \begin{tabular}{c|c|c|c|c}
-                    \textbf{Qualifications} & \textbf{Experience} & \textbf{Ease of Task} & \textbf{Quality of Docs} & \textbf{Time Taken} \\
+                    \textbf{Qualifications} & \textbf{Experience}
+                                            & \makecell{\textbf{Ease of}                             \\ \textbf{Task}}
+                                            & \makecell{\textbf{Quality of}                          \\ \textbf{Docs}}
+                                            & \textbf{Time Taken}                                    \\
                     \hline
-                    Bachelor's Degree       & Intermediate        & 4                     & 5                        & 6-10 minutes        \\
-                    Bachelor's Degree       & Intermediate        & 10                    & 9                        & 11-15 minutes       \\
-                    Postgraduate Degree     & Advanced            & 6                     & 6                        & 6-10 minutes        \\
-                    A-Level or equivalent   & Intermediate        & 2                     & 3                        & 6-10 minutes        \\
-                    A-Level or equivalent   & Beginner            & 4                     & 3                        & 11-15 minutes       \\
-                    A-Level or equivalent   & Beginner            & 1                     & 4                        & 11-15 minutes       \\
-                    Bachelor's Degree       & Intermediate        & 5                     & 3                        & 6-10 minutes        \\
-                    Postgraduate Degree     & Advanced            & 9                     & 9                        & 6-10 minutes        \\
-                    Other                   & Intermediate        & 8                     & 7                        & 1-5 minutes         \\
-                    Bachelor's Degree       & Intermediate        & 6                     & 8                        & 6-10 minutes        \\
-                    Bachelor's Degree       & Beginner            & 5                     & 8                        & 11-15 minutes       \\
+                    Bachelor's Degree       & Intermediate                  & 4  & 5 & 6-10 minutes  \\
+                    Bachelor's Degree       & Intermediate                  & 10 & 9 & 11-15 minutes \\
+                    Postgraduate Degree     & Advanced                      & 6  & 6 & 6-10 minutes  \\
+                    A-Level or equivalent   & Intermediate                  & 2  & 3 & 6-10 minutes  \\
+                    A-Level or equivalent   & Beginner                      & 4  & 3 & 11-15 minutes \\
+                    A-Level or equivalent   & Beginner                      & 1  & 4 & 11-15 minutes \\
+                    Bachelor's Degree       & Intermediate                  & 5  & 3 & 6-10 minutes  \\
+                    Postgraduate Degree     & Advanced                      & 9  & 9 & 6-10 minutes  \\
+                    Other                   & Intermediate                  & 8  & 7 & 1-5 minutes   \\
+                    Bachelor's Degree       & Intermediate                  & 6  & 8 & 6-10 minutes  \\
+                    Bachelor's Degree       & Beginner                      & 5  & 8 & 11-15 minutes \\
                 \end{tabular}
                 \caption{The results of the second task, including the quality of the documentation}
             \end{table}
@@ -121,15 +123,15 @@
     \chapter{Graphics Library Code Listings} \label{app:code}
         The following pages contain the code listings for the full graphics library.
         \section*{\texttt{Lib.hs}}
-            \lstinputlisting{../public/lib/Lib.hs}
+            \lstinputlisting[language={Haskell}]{../public/lib/Lib.hs}
         \section*{\texttt{Internal.hs}}
-            \lstinputlisting{../public/lib/Internal.hs}
+            \lstinputlisting[language={Haskell}]{../public/lib/Internal.hs}
         \section*{\texttt{Canvas.hs}}
-            \lstinputlisting{../public/lib/Canvas.hs}
+            \lstinputlisting[language={Haskell}]{../public/lib/Canvas.hs}
         \section*{\texttt{Shape.hs}}
-            \lstinputlisting{../public/lib/Shape.hs}
+            \lstinputlisting[language={Haskell}]{../public/lib/Shape.hs}
         \section*{\texttt{Maths.hs}}
-            \lstinputlisting{../public/lib/Maths.hs}
+            \lstinputlisting[language={Haskell}]{../public/lib/Maths.hs}
         \section*{\texttt{Color.hs}}
-            \lstinputlisting{../public/lib/Color.hs}
+            \lstinputlisting[language={Haskell}]{../public/lib/Color.hs}
 \end{document}
