@@ -5,7 +5,7 @@
 \begin{document}
 \chapter{Background} \label{ch:background}
     \section{Functional Programming and Haskell}
-        Functional programming is a programming paradigm built around the evaluation of
+        Functional programming is a paradigm built around the evaluation of pure
             mathematical functions \citep{fpPaulHudak}.
         Unlike the more widely used imperative programming, which utilises a series of
             statements to alter the state of a program and produce a result, functional
@@ -19,8 +19,8 @@
 
         One of the most widely used functional programming languages is Haskell,
             placing 31st in the TIOBE index for March 2025 \citep{tiobeIndex}.
-        A statically typed, purely functional programming language, developed in the
-            late 1980s, with the intention of consolidating features from existing pure
+        It is a statically typed, purely functional programming language, developed in
+            the late 1980s, with the intention of consolidating features from existing pure
             lazy functional programming languages into a single, standardised language
             \citep{haskellHistory}.
         Haskell's namesake is Haskell Curry, who developed an equivalent system to
@@ -36,8 +36,8 @@
             of types which satisfy a certain interface.
         One of the most important type classes in Haskell is the \texttt{Monad} type
             class.
-        Monads provide a way to simulate effects in a pure functional language
-            \citep{monads}.
+        Monads are a design pattern which provide a way to sequence computations and
+            simulate effects in a pure functional language \citep{monads}.
 
     \section{Graphics}
         Computer graphics is a wide field, encompassing the use of computers for the
@@ -62,7 +62,7 @@
             will not change in quality when resized.
         Both raster and vector graphics have their own advantages and disadvantages,
             and are used in different contexts depending on the requirements of the image.
-        They are often used together, particular on websites, with raster graphics
+        They are often used together, particularly on websites, with raster graphics
             being used for images which require fine detail, and vector graphics being used
             for images which need to be scaled.
 
@@ -72,9 +72,9 @@
                     cross-platform library developed by Silicon Graphics in the early 1990s
                     \citep{openGL}.
                 It supports both 2D and 3D graphics, and is generally used to interact with the
-                    graphics processing unit (GPU) to take advantage of hardware acceleration,
-                    improving performance particularly for 3D graphics, but can also be used for
-                    central processing unit (CPU) rendering.
+                    graphics processing unit to take advantage of hardware acceleration, improving
+                    performance particularly for 3D graphics, but can also be used for central
+                    processing unit rendering.
                 With several hundred procedures available within the API, OpenGL is a both a
                     powerful and versatile library, making it ideal for a wide range of
                     applications, from video games to scientific visualisation.
@@ -93,9 +93,10 @@
             \subsubsection{Gloss}
                 There are a number of libraries and bindings available for Haskell which aid in
                     generating graphics.
-                One of the most popular of these, with a rating on Hackage of 2.75 out of 3 and
-                    69,490 downloads, is the Gloss library, which provides a simple interface for
-                    creating graphics in Haskell \citep{hackageGloss}.
+                One of the most popular of these is the Gloss library, with a rating on Hackage
+                    of 2.75 out of 3 and 69,490 downloads.
+                Gloss provides a simple interface for creating graphics in Haskell
+                    \citep{hackageGloss}.
                 As with many graphics libraries, Gloss uses OpenGL as its rendering engine, but
                     provides a simpler and higher-level interface, making it ideal for beginners or
                     for quick sketches.
@@ -116,10 +117,11 @@
                 developed by Sir Tim \citet{worldWideWeb}, alongside the first web server, and
                 a basic version of HyperText Markup Language (HTML) \citep{html}.
             Web browsers are inherently designed for rendering structured graphical
-                content, and while the first browsers were limited to displaying just HTML,
-                developments in the last three decades, including the introduction of Cascading
-                Style Sheets (CSS) \citep{css}, JavaScript \citep{js}, and HTML5 \citep{html5},
-                have allowed for far more complex and interactive graphics.
+                content.
+            While the first browsers were limited to displaying just HTML, developments in
+                the last three decades, including the introduction of Cascading Style Sheets
+                (CSS) \citep{css}, JavaScript \citep{js}, and HTML5 \citep{html5}, have allowed
+                for far more complex graphics.
 
             \subsubsection{Scalable Vector Graphics (SVGs)}
                 Scalable Vector Graphics (SVGs) use an XML-based format, similar to HTML, to

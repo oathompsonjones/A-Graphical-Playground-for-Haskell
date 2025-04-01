@@ -35,7 +35,8 @@
                 ensure that they are robust.
             Fortunately, the Material UI library is well-tested and widely used, so many
                 components are already tested.
-            However, the custom CSS and JavaScript code must be tested.
+            However, the website also includes custom CSS and JavaScript, which needed to
+                be tested.
             Components which display variable amounts of data, such as the code editor and
                 the console output, were tested with a range of data to ensure that they behave
                 as expected.
@@ -47,13 +48,11 @@
                 every feature of the library.
             This included testing every primitive shape, in combination with every
                 transformation function, to ensure that they all worked as expected.
-            This came to a total of 10 shapes and 7 transformations (including the
+            This came to a total of ten shapes and seven transformations (including the
                 \texttt{center} function, which uses the \texttt{translate} function, but
                 behaves differently for different shapes) which resulted in 70 combinations.
             These programs were then run on the website to ensure that they worked as
                 expected.
-            The programs were also run with different input values to ensure that the
-                library can handle a wide range of inputs.
             The results of these tests were then compared to the expected behaviour, as
                 documented in the reference page, to ensure that these match.
 
@@ -108,7 +107,7 @@
             For the most part, the graphics library worked as expected.
             One issue that was encountered, however, was a limitation of working with
                 infinite lists.
-            If the user tires to render an animation with an infinite number of frames, the
+            If the user tries to render an animation with an infinite number of frames, the
                 browser quickly drops in performance, becoming unresponsive unless refreshed.
             This is a limitation of how the website is implemented, and not a limitation of
                 the graphics library itself.

@@ -36,8 +36,8 @@
             and the functional design of CodeWorld.
 
         \subsection{Required Modules}
-            We needed to consider what a graphics library should to be able to do, from the
-            perspective of a user:
+            The first step in designing the graphics library was to consider what it needed
+            to be able to do, from the perspective of a user:
             \begin{itemize}
                 \item Represent a two-dimensional space to draw on, i.e. the canvas.
                 \item Represent graphical primitives that can be drawn in that space, i.e.
@@ -82,86 +82,85 @@ render :: Canvas -> IO ()\end{lstlisting}
                 modules.
 
     \section{The \texttt{Color}
-        Module} The \texttt{Color} module is the simplest, as it just provides a way to
-            represent colours.
+        Module}
 
-        \subsection{Common Digital Colour Representations}
-            There are several ways to represent colours digitally, each with their own
+            \subsection{Common Digital Colour Representations}
+                There are several ways to represent colours digitally, each with their own
                 advantages and disadvantages.
-            Some common representations are hexadecimal, RGB, HSL and HSV.
+        Some common representations are hexadecimal, RGB, HSL and HSV.
 
-            \subsubsection{RGB and Hexadecimal}
-                The hexadecimal and RGB (red, green, blue) representations are two ways of
-                    representing the same thing, with the former being more concise, and the latter
-                    more readable.
-                They both represent colours as a combination of red, green and blue, with each
-                    component being an integer between 0 and 255.
-                This is naturally suited to digital displays, which use red, green and blue
-                    light to create colours.
+        \subsubsection{RGB and Hexadecimal}
+            The hexadecimal and RGB (red, green, blue) representations are two ways of
+                representing the same thing, with the former being more concise, and the latter
+                more readable.
+            They both represent colours as a combination of red, green and blue, with each
+                component being an integer between 0 and 255.
+            This is naturally suited to digital displays, which use red, green and blue
+                light to create colours.
 
-                RGB uses a tuple of three base ten integers to represent the red, green and
-                    blue components, respectively.
-                This is commonly written as a comma-separated list of integers, enclosed in
-                    parentheses, prefixed with \texttt{RGB}, e.g. \texttt{RGB(255, 0, 0)} for red.
+            RGB uses a tuple of three base ten integers to represent the red, green and
+                blue components, respectively.
+            This is commonly written as a comma-separated list of integers, enclosed in
+                parentheses, prefixed with \texttt{RGB}, e.g. \texttt{RGB(255, 0, 0)} for red.
 
-                Hexadecimal colours combine the red, green and blue components into a single
-                    base sixteen number.
-                This is written as a string, starting with a hash symbol, followed by three
-                    pairs of hexadecimal digits, representing the red, green and blue components,
-                    e.g. \texttt{"\#FF0000"} for red.
+            Hexadecimal colours combine the red, green and blue components into a single
+                base sixteen number.
+            This is written as a string, starting with a hash symbol, followed by three
+                pairs of hexadecimal digits, representing the red, green and blue components,
+                e.g. \texttt{"\#FF0000"} for red.
 
-                These representations can be visualised as a cube, with the x, y and z axes
-                    representing the red, green and blue components, (see Figure~\ref{fig:rgb}).
+            These representations can be visualised as a cube, with the x, y and z axes
+                representing the red, green and blue components, (see Figure~\ref{fig:rgb}).
 
-                \begin{figure}[H]
-                    \centering
-                    \includegraphics[width=0.35\linewidth]{rgb.png}
-                        \caption{The RGB colour space.
-                            Image taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
-                                    HSL and HSV}.
-                        }
-                        \label{fig:rgb}
-                \end{figure}
+            Both RGB and hexadecimal colours can be extended to support an alpha channel,
+                allowing for transparency.
+            RGB becomes RGBA, with the alpha channel represented as a floating point number
+                between 0.0 and 1.0, where 0.0 is transparent, and 1.0 is opaque.
+            The alpha channel in hexadecimal colours is represented as another pair of
+                hexadecimal digits, with 00 being transparent, and FF being opaque.
 
-                Both RGB and hexadecimal colours can be extended to support an alpha channel,
-                    allowing for transparency.
-                RGB becomes RGBA, with the alpha channel is represented as a floating point
-                    number between 0.0 and 1.0, with 0.0 being transparent, and 1.0 being opaque.
-                The alpha channel in hexadecimal colours is represented as another pair of
-                    hexadecimal digits, with 00 being transparent, and FF being opaque.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.35\linewidth]{rgb.png}
+                    \caption{The RGB colour space.
+                        Image taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
+                                HSL and HSV}.
+                    }
+                    \label{fig:rgb}
+            \end{figure}
 
-            \subsubsection{HSL and HSV}
-                HSL and HSV are almost identical, with HSL representing the colour as a hue,
-                    saturation and lightness, and HSV (also known as HSB) representing the colour
-                    as a hue, saturation and value (or brightness).
-                These representations are visualised as a cylinder, with the hue, saturation
-                    and lightness/value components representing the angle, radius and height,
-                    respectively (see Figure~\ref{fig:hsl}).
+        \subsubsection{HSL and HSV}
+            HSL and HSV are almost identical, with HSL representing the colour as a hue,
+                saturation and lightness, and HSV (also known as HSB) representing the colour
+                as a hue, saturation and value (or brightness).
+            These representations are visualised as a cylinder, with the hue, saturation
+                and lightness/value components representing the angle, radius and height,
+                respectively (see Figure~\ref{fig:hsl}).
 
-                The hue is an angle between 0 and 360 degrees, with 0 and 360 representing red,
-                    120 representing green, 240 representing blue.
-                The saturation is a percentage between 0\% and 100\%, with 0\% being grey, and
-                    100\% representing a fully saturated colour.
-                The lightness/value component is also a percentage between 0\% and 100\%.
-                For HSL, 0\% represents black, 100\% represents white, and 50\% represents the
-                    colour itself.
-                For HSV, 0\% represents black, 100\% represents the colour itself, and 50\%
-                    represents white.
+            The hue is an angle between 0 and 360 degrees, with 0 and 360 representing red,
+                120 representing green, 240 representing blue.
+            The saturation is a percentage between 0\% and 100\%, with 0\% being grey, and
+                100\% representing a fully saturated colour.
+            The lightness/value component is also a percentage between 0\% and 100\%.
+            For HSL, 0\% represents black, 100\% represents white, and 50\% represents the
+                colour itself.
+            For HSV, 0\% represents black, 100\% represents the colour itself, and 50\%
+                represents white.
 
-                \begin{figure}[H]
-                    \centering
-                    \includegraphics[width=0.35\linewidth]{hsl.png}
-                    \includegraphics[width=0.35\linewidth]{hsv.png}
-                        \caption{The HSL (left) and HSV (right) colour spaces.
-                            Images taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
-                                    HSL and HSV}.
-                        }
-                        \label{fig:hsl}
-                \end{figure}
+            As with RGB and hexadecimal, HSL and HSV can also be extended to support an
+                alpha channel, becoming HSLA and HSVA, with the alpha channel being the same as
+                in RGBA.
 
-                As with RGB and hexadecimal, HSL and HSV can also be extended to support an
-                    alpha channel, becoming HSLA and HSVA, with the alpha channel being the same as
-                    in RGBA.
+            \begin{figure}[H]
+                \centering
+                \includegraphics[width=0.35\linewidth]{hsl.png}
+                \includegraphics[width=0.35\linewidth]{hsv.png}
+                    \caption{The HSL (left) and HSV (right) colour spaces.
+                        Images taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
+                                HSL and HSV}.
+                    }
+                    \label{fig:hsl}
+            \end{figure}
 
         \subsection{The \texttt{Color}
             Type} For the purposes of this library, it made sense to consider what other
@@ -176,7 +175,7 @@ render :: Canvas -> IO ()\end{lstlisting}
 
             The \texttt{Color} type has 153 constructors.
             Named colours comprise 148 of these constructors, with the remaining five
-                constructors representing the other colour representations supported by CSS.
+                constructors representing the other supported colour representations.
 
             \begin{lstlisting}[language={Haskell}, label={lst:color}, caption={The \texttt{Color} 
                 type definition.
@@ -193,8 +192,8 @@ data Color
     \section{The \texttt{Maths}
         Module} The majority of the mathematical functions a user would need are
             provided by Haskell's standard library.
-        However, there are a few types and functions that are not provided by the
-            standard library, but are useful for a graphics library.
+        However, there are a few types and functions that are not provided, but are
+            useful for a graphics library.
 
         \subsection{The \texttt{Length}
             Type} The first of these is the \texttt{Length} type, which is used to
@@ -207,13 +206,12 @@ data Color
 type Length = Float\end{lstlisting}
 
         \subsection{Angles}
-            There are several units for measuring angles, including degrees, radians,
-                gradians and turns.
-            The two most common units are degrees and radians.
-            Degrees arbitrarily divide a circle into 360 parts, making it easily divisible
-                by many numbers.
-            Radians divide it into $2\pi$ parts, such that the angle subtended at the
-                centre of a circle by an arc equal in length to the radius is one radian.
+            There are several units for measuring angles.
+            The two most common are degrees and radians.
+            Degrees divide a circle into 360 parts.
+            This makes it easily divisible by many numbers, but is otherwise arbitrary.
+            Radians divide it into $2\pi$ parts, such that one radian is the angle
+                subtended at the centre of a circle by an arc equal in length to the radius.
             It made sense to provide users with the ability to work with both of these, and
                 functions for converting between them.
 
@@ -231,8 +229,7 @@ degrees :: Radians -> Degrees\end{lstlisting}
         \subsection{The \texttt{Vector}
             Type} Vectors are a fundamental part of any graphics library, as they can
                 represent points, directions, velocities, forces, etc. As this library works
-                with just two dimensions, our vectors only need to have two components, x and
-                y.
+                with just two dimensions, our vectors only need two components, x and y.
             Both P5.js and CodeWorld provide a \texttt{Vector} type, with the latter also
                 providing a \texttt{Point} type, which is identical to a \texttt{Vector}.
             For simplicity, we use a single \texttt{Vector} type to represent points,
@@ -252,18 +249,18 @@ data Vector = Vector Float Float\end{lstlisting}
             \subsubsection{Vector Operations}
                 Alongside the \texttt{Vector} type, it is useful to provide a simple set of
                     functions for working with vectors.
-                These functions include addition, subtraction, scalar multiplication, scalar
-                    division, dot product, magnitude, argument and normalisation.
-                For the first four functions, we could have made \texttt{Vector} an instance of
-                    the \texttt{Num} type class, but this would have required us to define all the
-                    functions in \texttt{Num}, which is unnecessary, as we only need a subset of
-                    them.
+                These include addition, subtraction, scalar multiplication, scalar division,
+                    dot product, magnitude, argument and normalisation.
+                For the first four functions, the \texttt{Vector} type could have been made an
+                    instance of the \texttt{Num} type class.
+                This would have required us to define all the functions in \texttt{Num}, which
+                    is unnecessary, as we only need a subset of them.
                 Moreover, there is no defined division or multiplication for vectors, so it
                     would be misleading to make \texttt{Vector} an instance of \texttt{Num}.
                 We can instead define the operators \verb|^+^|, \verb|^-^|, \verb|^*^| and
                     \verb|^/^|.
                 These names reflect the standard \verb|+|, \verb|-|, \verb|*| and \verb|/|
-                    operators, but with wrapped by carets (\verb|^|) to indicate that they are for
+                    operators, but wrapped by carets (\verb|^|) to indicate that they are for
                     vectors, based on the standard mathematical notation for vectors, which uses a
                     caret above the vector symbol.
 
@@ -295,9 +292,9 @@ norm :: Vector -> Vector
 dot :: Vector -> Vector -> Float\end{lstlisting}
 
         \subsection{Random Numbers}
-            Finally, a set of functions for generating random numbers, can be useful for
+            Finally, a set of functions for generating random numbers can be useful for
                 creating more interesting animations, allowing for a level of unpredictability.
-            As users are not to be able to use Haskell's \texttt{System} module with the
+            As users are not able to access Haskell's \texttt{System} module with the
                 online editor, they cannot use the \texttt{System.Random} functions for
                 generating random numbers.
             Instead, a simple pseudo-random number generator was implemented using a linear
@@ -326,8 +323,8 @@ randoms seed = map fst (iterate (lcg . snd) (lcg seed))
                 time from the \texttt{Data.Time.Clock.POSIX} module's \texttt{getPOSIXTime}
                 function.
             Although the \texttt{getPOSIXTime} function does not come from Haskell's
-                \texttt{Prelude} module, it is still safe to use, as it does not have any side
-                effects, and we are not exposing the \texttt{System} module to the user.
+                \texttt{Prelude} module, it is still safe to use, as it has no side effects,
+                and the \texttt{System} module is not exposed to the user.
 
             \begin{lstlisting}[language={Haskell}, label={lst:seed}, caption={The \texttt{seed} 
                 function.}]
@@ -337,13 +334,13 @@ seed = do
   return (floor (time * 1000000))\end{lstlisting}
 
             The \texttt{seed} function returns an \texttt{IO Int}, as it requires the
-                current time to generate the seed, which is not known until runtime, so the
-                function must be wrapped in the \texttt{IO} monad.
+                current time to generate the seed, which is not known until runtime.
+            The IO monad manages side effects in Haskell in a purely functional manner.
 
     \section{The \texttt{Shape}
         Module} The \texttt{Shape} module is the most complex, and most important.
-        It is responsible for creating and modifying graphical primitives that can be
-            drawn on the canvas.
+        It is responsible for creating and modifying shapes that can be drawn on the
+            canvas.
         The module is split into two parts: graphical primitives and transformations.
 
         \subsection{Graphical Primitives}
@@ -383,7 +380,7 @@ seed = do
                     of type \texttt{ShapeOptions} to represent the position (\texttt{Vector}),
                     angle (\texttt{Radians}), fill colour (\texttt{Color}), stroke colour
                     (\texttt{Color}) and stroke weight (\texttt{Float}).
-                The remaining parameters for each constructor are as follows:
+                The remaining constructors and their parameters are as follows:
                 \begin{itemize}
                     \item \texttt{Empty}, representing the empty shape.
                           This has no type parameters, and drawing it has no effect.
@@ -464,7 +461,7 @@ data Shape
                     them as needed.
                 For every shape, the default options are as follows:
                 \begin{itemize}
-                    \item The position is the origin, i.e. \texttt{Vector 0 0}.
+                    \item The position is the canvas origin, i.e. \texttt{Vector 0 0}.
                     \item The angle is 0 radians.
                     \item The fill colour is \texttt{Transparent}.
                     \item The stroke colour is \texttt{Black}.
@@ -494,8 +491,8 @@ pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
                 The \texttt{regular} function is used to create regular polygons, and takes two
                     arguments: the number of sides, and the radius of the circumcircle.
                 The \texttt{bezier2} and \texttt{bezier3} functions are used to create
-                    quadratic and cubic Bézier curves, respectively, and take two and three control
-                    points, respectively.
+                    quadratic and cubic Bézier curves, and take two and three control points,
+                    respectively.
                 They use the \texttt{Curve} constructor, but with a different number of control
                     points.
                 The \texttt{arc}, \texttt{segment} and \texttt{pie} functions all use the
@@ -622,7 +619,7 @@ rect 100 100 >>> scale 2
     \section{The \texttt{Canvas}
         Module} This is responsible for creating and modifying the canvas.
         The \texttt{Canvas} type has five type parameters:
-        \begin{enumerate}
+        \begin{itemize}
             \item Two \texttt{Length}s to represent the width and height.
             \item An \texttt{Int} to represent the frame rate at which to render the animation.
             \item A \texttt{Color} to represent the background colour to apply to each frame.
@@ -631,15 +628,20 @@ rect 100 100 >>> scale 2
                   However, as most animations are likely to use the same background colour for
                       each frame, this provides a more elegant solution.
             \item A \texttt{[Shape]} to represent the frames of the animation.
-        \end{enumerate}
+        \end{itemize}
 
         \begin{lstlisting}[language={Haskell}, label={lst:canvas}, caption={The \texttt{Canvas} type 
             definition.}]
-data Canvas = Canvas { ... }\end{lstlisting}
+data Canvas = Canvas
+    { _width :: Length
+    , _height :: Length
+    , _fps :: Int
+    , _backgroundColor :: Color
+    , _frames :: [Shape]
+    }\end{lstlisting}
 
         Once the \texttt{Canvas} type was defined, we needed an interface for users to
-            interact with it.
-        We need a function to create a canvas.
+            interact with it, starting with a function to create a canvas.
         One option was to take all the canvas parameters as arguments.
         However, this would require the user to write out each parameter in every
             program they write, even if these values are not important to them.
@@ -663,7 +665,7 @@ background :: Color -> Canvas -> Canvas\end{lstlisting}
         This was handled by two operators, \texttt{(<<<)}, which adds a single
             \texttt{Shape}, and \texttt{(<<<:)}, which appends a list of \texttt{Shape}s.
         The \texttt{(<<<:)} operator was not strictly necessary, as users could instead
-            use \texttt{foldl (<<<) canvas shapes}, but it provides a more elegant
+            use \texttt{foldl (<<<) canvas shapes}, but it provided a more elegant
             solution.
         Using \texttt{foldl} with \texttt{(<<<)} would not allow the user to take
             advantage of Haskell's lazy evaluation, as the list of shapes would be fully
@@ -691,7 +693,7 @@ background :: Color -> Canvas -> Canvas\end{lstlisting}
             then translating it back by half the width and height of the shape.
         These shapes also needed to be translated to account for their rotation.
 
-        \begin{lstlisting}[language={Haskell}, label={lst:centre}, caption={The \texttt{centre} 
+        \begin{lstlisting}[language={Haskell}, label={lst:centre}, caption={The \texttt{center} 
             function.}]
 center :: Canvas -> Shape -> Shape\end{lstlisting}
 
