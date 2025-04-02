@@ -110,7 +110,8 @@ render :: Canvas -> IO ()\end{lstlisting}
                 e.g. \texttt{"\#FF0000"} for red.
 
             These representations can be visualised as a cube, with the x, y and z axes
-                representing the red, green and blue components, (see Figure~\ref{fig:rgb}).
+                representing the red, green and blue components, (see
+                Figure~\ref{fig:colourSpaces}).
 
             Both RGB and hexadecimal colours can be extended to support an alpha channel,
                 allowing for transparency.
@@ -119,26 +120,18 @@ render :: Canvas -> IO ()\end{lstlisting}
             The alpha channel in hexadecimal colours is represented as another pair of
                 hexadecimal digits, with 00 being transparent, and FF being opaque.
 
-            \begin{figure}[H]
-                \centering
-                \includegraphics[width=0.35\linewidth]{rgb.png}
-                    \caption{The RGB colour space.
-                        Image taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
-                                HSL and HSV}.
-                    }
-                    \label{fig:rgb}
-            \end{figure}
-
         \subsubsection{HSL and HSV}
-            HSL and HSV are almost identical, with HSL representing the colour as a hue,
-                saturation and lightness, and HSV (also known as HSB) representing the colour
-                as a hue, saturation and value (or brightness).
+            HSL and HSV (also known as HSB) are almost identical, both having hue and
+                saturation components.
+            They differ in their final component.
+            HSL use lightness, while HSV uses brightness (or value).
             These representations are visualised as a cylinder, with the hue, saturation
                 and lightness/value components representing the angle, radius and height,
-                respectively (see Figure~\ref{fig:hsl}).
+                respectively (see Figure~\ref{fig:colourSpaces}).
 
-            The hue is an angle between 0 and 360 degrees, with 0 and 360 representing red,
-                120 representing green, 240 representing blue.
+            The hue is an angle between 0\textdegree{} and 360\textdegree{}, with
+                0\textdegree{} and 360\textdegree{} representing red, 120\textdegree{}
+                representing green, 240\textdegree{} representing blue.
             The saturation is a percentage between 0\% and 100\%, with 0\% being grey, and
                 100\% representing a fully saturated colour.
             The lightness/value component is also a percentage between 0\% and 100\%.
@@ -153,13 +146,14 @@ render :: Canvas -> IO ()\end{lstlisting}
 
             \begin{figure}[H]
                 \centering
-                \includegraphics[width=0.35\linewidth]{hsl.png}
-                \includegraphics[width=0.35\linewidth]{hsv.png}
-                    \caption{The HSL (left) and HSV (right) colour spaces.
+                \includegraphics[width=0.3\linewidth]{rgb.png}
+                \includegraphics[width=0.3\linewidth]{hsl.png}
+                \includegraphics[width=0.3\linewidth]{hsv.png}
+                    \caption{The RGB (left), HSL (centre) and HSV (right) colour spaces.
                         Images taken from \href{https://en.wikipedia.org/wiki/HSL_and_HSV}{Wikipedia:
                                 HSL and HSV}.
                     }
-                    \label{fig:hsl}
+                    \label{fig:colourSpaces}
             \end{figure}
 
         \subsection{The \texttt{Color}
@@ -185,7 +179,7 @@ data Color
     = RGB Int Int Int -- Red, Green, Blue (0-255)
     | RGBA Int Int Int Float -- RGB + Alpha (0.0-1.0)
     | Hex String -- Hexadecimal, # optional, case insensitive
-    | HSL Int Int Int -- Hue (0-360), Saturation (0-100), Lightness (0-100)
+    | HSL Int Int Int -- Hue (0-360), Saturation + Lightness (0-100)
     | HSLA Int Int Int Float -- HSL + Alpha (0.0-1.0)
     | ... -- Type constructors for named colours omitted\end{lstlisting}
 
@@ -266,14 +260,10 @@ data Vector = Vector Float Float\end{lstlisting}
 
                 \begin{lstlisting}[language={Haskell}, label={lst:vectorOps}, caption={The vector 
                     operators.}]
--- Vector addition
-(^+^) :: Vector -> Vector -> Vector
--- Vector subtraction
-(^-^) :: Vector -> Vector -> Vector
--- Scalar multiplication
-(^*^) :: Vector -> Float -> Vector
--- Scalar division
-(^/^) :: Vector -> Float -> Vector\end{lstlisting}
+(^+^) :: Vector -> Vector -> Vector -- Vector addition
+(^-^) :: Vector -> Vector -> Vector -- Vector subtraction
+(^*^) :: Vector -> Float -> Vector  -- Scalar multiplication
+(^/^) :: Vector -> Float -> Vector  -- Scalar division\end{lstlisting}
 
                 The remaining functions are equally simple to define, and make use of several
                     functions from the \texttt{Prelude} module.
@@ -282,14 +272,10 @@ data Vector = Vector Float Float\end{lstlisting}
 
                 \begin{lstlisting}[language={Haskell}, label={lst:vectorFns}, caption={The remaining 
                     vector functions.}]
--- Calculates the magnitude (length) of a vector
-mag :: Vector -> Length
--- Calculates the argument (polar angle) of a vector
-arg :: Vector -> Radians
--- Normalises a vector, i.e. returns a vector with the same direction, but a magnitude of 1
-norm :: Vector -> Vector
--- Calculates the dot product of two vectors
-dot :: Vector -> Vector -> Float\end{lstlisting}
+mag :: Vector -> Length  -- The magnitude (length) of a vector
+arg :: Vector -> Radians -- The argument (polar angle) of a vector
+norm :: Vector -> Vector -- A vector with same arg, but mag = 1
+dot :: Vector -> Vector -> Float -- The dot product of two vectors\end{lstlisting}
 
         \subsection{Random Numbers}
             Finally, a set of functions for generating random numbers can be useful for
@@ -311,9 +297,9 @@ randoms :: Int -> [Double]
 randoms seed = map fst (iterate (lcg . snd) (lcg seed))
   where
     lcg :: Int -> (Double, Int)
-    lcg seed = (fromIntegral newSeed / fromIntegral (2 ^ 32), newSeed)
+    lcg s = (fromIntegral s' / fromIntegral (2 ^ 32), s')
       where
-        newSeed = (1664525 * seed + 1013904223) `mod` 2 ^ 32\end{lstlisting}
+        s' = (1664525 * s + 1013904223) `mod` 2 ^ 32\end{lstlisting}
 
             The values of the multiplier ($a=1664525$), the increment ($c=1013904223$) and
                 the modulus ($m=2^{32}$) are taken from Equation~7.1.6, An Even Quicker
@@ -540,16 +526,11 @@ pie :: Length -> Length -> Radians -> Radians -> Shape\end{lstlisting}
 
                 \begin{lstlisting}[language={Haskell}, label={lst:colour}, caption={The colour 
                     transformation functions.}]
--- Sets the fill colour of shape
-fill :: Color -> Shape -> Shape
--- Sets the stroke colour of shape
-stroke :: Color -> Shape -> Shape
--- Sets the stroke weight of shape
-strokeWeight :: Float -> Shape -> Shape
--- Shorthand for fill Transparent
-noFill :: Shape -> Shape
--- Shorthand for stroke Transparent
-noStroke :: Shape -> Shape\end{lstlisting}
+fill :: Color -> Shape -> Shape -- Set shape's fill colour
+stroke :: Color -> Shape -> Shape -- Set shape's stroke colour
+strokeWeight :: Float -> Shape -> Shape -- Set shape's stroke weight
+noFill :: Shape -> Shape -- fill Transparent
+noStroke :: Shape -> Shape -- stroke Transparent\end{lstlisting}
 
             \subsubsection{Geometric Transformations}
                 Several geometric transformations are commonly used in graphics libraries,
@@ -568,53 +549,39 @@ noStroke :: Shape -> Shape\end{lstlisting}
 
                 \begin{lstlisting}[language={Haskell}, label={lst:geometric}, caption={The geometric 
                     transformation functions.}]
--- Moves a shape to a new position
-translate :: Vector -> Shape -> Shape
--- Rotates a shape by a given angle
-rotate :: Radians -> Shape -> Shape
--- Scales a shape by a given factor
-scale :: Float -> Shape -> Shape
--- Shorthand for translate (Vector x 0)
-translateX :: Length -> Shape -> Shape
--- Shorthand for translate (Vector 0 y)
-translateY :: Length -> Shape -> Shape\end{lstlisting}
+translate :: Vector -> Shape -> Shape -- Move shape by given vector
+rotate :: Radians -> Shape -> Shape -- Rotate shape by given angle
+scale :: Float -> Shape -> Shape -- Scale shape by given factor
+translateX :: Length -> Shape -> Shape -- translate (Vector x 0)
+translateY :: Length -> Shape -> Shape -- translate (Vector 0 y)\end{lstlisting}
 
             \subsubsection{Applying Transformations}
                 Transformations can be applied to a shape by directly calling the appropriate
                     function.
 
                 \begin{lstlisting}[language={Haskell}]
-translate (Vector 10 10) (rotate (radians 45) (scale 2 (rect 100 100)))\end{lstlisting}
+translate (Vector 5 5) (rotate pi (scale 2 (rect 10 50)))\end{lstlisting}
 
-                This can be cumbersome, particularly when applying multiple transformations to
-                    a shape.
-                Another approach would be to compose the functions, then apply the resulting
-                    function to the shape.
+                This is hard to read when applying multiple transformations to a shape.
+                Another approach is to compose the functions, applying the resulting function
+                    to the shape.
 
                 \begin{lstlisting}[language={Haskell}]
-transformation = translate (Vector 10 10)
-               . rotate (radians 45)
-               . scale 2
-transformation(rect 100 100)\end{lstlisting}
+(translate (Vector 5 5) . rotate pi . scale 2) $ rect 10 50\end{lstlisting}
 
-                This makes that specific combination of transformations reusable, and more
-                    readable.
-                However, as the order of the transformations is reversed, this could still be
-                    confusing for beginners.
-                To solve this, an operator was implemented specifically for applying
-                    transformations to shapes.
+                This is more readable, but as the order of the transformations is reversed, it
+                    could still be confusing for beginners.
+                To solve this, an operator was implemented to apply transformations to shapes.
 
                 \begin{lstlisting}[language={Haskell}, label={lst:transform}, caption={The 
                     transformation application (\texttt{>>>}) operator.}]
 (>>>) :: Shape -> (Shape -> Shape) -> Shape\end{lstlisting}
 
-                Now, the user can apply transformations to shapes in a readable and intuitive
+                Now the user can apply transformations to shapes in a readable and intuitive
                     fashion.
 
                 \begin{lstlisting}[language={Haskell}]
-rect 100 100 >>> scale 2
-             >>> rotate (radians 45)
-             >>> translate (Vector 10 10)\end{lstlisting}
+rect 10 50 >>> scale 2 >>> rotate pi >>> translate (Vector 5 5)\end{lstlisting}
 
     \section{The \texttt{Canvas}
         Module} This is responsible for creating and modifying the canvas.
@@ -654,12 +621,6 @@ data Canvas = Canvas
         To modify the frame rate and background colour, the \texttt{fps} and
             \texttt{background} functions were provided.
 
-        \begin{lstlisting}[language={Haskell}, label={lst:fps}, caption={The \texttt{createCanvas}, \texttt{fps} and 
-            \texttt{backgrounds} functions.}]
-createCanvas :: Length -> Length -> Canvas
-fps :: Int -> Canvas -> Canvas
-background :: Color -> Canvas -> Canvas\end{lstlisting}
-
         To allow the user to draw shapes on the canvas, we needed a way to append
             shapes to the list of frames.
         This was handled by two operators, \texttt{(<<<)}, which adds a single
@@ -671,8 +632,11 @@ background :: Color -> Canvas -> Canvas\end{lstlisting}
             advantage of Haskell's lazy evaluation, as the list of shapes would be fully
             evaluated due to the tail-recursive nature of \texttt{foldl}.
 
-        \begin{lstlisting}[language={Haskell}, label={lst:<<<}, caption={The operators to append a 
-            frame to the canvas.}]
+        \begin{lstlisting}[language={Haskell}, label={lst:fps}, caption={The \texttt{createCanvas}, \texttt{fps} and 
+            \texttt{background} functions and the \texttt{(<<<)} and \texttt{(<<<:)} operators.}]
+createCanvas :: Length -> Length -> Canvas
+fps :: Int -> Canvas -> Canvas
+background :: Color -> Canvas -> Canvas
 (<<<) :: Canvas -> Shape -> Canvas
 (<<<:) :: Canvas -> [Shape] -> Canvas\end{lstlisting}
 
