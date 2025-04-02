@@ -123,7 +123,8 @@
 
         \paragraph*{React}
             React is a JavaScript library for building user interfaces.
-            It is maintained by Facebook and is widely used in the industry.
+            It is maintained by Facebook and is the most widely used front-end framework
+                according to the Stack Overflow Developer Survey 2024 \citep{stackOverflow}.
             React allows developers to build reusable components that can be combined to
                 create complex user interfaces.
             Components are written in JSX, a syntax extension for JavaScript to allow
@@ -410,18 +411,15 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{lstlisting}
                     graphics component to be drawn on the canvas at the correct time, based on the
                     frame rate of the animation.
 
-                To summarise, the graphics display has two parts.
-                First, the controller, which receives the output of the user's program from the
-                    server, parses it, and passes the relevant frame to the graphics component at
-                    the correct time, based on the frame rate of the animation.
-                Second, the graphics component, which is responsible for drawing individual
-                    frames on the canvas, when it receives the relevant data from the controller.
-
             \subsubsection{The Toolbar}
-                This is a row of buttons to allow users to control their programs.
-                The name of the program is displayed in the centre of the toolbar, along with
-                    the name of the user who wrote it.
-                To the left are four buttons: new, save, open and share.
+                \begin{figure}[H]
+                    \centering
+                    \includegraphics[width=\linewidth]{images/toolbar.png}
+                        \caption{The toolbar component.}
+                        \label{fig:toolbar}
+                \end{figure}
+
+                On the left are four buttons: new, save, open and share.
                 As the names suggest, these buttons allow users to create a new program,
                     replacing the content of the code editor with some boilerplate code, save their
                     current program, open a saved program, and share their program.
@@ -431,6 +429,8 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{lstlisting}
                     generating and copying a URL which links directly to the program, copying the
                     image output of the program to the clipboard, or downloading the image output
                     of the program.
+                The name of the program is displayed in the centre of the toolbar, along with
+                    the name of the user who wrote it.
                 To the right are three buttons: clear, run and stop.
                 The clear button clears the console and graphics display, the run button runs
                     the user's program, and the stop button stops the program if it is currently
@@ -495,15 +495,6 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{lstlisting}
         These are written in both inline and block code, which are styled accordingly
             to make them clear.
 
-        The ``Color'' section also includes a list of all the named colours available
-            in the graphics library (see Figure~\ref{fig:colours}).
-        Each colour is displayed as its name, highlighted in that colour.
-        Hovering over these displays a tooltip with the hexadecimal, RGB and HSL values
-            of the colour.
-        The list can be sorted either by colour, a combination of hue, then saturation,
-            then lightness, or alphabetically by name, to accommodate users who are
-            colour-blind.
-
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.45\linewidth]{images/colours.png}
@@ -514,6 +505,15 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{lstlisting}
                 }
                 \label{fig:colours}
         \end{figure}
+
+        The ``Color'' section also includes a list of all the named colours available
+            in the graphics library (see Figure~\ref{fig:colours}).
+        Each colour is displayed as its name, highlighted in that colour.
+        Hovering over these displays a tooltip with the hexadecimal, RGB and HSL values
+            of the colour.
+        The list can be sorted either by colour, a combination of hue, then saturation,
+            then lightness, or alphabetically by name, to accommodate users who are
+            colour-blind.
 
     \section{Creating a User Account System}
         User accounts are nothing new to the internet.
@@ -552,13 +552,6 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{lstlisting}
         It is designed to be engaging and informative, showcasing the capabilities of
             the graphics library, and encouraging users to try it out.
 
-        \begin{figure}[H]
-            \centering
-            \includegraphics[width=0.75\linewidth]{images/homepage.png}
-                \caption{The homepage.}
-                \label{fig:homepage}
-        \end{figure}
-
         The top of the homepage features a large banner, indicating the name of the
             website.
         Below is a brief welcome message, encouraging users to try out the graphics
@@ -568,6 +561,13 @@ docker run --rm -m 128m --cpus=0.5 haskell:latest bash -c "..."\end{lstlisting}
         Finally, at the bottom of the page is a help section, directing users to the
             reference page for more information about the graphics library, and to the
             issue tracker if they encounter any problems.
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\linewidth]{images/homepage.png}
+                \caption{The homepage.}
+                \label{fig:homepage}
+        \end{figure}
 
     \section{Quality-of-Life and Legal Requirements}
         There were a few features that were added to the website to make it more
