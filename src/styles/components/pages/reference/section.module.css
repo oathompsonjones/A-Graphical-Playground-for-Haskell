@@ -21,6 +21,7 @@
 .title {
     padding-top: 3em;
     margin-top: -3em;
+    pointer-events: none;
 }
 
 .colored {
