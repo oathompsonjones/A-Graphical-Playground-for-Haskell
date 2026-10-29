@@ -9,7 +9,7 @@ import stroke from "assets/images/docs/stroke.png";
 export function Stroke(): ReactNode {
     return (
         <div>
-            <Image src={stroke} alt="stroke" width={500} height={500} />
+            <Image alt="stroke" height={500} src={stroke} width={500} />
             The <code>stroke :: Color -&gt; Shape -&gt; Shape</code> function sets the stroke color of the shape.
         </div>
     );

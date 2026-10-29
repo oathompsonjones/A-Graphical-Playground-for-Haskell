@@ -9,9 +9,9 @@ import strokeWeight from "assets/images/docs/strokeWeight.png";
 export function StrokeWeight(): ReactNode {
     return (
         <div>
-            <Image src={strokeWeight} alt="strokeWeight" width={500} height={500} />
+            <Image alt="strokeWeight" height={500} src={strokeWeight} width={500} />
             The <code>strokeWeight :: Float -&gt; Shape -&gt; Shape</code> function sets the stroke thickness of the
-                shape.
+            shape.
         </div>
     );
 }

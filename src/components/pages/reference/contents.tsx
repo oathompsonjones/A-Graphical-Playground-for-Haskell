@@ -10,7 +10,7 @@ import type { SectionType } from "app/(pages)/reference/page";
  * @param props.docs - The documentation to display.
  * @returns The contents of the reference page.
  */
-export function Contents({ docs }: { docs: SectionType; }): ReactNode {
+export function Contents({ docs }: { readonly docs: SectionType; }): ReactNode {
     return (
         <ul>
             {(Object.entries(docs) as Array<[string, SectionType]>).filter(([title]) => title !== "root")

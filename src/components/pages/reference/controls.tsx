@@ -11,7 +11,7 @@ import type { ReactNode } from "react";
  * @param props.controls - The editor controls to display.
  * @returns The editor controls section of the reference page.
  */
-export function Controls({ controls }: { controls: Array<[ReactNode, ReactNode]>; }): ReactNode {
+export function Controls({ controls }: { readonly controls: Array<[ReactNode, ReactNode]>; }): ReactNode {
     const [metaKey, setMetaKey] = useState(<KeyboardControlKey />);
 
     useEffect(() => {
@@ -23,8 +23,8 @@ export function Controls({ controls }: { controls: Array<[ReactNode, ReactNode]>
         <div>
             <Typography variant="h3">Editor Controls</Typography>
             {controls.map(([icon, text], i) => (
-                <Grid size={12} alignItems="center" container key={i}>
-                    <Grid size={2} component={Typography} variant="h4">{metaKey}{icon}</Grid>
+                <Grid container key={i} size={12} sx={{ alignItems: "center" }}>
+                    <Grid component={Typography} size={2} variant="h4">{metaKey}{icon}</Grid>
                     <Grid size={10}>{text}</Grid>
                 </Grid>
             ))}

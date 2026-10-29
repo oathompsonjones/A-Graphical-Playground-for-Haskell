@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 import { Button, TextField } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import type { ReactNode } from "react";
@@ -10,7 +11,7 @@ import { useState } from "react";
  * @param props.name - The name of the text field.
  * @returns The text field element.
  */
-export function PasswordField({ label, name }: { label: string; name: string; }): ReactNode {
+export function PasswordField({ label, name }: { readonly label: string; readonly name: string; }): ReactNode {
     const [showPassword, setShowPassword] = useState(false);
     const onClick = (): void => setShowPassword((prevShowPassword) => !prevShowPassword);
 
@@ -18,14 +19,16 @@ export function PasswordField({ label, name }: { label: string; name: string; })
         <TextField
             label={label}
             name={name}
-            type={showPassword ? "text" : "password"}
             slotProps={{
                 input: {
-                    endAdornment: <Button onClick={onClick} variant="text" sx={{ color: "inherit" }}>
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </Button>,
+                    endAdornment: (
+                        <Button onClick={onClick} sx={{ color: "inherit" }} variant="text">
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </Button>
+                    ),
                 },
             }}
+            type={showPassword ? "text" : "password"}
         />
     );
 }

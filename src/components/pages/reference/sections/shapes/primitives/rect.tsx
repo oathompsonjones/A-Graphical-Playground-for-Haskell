@@ -9,9 +9,9 @@ import rect from "assets/images/docs/rect.png";
 export function Rect(): ReactNode {
     return (
         <div>
-            <Image src={rect} alt="rect" width={500} height={500} />
+            <Image alt="rect" height={500} src={rect} width={500} />
             The <code>rect :: Length -&gt; Length -&gt; Shape</code> function takes a width and height and returns a
-                rectangle.
+            rectangle.
             <br />
             <br />
             The rectangle's origin is at its top left corner.

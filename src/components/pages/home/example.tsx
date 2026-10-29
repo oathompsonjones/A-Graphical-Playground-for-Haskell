@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/jsx-no-bind */
+
 import { Card, CardActionArea, CardMedia, Typography } from "@mui/material";
 import { useContext, useState } from "react";
 import Image from "next/image";
@@ -19,7 +21,11 @@ import styles from "styles/components/pages/home/examples.module.css";
  * @param props.name - The raw name of the example.
  * @returns The example with an image.
  */
-export function Example({ name, code, image }: { code: string; image: StaticImageData; name: string; }): ReactNode {
+export function Example({ name, code, image }: {
+    readonly code: string;
+    readonly image: StaticImageData;
+    readonly name: string;
+}): ReactNode {
     const { saved } = useContext(SketchContext);
 
     const url = `/editor?code=${code}&title=${encodeURIComponent(name)}&author=examples`;
@@ -35,10 +41,10 @@ export function Example({ name, code, image }: { code: string; image: StaticImag
     return (
         <>
             <UnsavedWarningMenu open={open} setOpen={setOpen} url={url} />
-            <Card className={styles.example!}>
+            <Card className={styles.example}>
                 <CardActionArea LinkComponent={Link} onClick={handleClick}>
                     <CardMedia>
-                        <Image src={image} alt={name} width={1000} height={600} />
+                        <Image alt={name} height={600} src={image} width={1000} />
                     </CardMedia>
                     <Typography component="p">{name}</Typography>
                 </CardActionArea>

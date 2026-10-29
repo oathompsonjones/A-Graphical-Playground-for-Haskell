@@ -14,9 +14,9 @@ import styles from "styles/components/pages/editor/console.module.css";
  * @returns The console element.
  */
 function ConsoleComponent({ content, status, message }: {
-    content?: string;
-    status: "done" | "error" | "running";
-    message: string;
+    readonly content?: string;
+    readonly status: "done" | "error" | "running";
+    readonly message: string;
 }): ReactNode {
     const colourMap = {
         done: "warning",
@@ -31,9 +31,9 @@ function ConsoleComponent({ content, status, message }: {
     } as const;
 
     return (
-        <PlainPaper className={styles.console!}>
-            <Tooltip title={messageMap[status]} placement="left" arrow>
-                <Typography className={styles.indicator!}>
+        <PlainPaper className={styles.console}>
+            <Tooltip arrow placement="left" title={messageMap[status]}>
+                <Typography className={styles.indicator}>
                     <Circle color={colourMap[status]} />
                 </Typography>
             </Tooltip>

@@ -14,10 +14,10 @@ import styles from "styles/components/pages/reference/section.module.css";
  * @returns A section of the reference page.
  */
 export function Section({ title, content, depth, colored }: {
-    title: string;
-    content: SectionType;
-    depth: number;
-    colored: boolean;
+    readonly title: string;
+    readonly content: SectionType;
+    readonly depth: number;
+    readonly colored: boolean;
 }): ReactNode {
     const list = (items: ReactNode[]): Awaited<ReactNode> => <ul>{items.map((item, i) => <li key={i}>{item}</li>)}</ul>;
 
@@ -26,16 +26,16 @@ export function Section({ title, content, depth, colored }: {
             <br />
             {title !== "root" &&
                 <Typography
-                    variant={`h${depth + 3}` as TypographyVariant}
+                    className={styles.title}
                     id={title.toLowerCase().replace(/\s/g, "-")}
-                    className={styles.title!}
-                >{title}<hr /></Typography>
-            }
+                    variant={`h${depth + 3}` as TypographyVariant}
+                >{title}<hr />
+                </Typography>}
             {content instanceof Function
                 ? content(list)
                 : Object.entries(content)
                     .map(([subtitle, subcontent], i) => (
-                        <Section title={subtitle} content={subcontent} depth={depth + 1} colored={colored} key={i} />
+                        <Section colored={colored} content={subcontent} depth={depth + 1} key={i} title={subtitle} />
                     ))}
         </div>
     );

@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/jsx-no-bind */
+
 import { Button, Card, CardContent, IconButton, Tooltip, Typography } from "@mui/material";
 import type { Dispatch, SetStateAction } from "react";
 import { type ReactNode, useContext, useState } from "react";
@@ -19,8 +21,8 @@ import styles from "styles/components/pages/account/sketch.module.css";
  * @returns The sketch element.
  */
 export function Sketch({ sketch, setSketches }: {
-    sketch: SketchSchema;
-    setSketches: Dispatch<SetStateAction<SketchSchema[] | null>>;
+    readonly sketch: SketchSchema;
+    readonly setSketches: Dispatch<SetStateAction<SketchSchema[] | null>>;
 }): ReactNode {
     const { saved } = useContext(SketchContext);
     const [openDelete, setOpenDelete] = useState(false);
@@ -37,31 +39,32 @@ export function Sketch({ sketch, setSketches }: {
     return (
         <>
             <DeleteWarningMenu
-                open={openDelete} setOpen={setOpenDelete}
-                id={sketch._id.toString()} setSketches={setSketches} />
+                id={sketch._id.toString()} open={openDelete}
+                setOpen={setOpenDelete} setSketches={setSketches}
+            />
             <UnsavedWarningMenu open={openUnsaved} setOpen={setOpenUnsaved} url={url} />
             <Card>
-                <CardContent className={styles.sketch!}>
+                <CardContent className={styles.sketch}>
                     <Typography variant="h5">
-                        <Button variant="text" color="secondary" onClick={handleOpenClick}>
+                        <Button color="secondary" onClick={handleOpenClick} variant="text">
                             <Typography variant="h6">
                                 {sketch.name}
                             </Typography>
                         </Button>
                     </Typography>
-                    <Tooltip title="Delete" placement="left" arrow>
+                    <Tooltip arrow placement="left" title="Delete">
                         <IconButton color="error" onClick={() => setOpenDelete(true)} size="small">
                             <Delete />
                         </IconButton>
                     </Tooltip>
                 </CardContent>
                 <CardContent>
-                    <Typography variant="caption" color="textDisabled">
+                    <Typography color="textDisabled" variant="caption">
                         <b>Created At: </b>
                         {new Date(parseInt(sketch.createdAt, 10)).toLocaleString()}
                     </Typography>
                     <br />
-                    <Typography variant="caption" color="textDisabled">
+                    <Typography color="textDisabled" variant="caption">
                         <b>Modified At: </b>
                         {new Date(parseInt(sketch.modifiedAt, 10)).toLocaleString()}
                     </Typography>

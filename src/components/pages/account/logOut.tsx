@@ -9,10 +9,13 @@ import styles from "styles/components/pages/account/logOut.module.css";
  * @param props.pending - Whether the action is pending.
  * @returns The button element wrapped in a form.
  */
-export function LogOut({ action, pending }: { action: (payload: FormData) => void; pending: boolean; }): ReactNode {
+export function LogOut({ action, pending }: {
+    readonly action: (payload: FormData) => void;
+    readonly pending: boolean;
+}): ReactNode {
     return (
-        <FormControl component="form" action={action} className={styles.button!}>
-            <Button type="submit" disabled={pending}>Sign Out</Button>
+        <FormControl action={action} className={styles.button} component="form">
+            <Button disabled={pending} type="submit">Sign Out</Button>
         </FormControl>
     );
 }

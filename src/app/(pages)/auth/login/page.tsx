@@ -29,14 +29,14 @@ export default function LogIn(): ReactNode {
 
     return (
         <div>
-            <Typography variant="h2" textAlign="center">Sign in</Typography>
+            <Typography align="center" variant="h2">Sign in</Typography>
             <br />
-            <Paper className={styles.container!}>
+            <Paper className={styles.container}>
                 {!state.success && state.error !== null && <Alert severity="error">{state.error}</Alert>}
-                <FormControl component="form" action={action} className={styles.form!}>
+                <FormControl action={action} className={styles.form} component="form">
                     <TextField label="Email" name="email" type="email" />
                     <PasswordField label="Password" name="password" />
-                    <Button className={styles.button!} type="submit" disabled={isPending}>Sign in</Button>
+                    <Button className={styles.button} disabled={isPending} type="submit">Sign in</Button>
                     {/* <ButtonGroup>
                         <Button className={styles.button!} color="secondary" startIcon={<Apple />} href="">
                             Sign in with Apple
@@ -51,7 +51,7 @@ export default function LogIn(): ReactNode {
                             Sign in with StackOverflow
                         </Button>
                     </ButtonGroup> */}
-                    <Typography variant="caption" textAlign="center">
+                    <Typography align="center" variant="caption">
                         Don't have an account? <Link href="/auth/register">Register</Link>
                     </Typography>
                     {/* <Typography variant="caption" textAlign="center">

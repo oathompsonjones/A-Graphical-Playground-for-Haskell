@@ -9,9 +9,9 @@ import ellipse from "assets/images/docs/ellipse.png";
 export function Ellipse(): ReactNode {
     return (
         <div>
-            <Image src={ellipse} alt="ellipse" width={500} height={500} />
+            <Image alt="ellipse" height={500} src={ellipse} width={500} />
             The <code>ellipse :: Length -&gt; Length -&gt; Shape</code> function takes a horizontal axis and a
-                vertical axis and returns an ellipse.
+            vertical axis and returns an ellipse.
             <br />
             <br />
             The ellipse's origin is at its center.

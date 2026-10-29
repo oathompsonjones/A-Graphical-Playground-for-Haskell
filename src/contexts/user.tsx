@@ -13,7 +13,7 @@ export const UserContext = createContext<{ user: User | null; setUser: (user: Us
  * @param props.children - The children to render.
  * @returns The wrapped user context provider.
  */
-export function UserContextProvider({ children }: { children: ReactNode; }): ReactNode {
+export function UserContextProvider({ children }: { readonly children: ReactNode; }): ReactNode {
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {

@@ -9,7 +9,7 @@ import scale from "assets/images/docs/scale.png";
 export function Scale(): ReactNode {
     return (
         <div>
-            <Image src={scale} alt="scale" width={500} height={500} />
+            <Image alt="scale" height={500} src={scale} width={500} />
             The <code>scale :: Float -&gt; Shape -&gt; Shape</code> function scales the shape by the given scale factor.
             <br />
             <br />

@@ -8,10 +8,10 @@ export function TransformationsRoot(): ReactNode {
     return (
         <div>
             To modify a shape, you can use any of the functions in this section. They all take some argument, the shape
-                to be transformed, and return the transformed shape.
+            to be transformed, and return the transformed shape.
             <br />
             By default, shapes are drawn at the top left corner of the canvas, with no rotation or scaling, have a
-                stroke color of black, a stroke weight of 1, and no fill color.
+            stroke color of black, a stroke weight of 1, and no fill color.
         </div>
     );
 }

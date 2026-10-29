@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/jsx-no-bind */
+
 import { Typography, useMediaQuery } from "@mui/material";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Buttons } from "components/pages/editor/buttons";
@@ -206,19 +208,21 @@ export default function EditorPage(): ReactNode {
     return (
         <div className={`full-width ${styles.container}`}>
             <ShareMenu open={openShare} setOpen={setOpenShare} />
-            <NewWarningMenu open={openNewWarning} setOpen={setOpenNewWarning} new={reset} save={save} />
+            <NewWarningMenu new={reset} open={openNewWarning} save={save} setOpen={setOpenNewWarning} />
             <OpenWarningMenu
-                open={openOpenWarning} setOpen={setOpenOpenWarning} openFn={() => setOpenOpen(true)} save={save} />
+                open={openOpenWarning} openFn={() => setOpenOpen(true)} save={save} setOpen={setOpenOpenWarning}
+            />
             <OpenMenu open={openOpen} setOpen={setOpenOpen} />
             <SaveMenu open={openSave} setOpen={setOpenSave} />
-            <Buttons new={new_} clear={clear} open={open} save={save} share={share} stop={stop} run={run} />
+            <Buttons clear={clear} new={new_} open={open} run={run} save={save} share={share} stop={stop} />
             <SplitView id="editor-horizontal">
-                <SplitView vertical id="editor-vertical">
-                    <Editor save={save} open={open} new={new_} run={run} />
+                <SplitView id="editor-vertical" vertical>
+                    <Editor new={new_} open={open} run={run} save={save} />
                     <Console
                         content={consoleOutput}
+                        message={codeOutput.at(-1)?.data ?? ""}
                         status={codeOutput.at(-1)?.status ?? "done"}
-                        message={codeOutput.at(-1)?.data ?? ""} />
+                    />
                 </SplitView>
                 <TabView titles={["Canvas", "Reference"]}>
                     <CanvasController content={graphics} interval={interval} />

@@ -1,5 +1,5 @@
-import { MenuItem, Select, Tooltip } from "@mui/material";
-import { useEffect, useState } from "react";
+import { MenuItem, Select, type SelectChangeEvent, Tooltip } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import styles from "styles/components/pages/reference/section.module.css";
 
@@ -213,9 +213,10 @@ const rgbToHsl = (r: number, g: number, b: number): [number, number, number] => 
  * @param props.list - A function to use to create a list element.
  * @returns A documentation section.
  */
-export function ColorsRoot({ list }: { list: (elems: ReactNode[]) => ReactNode; }): ReactNode {
+export function ColorsRoot({ list }: { readonly list: (elems: ReactNode[]) => ReactNode; }): ReactNode {
     const [sortByColour, setSortByColour] = useState(true);
     const [doc, setDoc] = useState<Document | null>(null);
+    const sortBy = useCallback((e: SelectChangeEvent<number>) => setSortByColour(Boolean(e.target.value)), []);
 
     useEffect(() => {
         if (typeof window.document !== "undefined")
@@ -228,20 +229,27 @@ export function ColorsRoot({ list }: { list: (elems: ReactNode[]) => ReactNode; 
             {list([
                 <><code>RGB Float Float Float</code> — Represents a color with red, green, and blue values.</>,
                 <><code>RGBA Float Float Float Float</code> — Represents a color with red, green, blue, and alpha
-                    values.</>,
+                    values.
+                </>,
                 <><code>Hex String</code> — Represents a color using a hexadecimal string. You can prefix the string
                     with a hash (e.g. <code>"#ff0000"</code>) or you can leave it out (e.g. <code>"ff0000"</code>).
                 </>,
                 <><code>HSL Float Float Float</code> — Represents a color with hue, saturation,
-                    and lightness values.</>,
+                    and lightness values.
+                </>,
                 <><code>HSLA Float Float Float Float</code> — Represents a color with hue, saturation, lightness,
-                    and alpha values.</>,
+                    and alpha values.
+                </>,
                 <><code>Transparent</code> — Represents a transparent color.</>,
             ])}
 
-            You can also use the following CSS named colors (sort by <Select
-                value={Number(sortByColour)} variant="standard" size="small"
-                onChange={(e) => setSortByColour(Boolean(e.target.value))}>
+            You can also use the following CSS named colors (sort by
+            <Select
+                onChange={sortBy}
+                size="small"
+                value={Number(sortByColour)}
+                variant="standard"
+            >
                 <MenuItem value={0}>Alphabetical</MenuItem>
                 <MenuItem value={1}>Colour</MenuItem>
             </Select>):
@@ -259,8 +267,9 @@ export function ColorsRoot({ list }: { list: (elems: ReactNode[]) => ReactNode; 
                     : a.name.localeCompare(b.name)))
                 .map(({ name, rgb, hsl, hex, contrast }, i) => (
                     <Tooltip
-                        key={i} placement="top"
-                        componentsProps={{
+                        key={i}
+                        placement="top"
+                        slotProps={{
                             popper: { className: styles.tooltip },
                             tooltip: {
                                 sx: {
@@ -271,15 +280,18 @@ export function ColorsRoot({ list }: { list: (elems: ReactNode[]) => ReactNode; 
                                 },
                             },
                         }}
-                        title={<>
-                            <b>{name}</b>
-                            <br />
-                            rgb({rgb.join(", ")})
-                            <br />
-                            hsl({hsl[0]}, {hsl[1]}%, {hsl[2]}%)
-                            <br />
-                            {hex.toUpperCase()}
-                        </>}>
+                        title={(
+                            <>
+                                <b>{name}</b>
+                                <br />
+                                rgb({rgb.join(", ")})
+                                <br />
+                                hsl({hsl[0]}, {hsl[1]}%, {hsl[2]}%)
+                                <br />
+                                {hex.toUpperCase()}
+                            </>
+                        )}
+                    >
                         <span style={{ lineHeight: "2em" }}>
                             <code style={{ background: name, color: contrast }}>{name}</code>
                             {" "}

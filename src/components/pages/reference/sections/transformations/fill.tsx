@@ -9,7 +9,7 @@ import fill from "assets/images/docs/fill.png";
 export function Fill(): ReactNode {
     return (
         <div>
-            <Image src={fill} alt="fill" width={500} height={500} />
+            <Image alt="fill" height={500} src={fill} width={500} />
             The <code>fill :: Color -&gt; Shape -&gt; Shape</code> function sets the fill color of the shape.
         </div>
     );

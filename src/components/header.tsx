@@ -1,6 +1,6 @@
 "use client";
 
-import { AppBar, Avatar, MenuItem, Toolbar, Tooltip, Typography, useMediaQuery } from "@mui/material";
+import { AppBar, Avatar, Button, Toolbar, Typography, useMediaQuery } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,39 +36,45 @@ export function Header(): ReactNode {
             status = "unsaved";
     }
 
+    const statusMarker = mounted && status !== "none"
+        ? (
+            <Typography
+                className={styles[status]}
+                title={`${title} — ${status === "open" ? "Saved" : "Unsaved"}`}
+                variant="h4"
+            >
+                •
+            </Typography>
+        )
+        : null;
+
     return (
-        <AppBar component="header" className={styles.header!}>
-            <Toolbar component="nav" className={`${styles.nav} ${edge ? "edge" : "full-width"}`}>
+        <AppBar className={styles.header} component="header">
+            <Toolbar className={`${styles.nav} ${edge ? "edge" : "full-width"}`} component="nav">
                 <div className={styles.title}>
-                    <Image src={logo} alt="Haskell Logo" />
-                    <Typography variant="h5" component="h5">A Graphical Playground for Haskell</Typography>
+                    <Image alt="Haskell Logo" src={logo} />
+                    <Typography component="h5" variant="h5">A Graphical Playground for Haskell</Typography>
                 </div>
-                <MenuItem className={styles.menuItem!} component={Link} href="/">
+                <Button className={styles.menuItem} color="inherit" component={Link} href="/" variant="text">
                     Home
-                </MenuItem>
-                <MenuItem className={styles.menuItem!} component={Link} href="/reference">
+                </Button>
+                <Button className={styles.menuItem} color="inherit" component={Link} href="/reference" variant="text">
                     Reference
-                </MenuItem>
-                <MenuItem className={styles.menuItem!} component={Link} href="/editor">
+                </Button>
+                <Button className={styles.menuItem} color="inherit" component={Link} href="/editor" variant="text">
                     Editor
-                    {mounted && status !== "none" &&
-                        <Tooltip
-                            title={`${title} — ${status === "open" ? "Saved" : "Unsaved"}`}
-                            placement="right"
-                            arrow>
-                            <Typography variant="h4" className={styles[status]!}>•</Typography>
-                        </Tooltip>}
-                </MenuItem>
+                    {statusMarker}
+                </Button>
                 <div className={styles.spacer} />
-                <MenuItem className={styles.account!} component={Link} href="/account">
+                <Button className={styles.account} color="inherit" component={Link} href="/account" variant="text">
                     {signInText}
-                    <Avatar src={user?.avatar ?? ""} className={styles.avatar!}>
+                    <Avatar className={styles.avatar} src={user?.avatar ?? ""}>
                         {user?.avatar === null && signInText.split(" ")
                             .map((word) => word[0])
                             .join("")
                             .slice(0, 3)}
                     </Avatar>
-                </MenuItem>
+                </Button>
             </Toolbar>
         </AppBar>
     );

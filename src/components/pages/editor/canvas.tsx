@@ -11,20 +11,18 @@ import styles from "styles/components/pages/editor/canvas.module.css";
  * @param props.canvas - The config for the canvas.
  * @param props.frame - The frame to render on the canvas.
  * @param props.index - The index of the current frame.
- * @param props.done - Whether the animation is done.
  * @returns The canvas element.
  */
 function CanvasComponent({ canvas, frame, index }: {
-    canvas: CanvasSchema | null;
-    frame: Shape[];
-    index: number;
-    done: boolean;
+    readonly canvas: CanvasSchema | null;
+    readonly frame: Shape[];
+    readonly index: number;
 }): ReactNode {
     const parseColour = (colour: number | string): string => {
-        switch (typeof colour) {
-            case "number": return colours[colour]!;
-            default: return colour;
-        }
+        if (typeof colour === "number")
+            return colours[colour]!;
+
+        return colour;
     };
 
     const render = (element: HTMLCanvasElement | null): void => {
@@ -157,8 +155,8 @@ function CanvasComponent({ canvas, frame, index }: {
     };
 
     return (
-        <PlainPaper className={styles.wrapper!}>
-            <canvas id="canvas" width={800} height={600} ref={render} />
+        <PlainPaper className={styles.wrapper}>
+            <canvas height={600} id="canvas" ref={render} width={800} />
         </PlainPaper>
     );
 }

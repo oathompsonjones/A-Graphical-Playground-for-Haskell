@@ -1,14 +1,15 @@
 "use client";
 
+/* eslint-disable sort-imports */
+
 import { ContentCopy, CopyAll, Download, Image } from "@mui/icons-material";
 import { Dialog, IconButton, Typography } from "@mui/material";
-import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { NotificationsContext } from "contexts/notifications";
 import { SketchContext } from "contexts/sketch";
 import { decompressFromEncodedURIComponent } from "lz-string";
-import styles from "styles/components/menu.module.css";
-import { useContext } from "react";
+import { useCallback, useContext, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import { useOutsideClick } from "hooks/useOutsideClick";
+import styles from "styles/components/menu.module.css";
 
 /**
  * This is the share menu.
@@ -18,10 +19,11 @@ import { useOutsideClick } from "hooks/useOutsideClick";
  * @returns The share menu element.
  */
 export function ShareMenu({ open, setOpen }: {
-    open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
+    readonly open: boolean;
+    readonly setOpen: Dispatch<SetStateAction<boolean>>;
 }): ReactNode {
-    const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
+    const handleClose = useCallback((): void => setOpen(false), [setOpen]);
+    const ref = useOutsideClick<HTMLDivElement>(handleClose);
     const { setNotification } = useContext(NotificationsContext);
     const { code, title, author } = useContext(SketchContext);
 
@@ -84,7 +86,7 @@ export function ShareMenu({ open, setOpen }: {
     ];
 
     return (
-        <Dialog open={open} onClose={() => setOpen(false)} ref={ref}>
+        <Dialog onClose={handleClose} open={open} ref={ref}>
             <div className={`${styles.dialog} ${styles.options}`}>
                 {shareOptions.map(({ action, icon, label }, i) => (
                     <div key={i}>

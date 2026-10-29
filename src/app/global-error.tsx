@@ -9,7 +9,7 @@ import type { ReactNode } from "react";
  * @param props.reset - The function to reset the page.
  * @returns An error page.
  */
-export default function Error({ error, reset }: { error: Error; reset: () => void; }): ReactNode {
+export default function Error({ error, reset }: { readonly error: Error; readonly reset: () => void; }): ReactNode {
     // eslint-disable-next-line no-console
     console.error(error);
 

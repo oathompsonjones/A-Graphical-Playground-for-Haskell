@@ -27,15 +27,15 @@ export default function Register(): ReactNode {
 
     return (
         <div>
-            <Typography variant="h2" textAlign="center">Register</Typography>
+            <Typography align="center" variant="h2">Register</Typography>
             <br />
-            <Paper className={styles.container!}>
+            <Paper className={styles.container}>
                 {!state.success && state.error !== null && <Alert severity="error">{state.error}</Alert>}
-                <FormControl component="form" action={action} className={styles.form!}>
+                <FormControl action={action} className={styles.form} component="form">
                     <TextField label="Email" name="email" type="email" />
                     <PasswordField label="Password" name="password" />
                     <PasswordField label="Confirm Password" name="confirmPassword" />
-                    <Button className={styles.button!} type="submit" disabled={isPending}>Register</Button>
+                    <Button className={styles.button} disabled={isPending} type="submit">Register</Button>
                     {/* <ButtonGroup>
                         <Button className={styles.button!} color="secondary" startIcon={<Apple />} href="">
                             Register with Apple
@@ -50,7 +50,7 @@ export default function Register(): ReactNode {
                             Register with StackOverflow
                         </Button>
                     </ButtonGroup> */}
-                    <Typography variant="caption" textAlign="center">
+                    <Typography align="center" variant="caption">
                         Already have an account? <Link href="/auth/login">Sign in</Link>
                     </Typography>
                 </FormControl>

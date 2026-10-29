@@ -29,72 +29,73 @@ Record<"clear" | "new" | "open" | "run" | "save" | "share" | "stop", () => void>
     const { author, saved, title } = useContext(SketchContext);
     const [mounted, setMounted] = useState(false);
 
+    let displayTitle: string | null = null;
+
+    if (mounted)
+        displayTitle = author === null ? title : `${author}/${title} — ${saved ? "Saved" : "Unsaved"}`;
+
+    const accountButtons = loggedIn
+        ? (
+            <ButtonGroup variant="text">
+                <Tooltip arrow title="Open">
+                    <IconButton onClick={open}><FileOpen /></IconButton>
+                </Tooltip>
+                <Tooltip arrow title="Save">
+                    <IconButton onClick={save}><Save /></IconButton>
+                </Tooltip>
+            </ButtonGroup>
+        )
+        : (
+            <ButtonGroup disabled variant="text">
+                <IconButton disabled><FileOpen /></IconButton>
+                <IconButton disabled><Save /></IconButton>
+            </ButtonGroup>
+        );
+
     useEffect(() => setMounted(true), []);
 
     return (
-        <PlainPaper className={styles.container!}>
+        <PlainPaper className={styles.container}>
             <ButtonGroup variant="text">
-                <Tooltip title="New" arrow>
+                <Tooltip arrow title="New">
                     <IconButton onClick={new_}>
                         <InsertDriveFile />
                     </IconButton>
                 </Tooltip>
             </ButtonGroup>
 
-            <Divider orientation="vertical" className={styles.divider!} />
+            <Divider className={styles.divider} orientation="vertical" />
 
-            {loggedIn
-                ? (<ButtonGroup variant="text">
-                    <Tooltip title="Open" arrow>
-                        <IconButton onClick={open}>
-                            <FileOpen />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Save" arrow>
-                        <IconButton onClick={save}>
-                            <Save />
-                        </IconButton>
-                    </Tooltip>
-                </ButtonGroup>)
-                : (<ButtonGroup variant="text" disabled>
-                    <IconButton disabled>
-                        <FileOpen />
-                    </IconButton>
-                    <IconButton disabled>
-                        <Save />
-                    </IconButton>
-                </ButtonGroup>)}
+            {accountButtons}
 
-            <Divider orientation="vertical" className={styles.divider!} />
+            <Divider className={styles.divider} orientation="vertical" />
 
             <ButtonGroup variant="text">
-                <Tooltip title="Share" arrow>
+                <Tooltip arrow title="Share">
                     <IconButton onClick={share}>
                         <IosShare />
                     </IconButton>
                 </Tooltip>
             </ButtonGroup>
 
-            <Divider orientation="vertical" className={styles.divider!} />
+            <Divider className={styles.divider} orientation="vertical" />
 
-            <Typography className={styles.heading!}>
-                {mounted && (author === null ? title : `${author}/${title} — ${saved ? "Saved" : "Unsaved"}`)}
-            </Typography>
+            <Typography className={styles.heading}>{displayTitle}</Typography>
 
-            <Divider orientation="vertical" className={styles.divider!} />
+            <Divider className={styles.divider} orientation="vertical" />
 
-            <ButtonGroup variant="text" className={styles.right!}>
-                <Tooltip title="Clear Output" arrow>
+            <ButtonGroup className={styles.right} variant="text">
+                <Tooltip arrow title="Clear Output">
                     <IconButton color="warning" onClick={clear}>
                         <Clear />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Stop" arrow>
+                <Tooltip arrow title="Stop">
                     <IconButton color="error" onClick={stop}>
                         <Stop />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Run" arrow>
+                <Tooltip arrow title="Run">
                     <IconButton color="success" onClick={run}>
                         <PlayArrow />
                     </IconButton>

@@ -1,3 +1,5 @@
+/* eslint-disable react/no-multi-comp */
+
 "use client";
 
 import { Icon, Stack, Typography } from "@mui/material";
@@ -117,24 +119,26 @@ const docs: Record<string, SectionType> = {
  * @param props.hideControls - Whether to hide the controls.
  * @returns The reference page.
  */
-export default function Reference({ hideControls }: { hideControls?: boolean; }): ReactNode {
+export default function Reference({ hideControls }: { readonly hideControls?: boolean; }): ReactNode {
+    const controls: Array<[ReactNode, ReactNode]> = [
+        [<KeyboardReturn key="run" />, "Run your sketch."],
+        [<Icon key="save">S</Icon>, "Save your sketch."],
+        [<Icon key="open">O</Icon>, "Open one of your saved sketches."],
+        [<Icon key="new">N</Icon>, "Create a new sketch."],
+        [<Icon key="comment">/</Icon>, "Comment/uncomment the current line."],
+    ];
+
     return (
         <>
             <div className="wrapper">
                 <Typography variant="h2">Reference</Typography>
-                <Stack direction={{ md: "row" }} alignItems="top" gap={5}>
+                <Stack direction={{ md: "row" }} sx={{ alignItems: "flex-start", gap: 5 }}>
                     <Contents docs={docs} />
-                    {!(hideControls ?? false) && <Controls controls={[
-                        [<KeyboardReturn />, "Run your sketch."],
-                        [<Icon>S</Icon>, "Save your sketch."],
-                        [<Icon>O</Icon>, "Open one of your saved sketches."],
-                        [<Icon>N</Icon>, "Create a new sketch."],
-                        [<Icon>/</Icon>, "Comment/uncomment the current line."],
-                    ]} />}
+                    {!(hideControls ?? false) && <Controls controls={controls} />}
                 </Stack>
             </div>
             {Object.entries(docs).map(([title, content], i) => (
-                <Section title={title} content={content} depth={0} colored={i % 2 === 0} key={i} />
+                <Section colored={i % 2 === 0} content={content} depth={0} key={i} title={title} />
             ))}
         </>
     );

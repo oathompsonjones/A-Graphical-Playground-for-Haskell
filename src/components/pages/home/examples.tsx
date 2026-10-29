@@ -13,7 +13,7 @@ import { useEffect } from "react";
  * @returns The examples with images.
  */
 export function Examples({ examples }: {
-    examples: Array<{ code: string; image: StaticImageData; name: string; }>;
+    readonly examples: Array<{ code: string; image: StaticImageData; name: string; }>;
 }): ReactNode {
     // Safari and Chrome can do this by just applying `justify-content: center;` to the container.
     // Firefox needs a little help.
@@ -27,7 +27,7 @@ export function Examples({ examples }: {
     return (
         <div className={styles.examplesContainer}>
             <div className={styles.examplesScroll}>
-                {examples.map(({ name, code, image }, i) => <Example key={i} code={code} image={image} name={name} />)}
+                {examples.map(({ name, code, image }, i) => <Example code={code} image={image} key={i} name={name} />)}
             </div>
         </div>
     );

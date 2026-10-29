@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/jsx-no-bind */
+
 import { Cancel, Delete } from "@mui/icons-material";
 import { Dialog, IconButton, Typography } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
@@ -20,10 +22,10 @@ import { useOutsideClick } from "hooks/useOutsideClick";
  * @returns The delete warning menu element.
  */
 export function DeleteWarningMenu({ open, setOpen, id, setSketches }: {
-    open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
-    id: string;
-    setSketches: Dispatch<SetStateAction<Sketch[] | null>>;
+    readonly open: boolean;
+    readonly setOpen: Dispatch<SetStateAction<boolean>>;
+    readonly id: string;
+    readonly setSketches: Dispatch<SetStateAction<Sketch[] | null>>;
 }): ReactNode {
     const { user } = useContext(UserContext);
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
@@ -54,7 +56,7 @@ export function DeleteWarningMenu({ open, setOpen, id, setSketches }: {
     ];
 
     return (
-        <Dialog open={open} onClose={() => setOpen(false)} ref={ref}>
+        <Dialog onClose={() => setOpen(false)} open={open} ref={ref}>
             <div className={styles.dialog}>
                 <Typography variant="h5">Are you sure you want to continue?</Typography>
                 <Typography variant="h6">

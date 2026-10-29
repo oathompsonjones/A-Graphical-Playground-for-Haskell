@@ -9,9 +9,9 @@ import arc from "assets/images/docs/arc.png";
 export function Arc(): ReactNode {
     return (
         <div>
-            <Image src={arc} alt="arc" width={500} height={500} />
+            <Image alt="arc" height={500} src={arc} width={500} />
             The <code>arc :: Length -&gt; Length -&gt; Radians -&gt; Radians -&gt; Shape</code> function takes a
-                horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical arc.
+            horizontal radius, a vertical radius, a start angle, and an end angle, and returns an elliptical arc.
             <br />
             <br />
             As with ellipses, the arc's origin is at its center.

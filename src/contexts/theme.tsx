@@ -10,7 +10,7 @@ import type { ReactNode } from "react";
  * @param props.children - The children to render.
  * @returns The theme provider to wrap the application in.
  */
-export function ThemeContextProvider({ children }: { children: ReactNode; }): ReactNode {
+export function ThemeContextProvider({ children }: { readonly children: ReactNode; }): ReactNode {
     const theme = responsiveFontSizes(
         createTheme({
             components: {
@@ -45,7 +45,8 @@ export function ThemeContextProvider({ children }: { children: ReactNode; }): Re
                     MuiButtonGroup: { variant: "contained" },
                     MuiPaper: { elevation: 5 },
                     MuiTextField: { fullWidth: true, required: true, variant: "filled" },
-                }}>
+                }}
+                >
                     <CssBaseline enableColorScheme />
                     {children}
                 </DefaultPropsProvider>

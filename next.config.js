@@ -2,12 +2,13 @@
 import { next } from "@million/lint";
 
 /** @type {import('next').NextConfig} */
-export default next({ rsc: true })({
+const nextConfig = {
     compiler: {
         emotion: true,
         styledComponents: true,
     },
     images: { remotePatterns: ["www.gravatar.com", "www.gchq.gov.uk"].map((hostname) => ({ hostname })) },
+    reactStrictMode: true,
     // eslint-disable-next-line require-await
     async redirects() {
         return Object.entries({
@@ -28,4 +29,6 @@ export default next({ rsc: true })({
 
         return config;
     },
-});
+};
+
+export default next({ rsc: true })(nextConfig);

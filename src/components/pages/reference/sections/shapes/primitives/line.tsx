@@ -9,7 +9,7 @@ import line from "assets/images/docs/line.png";
 export function Line(): ReactNode {
     return (
         <div>
-            <Image src={line} alt="line" width={500} height={500} />
+            <Image alt="line" height={500} src={line} width={500} />
             The <code>line :: Length -&gt; Shape</code> function takes a length and returns a line.
             <br />
             <br />

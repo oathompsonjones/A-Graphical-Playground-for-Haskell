@@ -9,9 +9,9 @@ import circle from "assets/images/docs/circle.png";
 export function Circle(): ReactNode {
     return (
         <div>
-            <Image src={circle} alt="circle" width={500} height={500} />
+            <Image alt="circle" height={500} src={circle} width={500} />
             The <code>circle :: Length -&gt; Shape</code> function is a shorthand for <code>ellipse r r</code>,
-                where <code>r</code> is the radius of the circle.
+            where <code>r</code> is the radius of the circle.
         </div>
     );
 }

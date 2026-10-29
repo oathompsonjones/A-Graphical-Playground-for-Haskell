@@ -12,10 +12,10 @@ export function CombiningShapes(): ReactNode {
             <br />
             <br />
             The resulting <code>Shape</code> is a list of <code>Shape</code>s that are drawn on top of each other, in
-                the order they are combined.
+            the order they are combined.
             Applying transformations to a group of shapes applies the transformation to each shape individually.
             Given that the shapes may have different relative origin points, applying transformations such as a rotation
-                or scaling may result in unexpected behavior.
+            or scaling may result in unexpected behavior.
         </div>
     );
 }

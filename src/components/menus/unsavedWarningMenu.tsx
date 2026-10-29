@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/jsx-no-bind */
+
 import { ArrowCircleRight, Cancel } from "@mui/icons-material";
 import { Dialog, IconButton, Typography } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
@@ -16,9 +18,9 @@ import { useOutsideClick } from "hooks/useOutsideClick";
  * @returns The unsaved code warning menu element.
  */
 export function UnsavedWarningMenu({ open, setOpen, url }: {
-    open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
-    url: string;
+    readonly open: boolean;
+    readonly setOpen: Dispatch<SetStateAction<boolean>>;
+    readonly url: string;
 }): ReactNode {
     const ref = useOutsideClick<HTMLDivElement>(() => setOpen(false));
 
@@ -41,7 +43,7 @@ export function UnsavedWarningMenu({ open, setOpen, url }: {
     ];
 
     return (
-        <Dialog open={open} onClose={() => setOpen(false)} ref={ref}>
+        <Dialog onClose={() => setOpen(false)} open={open} ref={ref}>
             <div className={styles.dialog}>
                 <Typography variant="h5">You have unsaved changes.</Typography>
                 <Typography variant="h6">

@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/jsx-no-bind */
+
 import { Button, Dialog, FormControl, TextField } from "@mui/material";
 import type { Dispatch, ReactNode, SetStateAction } from "react";
 import { NotificationsContext } from "contexts/notifications";
@@ -18,8 +20,8 @@ import { useOutsideClick } from "hooks/useOutsideClick";
  * @returns The save menu element.
  */
 export function SaveMenu({ open, setOpen }: {
-    open: boolean;
-    setOpen: Dispatch<SetStateAction<boolean>>;
+    readonly open: boolean;
+    readonly setOpen: Dispatch<SetStateAction<boolean>>;
 }): ReactNode {
     const { user } = useContext(UserContext);
     const { setNotification } = useContext(NotificationsContext);
@@ -38,11 +40,11 @@ export function SaveMenu({ open, setOpen }: {
     };
 
     return user !== null && (
-        <Dialog open={open} onClose={() => setOpen(false)} ref={ref}>
+        <Dialog onClose={() => setOpen(false)} open={open} ref={ref}>
             <div className={styles.dialog}>
                 <FormControl action={saveSketchAction} component="form">
-                    <TextField type="hidden" name="content" value={code} sx={{ opacity: 0 }} />
-                    <TextField type="hidden" name="authorId" value={user._id.toString()} sx={{ opacity: 0 }} />
+                    <TextField name="content" sx={{ opacity: 0 }} type="hidden" value={code} />
+                    <TextField name="authorId" sx={{ opacity: 0 }} type="hidden" value={user._id.toString()} />
                     <TextField label="Name" name="name" />
                     <br />
                     <Button type="submit">Save</Button>

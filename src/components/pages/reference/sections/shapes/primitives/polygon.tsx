@@ -9,7 +9,7 @@ import polygon from "assets/images/docs/polygon.png";
 export function Polygon(): ReactNode {
     return (
         <div>
-            <Image src={polygon} alt="polygon" width={500} height={500} />
+            <Image alt="polygon" height={500} src={polygon} width={500} />
             The <code>polygon :: [Vector] -&gt; Shape</code> function takes a list of points and returns a polygon.
             <br />
             <br />

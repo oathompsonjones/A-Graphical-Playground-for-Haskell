@@ -9,9 +9,9 @@ import regular from "assets/images/docs/regular.png";
 export function Regular(): ReactNode {
     return (
         <div>
-            <Image src={regular} alt="regular" width={500} height={500} />
+            <Image alt="regular" height={500} src={regular} width={500} />
             The <code>regular :: Int -&gt; Length -&gt; Shape</code> function takes the number of sides and a radius and
-                returns a regular polygon, with each point lying on a circle with the given radius.
+            returns a regular polygon, with each point lying on a circle with the given radius.
             <br />
             <br />
             The polygon's origin is at its center, just like circles and ellipses.

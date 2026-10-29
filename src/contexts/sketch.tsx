@@ -28,7 +28,7 @@ export const SketchContext = createContext<{
  * @param props.children - The children to render.
  * @returns The wrapped user context provider.
  */
-export function SketchContextProvider({ children }: { children: ReactNode; }): ReactNode {
+export function SketchContextProvider({ children }: { readonly children: ReactNode; }): ReactNode {
     const { user } = useContext(UserContext);
 
     const defaults = {
@@ -72,21 +72,23 @@ export function SketchContextProvider({ children }: { children: ReactNode; }): R
     }, [code]);
 
     return (
-        <SketchContext.Provider value={{
-            author,
-            code,
-            id,
-            open,
-            resetSketch,
-            saved,
-            setAuthor,
-            setCode,
-            setId,
-            setSaved,
-            setTitle,
-            title,
-            updateCode,
-        }}>
+        <SketchContext.Provider
+            value={{
+                author,
+                code,
+                id,
+                open,
+                resetSketch,
+                saved,
+                setAuthor,
+                setCode,
+                setId,
+                setSaved,
+                setTitle,
+                title,
+                updateCode,
+            }}
+        >
             {children}
         </SketchContext.Provider>
     );

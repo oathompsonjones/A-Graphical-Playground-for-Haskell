@@ -98,11 +98,11 @@ export default function Home(): ReactNode {
 
     return (
         <>
-            <Stack direction={{ md: "row" }} gap={2} className={styles.title!}>
-                <Image src="/favicon.svg" alt="Haskell Logo" width={150} height={100} />
+            <Stack className={styles.title} direction={{ md: "row" }} sx={{ gap: 2 }}>
+                <Image alt="Haskell Logo" height={100} src="/favicon.svg" width={150} />
                 <div>
-                    <Typography variant="h2" component="h2"><b>A Graphical Playground</b></Typography>
-                    <Typography variant="h3" component="h3">for Haskell</Typography>
+                    <Typography component="h2" variant="h2"><b>A Graphical Playground</b></Typography>
+                    <Typography component="h3" variant="h3">for Haskell</Typography>
                     <hr />
                     All the fun, with none of the hassle.
                 </div>
@@ -111,11 +111,11 @@ export default function Home(): ReactNode {
             <div className={styles.section}>
                 <Typography variant="h4">
                     Welcome! Whether you have never written a line of code before, or you are a seasoned veteran, you
-                        will find something here to enjoy.
+                    will find something here to enjoy.
                     <br />
                     <br />
                     With this easy-to-use playground, you can get right down to business — no need to install anything,
-                        just write some code and see the results. <Link href="/editor">Start Coding!</Link>
+                    just write some code and see the results. <Link href="/editor">Start Coding!</Link>
                 </Typography>
             </div>
 
@@ -124,10 +124,10 @@ export default function Home(): ReactNode {
                     <Typography variant="h3">See what you can do...</Typography>
                     <br />
                     <Examples examples={staticExamples} />
-                    <Typography variant="h4" textAlign="center">Images</Typography>
+                    <Typography align="center" variant="h4">Images</Typography>
 
                     <Examples examples={animatedExamples} />
-                    <Typography variant="h4" textAlign="center">Animations</Typography>
+                    <Typography align="center" variant="h4">Animations</Typography>
                 </div>
             </div>
 
@@ -136,7 +136,7 @@ export default function Home(): ReactNode {
                 <Typography variant="h6">
                     Check out the <Link href="/reference">reference page</Link> for documentation.
                     If you have any other questions, or would like to report a bug, please visit
-                        the <Link href="/issues">GitHub issue tracker</Link>.
+                    the <Link href="/issues">GitHub issue tracker</Link>.
                 </Typography>
             </div>
         </>

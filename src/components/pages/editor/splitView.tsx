@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react/jsx-no-bind */
+
 import type { MouseEvent, ReactElement, ReactNode, TouchEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { DragHandleRounded } from "@mui/icons-material";
@@ -16,9 +18,9 @@ import { useWindowSize } from "hooks/useWindowSize";
  * @returns The split view element.
  */
 export function SplitView({ children, id, vertical }: {
-    children: [ReactElement, ReactElement];
-    id: string;
-    vertical?: boolean;
+    readonly children: [ReactElement, ReactElement];
+    readonly id: string;
+    readonly vertical?: boolean;
 }): ReactNode {
     const { height, width } = useWindowSize();
     const container = useRef<HTMLDivElement & { children: [HTMLDivElement, HTMLDivElement, HTMLDivElement]; }>(null!);
@@ -68,20 +70,20 @@ export function SplitView({ children, id, vertical }: {
     return (
         <div
             className={`${styles.container} ${styles[orientation]} ${canDrag ? styles.dragging : ""}`}
-            ref={container}
-            onMouseMove={handleDrag}
             onMouseLeave={disableDrag}
+            onMouseMove={handleDrag}
             onMouseUp={disableDrag}
+            ref={container}
         >
             {children[0]}
             <div
                 className={styles.splitter}
                 onMouseDown={enableDrag}
-                onTouchStart={enableDrag}
                 onTouchEnd={disableDrag}
                 onTouchMove={handleDrag}
+                onTouchStart={enableDrag}
             >
-                <DragHandleRounded className={styles.dragIcon!} />
+                <DragHandleRounded className={styles.dragIcon} />
             </div>
             {children[1]}
         </div>

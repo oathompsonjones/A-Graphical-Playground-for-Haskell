@@ -1,7 +1,8 @@
 {
     "extends": "@oathompsonjones/ts-config",
     "compilerOptions": {
-        "target": "es5",
+        "module": "esnext",
+        "moduleResolution": "Bundler",
         "skipLibCheck": true,
         "noEmit": true,
         "incremental": true,

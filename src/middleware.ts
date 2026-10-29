@@ -9,12 +9,11 @@ import { NextResponse } from "next/server";
 export function middleware(request: NextRequest): NextResponse {
     const user = request.cookies.get("user")?.value;
 
-    switch (true) {
-        case user === undefined && request.nextUrl.pathname.startsWith("/account"):
-            return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
-        case user !== undefined && request.nextUrl.pathname.startsWith("/auth"):
-            return NextResponse.redirect(new URL("/account", request.nextUrl));
-        default:
-            return NextResponse.next();
-    }
+    if (user === undefined && request.nextUrl.pathname.startsWith("/account"))
+        return NextResponse.redirect(new URL("/auth/login", request.nextUrl));
+
+    if (user !== undefined && request.nextUrl.pathname.startsWith("/auth"))
+        return NextResponse.redirect(new URL("/account", request.nextUrl));
+
+    return NextResponse.next();
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 import "styles/codeTheme.css";
 import type { FormEvent, KeyboardEvent, ReactNode, UIEvent } from "react";
 import { memo, useContext } from "react";
@@ -30,10 +31,10 @@ That's why we are storing the highlight.js instance in a state variable,
  */
 // eslint-disable-next-line max-lines-per-function
 function EditorComponent({ save, open, new: new_, run }: {
-    save: () => void;
-    open: () => void;
-    new: () => void;
-    run: () => void;
+    readonly save: () => void;
+    readonly open: () => void;
+    readonly new: () => void;
+    readonly run: () => void;
 }): ReactNode {
     const { code: compressedCode, updateCode } = useContext(SketchContext);
     const code = decompressFromEncodedURIComponent(compressedCode);
@@ -54,8 +55,9 @@ function EditorComponent({ save, open, new: new_, run }: {
                 pre.innerHTML = code.split("\n").map((line) => renderToString(
                     <code
                         className="language-haskell"
-                        // eslint-disable-next-line @typescript-eslint/naming-convention
-                        dangerouslySetInnerHTML={{ __html: _hljs.highlight(line, { language: "haskell" }).value }}
+                        // The highlighter returns escaped HTML for source text.
+                        // eslint-disable-next-line react/no-danger
+                        dangerouslySetInnerHTML={{ __html: _hljs.highlight(line, { language: "haskell" }).value }} // eslint-disable-line max-len, @typescript-eslint/naming-convention
                     />,
                 )).join("");
             };
@@ -157,7 +159,7 @@ function EditorComponent({ save, open, new: new_, run }: {
                         textarea.selectionEnd = textarea.selectionStart;
                     }
 
-                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    handleChange(event);
                     break;
                 }
                 // Save the sketch.
@@ -193,7 +195,7 @@ function EditorComponent({ save, open, new: new_, run }: {
                     textarea.selectionStart = start + 1 + indent.length;
                     textarea.selectionEnd = start + 1 + indent.length;
 
-                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    handleChange(event);
                     break;
                 }
                 // Indent the selected lines/current line.
@@ -210,7 +212,7 @@ function EditorComponent({ save, open, new: new_, run }: {
                     textarea.selectionStart = start + spaceCount;
                     textarea.selectionEnd = start + spaceCount;
 
-                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    handleChange(event);
                     break;
                 }
                 // Automatically close angle brackets only when wrapping text.
@@ -235,7 +237,7 @@ function EditorComponent({ save, open, new: new_, run }: {
                     textarea.selectionStart = start + 1;
                     textarea.selectionEnd = end + 1;
 
-                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    handleChange(event);
                     break;
                 }
                 // Allow typing over closing brackets.
@@ -245,7 +247,7 @@ function EditorComponent({ save, open, new: new_, run }: {
                         textarea.selectionStart = end + 1;
                         textarea.selectionEnd = end + 1;
 
-                        handleChange(event as FormEvent<HTMLTextAreaElement>);
+                        handleChange(event);
                     }
 
                     break;
@@ -270,7 +272,7 @@ function EditorComponent({ save, open, new: new_, run }: {
                         textarea.selectionEnd = end + 1;
                     }
 
-                    handleChange(event as FormEvent<HTMLTextAreaElement>);
+                    handleChange(event);
                     break;
                 }
             }
@@ -287,11 +289,12 @@ function EditorComponent({ save, open, new: new_, run }: {
     };
 
     return (
-        <PlainPaper className={styles.editor!}>
+        <PlainPaper className={styles.editor}>
             <pre id="pre" ref={updateDisplayCode} />
             <textarea
-                spellCheck={false}
-                onKeyDown={handleKey} onChange={handleChange} onScroll={handleScroll} ref={setCode} />
+                onChange={handleChange}
+                onKeyDown={handleKey} onScroll={handleScroll} ref={setCode} spellCheck={false}
+            />
         </PlainPaper>
     );
 }

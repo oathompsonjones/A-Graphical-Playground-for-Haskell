@@ -7,8 +7,8 @@ import type { ReactNode } from "react";
 export function TranslateY(): ReactNode {
     return (
         <div>
-            The <code>translateY :: Float -&gt; Shape -&gt; Shape</code> function is shorthand for <code>translate
-                (Vector 0 y)</code>.
+            The <code>translateY :: Float -&gt; Shape -&gt; Shape</code> function is shorthand for{" "}
+            <code>translate (Vector 0 y)</code>.
         </div>
     );
 }

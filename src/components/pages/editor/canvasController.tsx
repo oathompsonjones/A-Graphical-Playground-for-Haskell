@@ -14,8 +14,8 @@ import { Canvas } from "./canvas";
  * @returns The canvas element.
  */
 function CanvasControllerComponent({ content: [canvasInput, ...frameInputs], interval }: {
-    content: string[];
-    interval: RefObject<NodeJS.Timeout | null>;
+    readonly content: string[];
+    readonly interval: RefObject<NodeJS.Timeout | null>;
 }): ReactNode {
     const frameIndexRef = useRef(0);
     const framesLength = useRef(0);
@@ -39,7 +39,7 @@ function CanvasControllerComponent({ content: [canvasInput, ...frameInputs], int
 
         const object = JSON.parse(extract[1]) as unknown;
 
-        canvas = canvasSchema.parse(object) as unknown as CanvasSchema;
+        canvas = canvasSchema.parse(object);
     } catch (error) {
         // Continue
     }
@@ -59,7 +59,7 @@ function CanvasControllerComponent({ content: [canvasInput, ...frameInputs], int
 
             const object = JSON.parse(extract[1]) as unknown;
 
-            framesLength.current = frames.push(shapeSchema.parse(object) as unknown as Shape);
+            framesLength.current = frames.push(shapeSchema.parse(object));
         } catch (error) {
             continue;
         }
@@ -81,7 +81,6 @@ function CanvasControllerComponent({ content: [canvasInput, ...frameInputs], int
             canvas={canvas}
             frame={frame instanceof Array ? frame : [frame]}
             index={frameIndex}
-            done={done.current}
         />
     );
 }

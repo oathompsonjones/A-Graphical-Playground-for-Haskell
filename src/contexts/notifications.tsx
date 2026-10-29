@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, IconButton, Stack, Typography } from "@mui/material";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
 import type { AlertColor } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import Link from "next/link";
@@ -18,7 +18,7 @@ export const NotificationsContext = createContext<{
  * @param props.children - The children to render.
  * @returns The wrapped notifications context provider.
  */
-export function NotificationsContextProvider({ children }: { children: ReactNode; }): ReactNode {
+export function NotificationsContextProvider({ children }: { readonly children: ReactNode; }): ReactNode {
     const [state, setState] = useState<{ message: ReactNode; type: AlertColor; } | null>({
         message: <>This website uses cookies. <Link href="/privacy">Learn more</Link></>,
         type: "info",
@@ -27,7 +27,7 @@ export function NotificationsContextProvider({ children }: { children: ReactNode
     const [hover, setHover] = useState(false);
 
     const setNotification = (message: ReactNode, type: AlertColor = "info"): void => setState({ message, type });
-    const onClick = (): void => setState(null);
+    const onClick = useCallback((): void => setState(null), []);
 
     useEffect(() => {
         const timeout = setTimeout(() => setOpaque(false), 5_000);
@@ -38,16 +38,20 @@ export function NotificationsContextProvider({ children }: { children: ReactNode
         return (): void => clearTimeout(timeout);
     }, [state]);
 
+    const enableHover = useCallback((): void => setHover(true), []);
+    const disableHover = useCallback((): void => setHover(false), []);
+
     return (
         <NotificationsContext.Provider value={{ setNotification }}>
             {children}
             {state !== null && (
                 <Alert
                     className={`${styles.notifications} ${opaque || hover ? "" : styles.translucent}`}
-                    severity={state.type} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}>
-                    <Stack direction="row" spacing={1} alignItems="center">
+                    onMouseEnter={enableHover} onMouseLeave={disableHover} severity={state.type}
+                >
+                    <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                         <Typography>{state.message}</Typography>
-                        <IconButton className={styles.close!} onClick={onClick}>
+                        <IconButton className={styles.close} onClick={onClick}>
                             <Close />
                         </IconButton>
                     </Stack>
