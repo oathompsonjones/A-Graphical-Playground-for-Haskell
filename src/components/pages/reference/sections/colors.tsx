@@ -243,7 +243,7 @@ export function ColorsRoot({ list }: { readonly list: (elems: ReactNode[]) => Re
                 <><code>Transparent</code> — Represents a transparent color.</>,
             ])}
 
-            You can also use the following CSS named colors (sort by
+            You can also use the following CSS named colors (sort by{" "}
             <Select
                 onChange={sortBy}
                 size="small"
