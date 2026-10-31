@@ -1,27 +1,42 @@
 name: Build LaTeX document
 on: 
-    push:
-        paths: 
-            - report/**
-            - .github/workflows/**
+  push:
+    paths: 
+      - report/**
+      - .github/workflows/**
 jobs:
   build_latex:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v4
-      - name: Compile LaTeX document
+      - name: Compile online LaTeX document
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           working_directory: report
+      - name: Compile printable LaTeX document
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: printable.tex
+          working_directory: report
       - name: Generate GitHub Pages content
-        run: mkdir build && cp ./report/main.pdf ./build/main.pdf && cp ./report/participant-information.pdf ./build/participant-information.pdf && echo "<meta http-equiv='refresh' content='0;url=main.pdf'>" > ./build/index.html
-      - name: Upload PDF file
+        run: |
+          mkdir build
+          cp ./report/main.pdf ./build/main.pdf
+          cp ./report/printable.pdf ./build/printable.pdf
+          cp ./report/participant-information.pdf ./build/participant-information.pdf
+          echo "<meta http-equiv='refresh' content='0;url=main.pdf'>" > ./build/index.html
+      - name: Upload online PDF artifact
         uses: actions/upload-artifact@v4
         with:
-          name: PDF
+          name: Online PDF
           path: build/main.pdf
+      - name: Upload printable PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Printable PDF
+          path: build/printable.pdf
       - name: Upload participant information file
         uses: actions/upload-artifact@v4
         with:

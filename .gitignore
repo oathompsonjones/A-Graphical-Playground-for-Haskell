@@ -17,6 +17,8 @@ build
 notes
 report/*
 !report/main.tex
+!report/printable.tex
+!report/document.tex
 !report/references.bib
 !report/ugcheck.sty
 !report/infthesis.cls
