@@ -27,7 +27,8 @@ export function Footer(): ReactNode {
                 <Typography>© 2024-{String(new Date().getFullYear()).slice(2)} Oliver Jones</Typography>
             </Stack>
             <Typography>
-                Website Designed and Developed by <Link href="https://oathompsonjones.co.uk">Oliver Jones</Link>.
+                Website designed and developed by{" "}
+                <Link href="https://oathompsonjones.co.uk">Oliver Andrew Thompson Jones</Link>.
             </Typography>
         </footer>
     );
