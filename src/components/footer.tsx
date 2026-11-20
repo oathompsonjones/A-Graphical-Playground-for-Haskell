@@ -28,7 +28,7 @@ export function Footer(): ReactNode {
             </Stack>
             <Typography>
                 Website designed and developed by{" "}
-                <Link href="https://oathompsonjones.co.uk">Oliver Andrew Thompson Jones</Link>.
+                <Link href="https://oathompsonjones.co.uk">Oliver Jones (oathompsonjones)</Link>.
             </Typography>
         </footer>
     );
