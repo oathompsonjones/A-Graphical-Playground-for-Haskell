@@ -7,6 +7,21 @@ import { Header } from "components/header";
 import { Providers } from "../contexts/providers";
 import type { ReactNode } from "react";
 
+const structuredData = JSON.stringify({
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    "@context": "https://schema.org",
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    "@type": "SoftwareApplication",
+    applicationCategory: "EducationalApplication",
+    author: {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        "@id": "https://oathompsonjones.co.uk/#person",
+    },
+    name: "A Graphical Playground for Haskell",
+    operatingSystem: "Web",
+    url: "https://www.haskell-playground.co.uk",
+}).replace(/</gu, "\\u003c");
+
 // https://realfavicongenerator.net (remove the mask icon and msapplication stuff)
 export const metadata: Metadata = {
     description: "Experience Haskell like never before. This educational tool allows you to create graphics and " +
@@ -61,6 +76,14 @@ export default function Layout({ children }: { readonly children: ReactNode; }):
     return (
         <html lang="en" suppressHydrationWarning>
             <body>
+                <script
+                    // eslint-disable-next-line react/no-danger
+                    dangerouslySetInnerHTML={{
+                        // eslint-disable-next-line @typescript-eslint/naming-convention
+                        __html: structuredData,
+                    }}
+                    type="application/ld+json"
+                />
                 <noscript>You need to enable JavaScript to run this app.</noscript>
                 <Providers>
                     <Header />
